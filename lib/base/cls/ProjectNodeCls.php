@@ -14,6 +14,8 @@ class ProjectNodeCls
     const PROGRESS = 8;
     const ACCEPT = 9;
 
+    const SECURITY = 10;
+
     //sub
     const CONFIRM_1 = 31;
     const CONFIRM_2 = 32;
@@ -43,6 +45,11 @@ class ProjectNodeCls
 
 
     const INSPECT = 9999;
+
+    const SECURITY_1 = 10001;
+    const SECURITY_2 = 10002;
+    const SECURITY_3 = 10003;
+    const SECURITY_4 = 10004;
 
     private static $map = array(//
         0 => '工程立项',//

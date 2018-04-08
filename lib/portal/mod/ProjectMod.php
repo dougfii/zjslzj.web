@@ -5769,6 +5769,453 @@ class ProjectMod extends BaseMod
         $this->MemberFooter();
     }
 
+    public function ProjectFlow10001List()
+    {
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectFlow10001List');
+
+        $pid = $this->Mid();
+
+        $new = true;
+        $rr = array();
+        $rl = Flow10001Cls::GetLastItem($pid);
+        if (!empty($rl) && count($rl) > 0) {
+            $new = ProjectStateCls::IsNew(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_1));
+            if ($rl['replyid'] > 0) $rr = Reply1Cls::GetLastItem($pid, $rl['replyid']);
+        }
+        $rs = Flow10001Cls::GetApprovedItems($pid);
+
+        $view->rl = $rl;
+        $view->rr = $rr;
+        $view->rs = $rs;
+        $view->new = $new;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_1);
+
+        echo $view->Render();
+
+        $this->MemberFooter();
+    }
+
+    public function ProjectFlow10001()
+    {
+        $id = $this->Req('id', 0, 'int');
+
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectFlow10001');
+
+        $pid = $this->Mid();
+        $gc = ProjectCls::GetGroupCompany($pid);
+
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        if ($id > 0) $rs = Flow10001Cls::Instance()->Item($id);
+        else $rs = Flow10001Cls::GetLastItem($pid);
+
+        $no = '';
+        $signer = '';
+        $content = '';
+        $date = '';
+        $keywords = '';
+
+        $edit = true;
+
+        if (!empty($rs) && count($rs) > 0) {
+
+            $no = $rs['no'];
+            $signer = $rs['signer'];
+            $content = $rs['content'];
+            $date = $rs['date'];
+            $keywords = $rs['keywords'];
+
+            $edit = ProjectStateCls::IsEdit(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_1));
+        }
+
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        $view->edit = $edit;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_1);
+
+        $view->rs = $rs;
+        $view->no = $no;
+        $view->signer = $signer;
+        $view->content = $content;
+        $view->date = $date;
+        $view->keywords = $keywords;
+
+        $view->pid = $pid;
+        //$view->atts = Atts::UploadFixed(Atts::$flow1, AttachmentCls::GetFixedItems($pid, 1), $edit);
+
+        echo $view->Render();
+
+        $this->MemberFooter();
+    }
+
+    public function ProjectFlow10001Print()
+    {
+        $id = $this->Req('id', 0, 'int');
+        $pid = Flow1Cls::Instance()->Pid($id);
+
+        $this->HeadPrint();
+
+        $view = View::Factory('ProjectFlow10001Print');
+
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        $rs = Flow10001Cls::Instance()->Item($id);
+
+        $view->rs = $rs;
+
+        $view->name = $name;
+        $view->company = $company;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_1);
+
+        $view->approve = false;
+
+        //$view->atts = Atts::UploadFixed(Atts::$flow1, AttachmentCls::GetFixedItems($pid, 1), false);
+
+        echo $view->Render();
+
+        $this->FootPrint();
+    }
+
+    public function OnProjectFlow10001()
+    {
+        $no = $this->Req('no', '', 'str');
+        $signer = $this->Req('signer', '', 'str');
+        $content = $this->Req('content', '', 'str');
+        $date = $this->Req('date', '', 'str');
+        $keywords = $this->Req('keywords', '', 'str');
+        $attachments = $this->Req('attachments', '', 'str');
+
+        $pid = $this->Mid();
+
+        if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
+        if (empty($no)) Json::ReturnError('请输入文件编号');
+        if (empty($signer)) Json::ReturnError('请输入签发单位');
+        if (empty($content)) Json::ReturnError('请输入申报内容');
+        if (empty($date)) Json::ReturnError('请输入申报日期');
+
+        if (empty($keywords)) $keywords = '无';
+
+        $id = Flow10001Cls::Add($pid, $no, $signer, $content, $date, $keywords, $attachments);
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_1, $id, ProjectStateCls::APPROVE);
+
+        try {
+            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::APPLY, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::APPLY));
+        } catch (Exception $e) {
+            Json::ReturnError($e->getMessage());
+        }
+
+        Json::ReturnSuccess();
+    }
+
+    public function ProjectRep10001y1View()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+
+        $pid = Flow10001Cls::Instance()->Pid($fid);
+        $gc = ProjectCls::GetGroupCompany($pid);
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        $rs = Reply10001Cls::GetLastItem($pid, $fid);
+
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectReply10001View');
+
+        $view->rs = $rs;
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        echo $view->Render();
+
+        $this->MemberFooter();
+    }
+
+    public function ProjectFlow10002List()
+    {
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectFlow10002List');
+
+        $pid = $this->Mid();
+
+        $new = true;
+        $rr = array();
+        $rl = Flow10002Cls::GetLastItem($pid);
+        if (!empty($rl) && count($rl) > 0) {
+            $new = ProjectStateCls::IsNew(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_2));
+            if ($rl['replyid'] > 0) $rr = Reply1Cls::GetLastItem($pid, $rl['replyid']);
+        }
+        $rs = Flow10002Cls::GetApprovedItems($pid);
+
+        $view->rl = $rl;
+        $view->rr = $rr;
+        $view->rs = $rs;
+        $view->new = $new;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_2);
+
+        echo $view->Render();
+
+        $this->MemberFooter();
+    }
+
+    public function ProjectFlow10002()
+    {
+        $id = $this->Req('id', 0, 'int');
+
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectFlow10002');
+
+        $pid = $this->Mid();
+        $gc = ProjectCls::GetGroupCompany($pid);
+
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        if ($id > 0) $rs = Flow10002Cls::Instance()->Item($id);
+        else $rs = Flow10002Cls::GetLastItem($pid);
+
+        $no = '';
+        $signer = '';
+        $content = '';
+        $date = '';
+        $keywords = '';
+
+        $edit = true;
+
+        if (!empty($rs) && count($rs) > 0) {
+
+            $no = $rs['no'];
+            $signer = $rs['signer'];
+            $content = $rs['content'];
+            $date = $rs['date'];
+            $keywords = $rs['keywords'];
+
+            $edit = ProjectStateCls::IsEdit(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_2));
+        }
+
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        $view->edit = $edit;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_2);
+
+        $view->rs = $rs;
+        $view->no = $no;
+        $view->signer = $signer;
+        $view->content = $content;
+        $view->date = $date;
+        $view->keywords = $keywords;
+
+        $view->pid = $pid;
+        //$view->atts = Atts::UploadFixed(Atts::$flow1, AttachmentCls::GetFixedItems($pid, 1), $edit);
+
+        echo $view->Render();
+
+        $this->MemberFooter();
+    }
+
+    public function ProjectFlow10003List()
+    {
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectFlow10003List');
+
+        $pid = $this->Mid();
+
+        $new = true;
+        $rr = array();
+        $rl = Flow10003Cls::GetLastItem($pid);
+        if (!empty($rl) && count($rl) > 0) {
+            $new = ProjectStateCls::IsNew(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_3));
+            if ($rl['replyid'] > 0) $rr = Reply1Cls::GetLastItem($pid, $rl['replyid']);
+        }
+        $rs = Flow10003Cls::GetApprovedItems($pid);
+
+        $view->rl = $rl;
+        $view->rr = $rr;
+        $view->rs = $rs;
+        $view->new = $new;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_3);
+
+        echo $view->Render();
+
+        $this->MemberFooter();
+    }
+
+    public function ProjectFlow10003()
+    {
+        $id = $this->Req('id', 0, 'int');
+
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectFlow10003');
+
+        $pid = $this->Mid();
+        $gc = ProjectCls::GetGroupCompany($pid);
+
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        if ($id > 0) $rs = Flow10003Cls::Instance()->Item($id);
+        else $rs = Flow10003Cls::GetLastItem($pid);
+
+        $no = '';
+        $signer = '';
+        $content = '';
+        $date = '';
+        $keywords = '';
+
+        $edit = true;
+
+        if (!empty($rs) && count($rs) > 0) {
+
+            $no = $rs['no'];
+            $signer = $rs['signer'];
+            $content = $rs['content'];
+            $date = $rs['date'];
+            $keywords = $rs['keywords'];
+
+            $edit = ProjectStateCls::IsEdit(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_3));
+        }
+
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        $view->edit = $edit;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_3);
+
+        $view->rs = $rs;
+        $view->no = $no;
+        $view->signer = $signer;
+        $view->content = $content;
+        $view->date = $date;
+        $view->keywords = $keywords;
+
+        $view->pid = $pid;
+        //$view->atts = Atts::UploadFixed(Atts::$flow1, AttachmentCls::GetFixedItems($pid, 1), $edit);
+
+        echo $view->Render();
+
+        $this->MemberFooter();
+    }
+
+    public function ProjectFlow10004List()
+    {
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectFlow10004List');
+
+        $pid = $this->Mid();
+
+        $new = true;
+        $rr = array();
+        $rl = Flow10004Cls::GetLastItem($pid);
+        if (!empty($rl) && count($rl) > 0) {
+            $new = ProjectStateCls::IsNew(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_4));
+            if ($rl['replyid'] > 0) $rr = Reply1Cls::GetLastItem($pid, $rl['replyid']);
+        }
+        $rs = Flow10004Cls::GetApprovedItems($pid);
+
+        $view->rl = $rl;
+        $view->rr = $rr;
+        $view->rs = $rs;
+        $view->new = $new;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_4);
+
+        echo $view->Render();
+
+        $this->MemberFooter();
+    }
+
+    public function ProjectFlow10004()
+    {
+        $id = $this->Req('id', 0, 'int');
+
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectFlow10004');
+
+        $pid = $this->Mid();
+        $gc = ProjectCls::GetGroupCompany($pid);
+
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        if ($id > 0) $rs = Flow10004Cls::Instance()->Item($id);
+        else $rs = Flow10004Cls::GetLastItem($pid);
+
+        $no = '';
+        $signer = '';
+        $content = '';
+        $date = '';
+        $keywords = '';
+
+        $edit = true;
+
+        if (!empty($rs) && count($rs) > 0) {
+
+            $no = $rs['no'];
+            $signer = $rs['signer'];
+            $content = $rs['content'];
+            $date = $rs['date'];
+            $keywords = $rs['keywords'];
+
+            $edit = ProjectStateCls::IsEdit(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_4));
+        }
+
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        $view->edit = $edit;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_4);
+
+        $view->rs = $rs;
+        $view->no = $no;
+        $view->signer = $signer;
+        $view->content = $content;
+        $view->date = $date;
+        $view->keywords = $keywords;
+
+        $view->pid = $pid;
+        //$view->atts = Atts::UploadFixed(Atts::$flow1, AttachmentCls::GetFixedItems($pid, 1), $edit);
+
+        echo $view->Render();
+
+        $this->MemberFooter();
+    }
+
     public function PopFacadeItemsEdit()
     {
         $this->MemberAuth();

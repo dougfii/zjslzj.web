@@ -193,9 +193,10 @@ table{ border-collapse:collapse; width:100%; }
 .pagedialog-buttons{text-align:center;}
 .pagedialog-buttons .btn{display:inline-block;border:#c6c6c6 solid 1px;padding:0 10px;margin:0 20px;text-decoration:none;border-radius:3px;cursor:pointer;}
 
-.plbox{border:#ddd solid 1px;border-bottom:0;font-size:12px;}
+.plbox{border:#ddd solid 1px;font-size:12px;}
 .plbox a{color:#337ab7;text-decoration: none;}
-.plbox .row{}
+.plbox .start{padding:8px;}
+.plbox .title{background:#c09853;padding:8px;font-size:14px;}
 .plbox .item{padding:8px 15px;border-bottom:#ddd dotted 1px;}
 .plbox .item:hover{ background:#fcf8e3;}
 .plbox .state{display: inline-block;width:60px;color:#d95c4f;text-align: center;}
