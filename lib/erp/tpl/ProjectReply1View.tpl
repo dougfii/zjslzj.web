@@ -8,7 +8,7 @@ if(!empty($rs)):
 ?>
         <div class="pagea4info">
             <div class="pa4-caption1"><?php echo $gc; ?></div>
-            <div class="center">泰水质监<?php echo $rs['no']; ?>号</div>
+            <div class="center">镇水质监<?php echo $rs['no']; ?>号</div>
             <div class="pa4-redline"></div>
             <div class="pa4-title1">关于对<?php echo $name; ?>质量监督的批复</div>
             <div class="pa4-company"><?php echo $company; ?>:</div>

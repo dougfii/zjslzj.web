@@ -38,8 +38,8 @@ define('ALERT_ERROR', '系统处理错误');
 define('YEAR_START', 2017);
 
 //
-define('APP_TITLE', '镇江水利工程质量管理站');
-define('COMPANY_NAME', '镇江市水利工程质量监督站');
+define('APP_TITLE', '镇江水利工程质量安全监督站');
+define('COMPANY_NAME', '镇江市水利工程质量安全监督站');
 
 require_once BASE_LIB_PATH . 'erp/Loader.php';
 ob_start();

@@ -20,7 +20,7 @@ $(function(){
 <body>
 <div class="body">
 	<div class="loginp">
-		<div class="loginc">水利工程质量监督站管理登陆</div>
+		<div class="loginc">水利工程质量安全监督站管理登陆</div>
 		账号：<input type="text" id="username" placeholder="请输入用户名称" autofocus /><br />
 		密码：<input type="password" id="password" placeholder="请输入用户密码" /><br />
 		<input type="button" class="blogin" id="ok" value="登录" />

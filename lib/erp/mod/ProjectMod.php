@@ -506,7 +506,7 @@ class ProjectMod extends BaseMod
         Flow2Cls::SetReply($fid, $uid, $replyid, $act);
         ProjectCls::SetNode($pid, ProjectNodeCls::DIVIDE, $fid, ProjectStateCls::ALLOW);
 
-        if ($n3) {
+        if ($n3==1) {
             ProjectCls::SetNode($pid, ProjectNodeCls::CONFIRM, $fid, ProjectStateCls::BEGIN);
             ProjectCls::SetNode($pid, ProjectNodeCls::CONFIRM_1, $fid, ProjectStateCls::BEGIN);
             ProjectCls::SetNode($pid, ProjectNodeCls::CONFIRM_2, $fid, ProjectStateCls::BEGIN);

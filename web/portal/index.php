@@ -7,9 +7,9 @@ define('ALERT_ERROR', '系统处理错误');
 
 define('PAGE_SIZE_MEDIUM', 20);
 
-define('APP_NAME', '镇江水利工程质量监督管理站');
+define('APP_NAME', '镇江水利工程质量安全监督管理站');
 define('APP_SHORTNAME', '水利工程质监站');
-define('COMPANY_NAME', '镇江市水利工程质量监督站');
+define('COMPANY_NAME', '镇江市水利工程质量安全监督站');
 
 ob_start();
 

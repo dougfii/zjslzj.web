@@ -81,7 +81,7 @@
                 <div class="cap-operation"></div>
                 <div class="list-operation">
                     <a href="?m=project" target="_blank" class="btn-apply"><i></i>工程监督在线申报</a>
-                    <a href="http://manage.zjslzj.cn" target="_blank" class="btn-panel"><i></i>业务系统管理中心</a>
+                    <a href="http://manage.demo.xzslzj.cn" target="_blank" class="btn-panel"><i></i>业务系统管理中心</a>
                 </div>
             </div>
         </div>
