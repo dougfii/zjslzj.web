@@ -44,6 +44,7 @@ class ProjectMod extends BaseMod
     public function Join()
     {
         $gid = $this->Req('gid', 0, 'int');
+        $type = $this->Req('type', 0, 'int');
         $name = $this->Req('name', '', 'str');
         $company = $this->Req('company', '', 'str');
         $pass = $this->Req('pass', '', 'str');
@@ -52,6 +53,7 @@ class ProjectMod extends BaseMod
         $mobile = $this->Req('mobile', '', 'str');
         $email = $this->Req('email', '', 'str');
 
+        if ($type != 1 && $type != 2) Json::ReturnError('请选择质监类型');
         if ($gid <= 0) Json::ReturnError('请选择所属区域');
         if (empty($name)) Json::ReturnError('请输入工程名称');
         if (!Util::IsMaxLen($name, 200)) Json::ReturnError('工程名称过长');
@@ -64,9 +66,9 @@ class ProjectMod extends BaseMod
         if (!Util::IsMobile($mobile) && !Util::IsPhone($mobile)) Json::ReturnError('请输入正确的联系人手机或电话号码');
         if (!empty($email) && !Util::IsEmail($email)) Json::ReturnError('请输入正确的联系人电子邮箱');
 
-        if (ProjectCls::ExistName($name)) Json::ReturnError('工程名称已经存在');
+        if (ProjectCls::ExistName($type, $name)) Json::ReturnError('工程名称已经存在');
 
-        $id = ProjectCls::Add($gid, $name, $company, $pass, $contacts, $mobile, $email);
+        $id = ProjectCls::Add($gid, $type, $name, $company, $pass, $contacts, $mobile, $email);
         ProjectCls::SetNode($id, ProjectNodeCls::INIT, 0, ProjectStateCls::BEGIN);
 
         $_SESSION ['mid'] = $id;

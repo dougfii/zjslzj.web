@@ -106,6 +106,7 @@ CREATE TABLE t_project
 	name						VARCHAR(200) NOT NULL ,
 	pass						VARCHAR(50) NOT NULL ,
 	gid							BIGINT NOT NULL DEFAULT 0 , -- group id
+	type						INTEGER NOT NULL DEFAULT 0 , -- 类型
 	company						VARCHAR(200) DEFAULT '' ,
 	contacts					VARCHAR(50) NOT NULL ,
 	mobile						VARCHAR(50) DEFAULT '' ,

@@ -4,11 +4,13 @@ class ProjectMod extends BaseMod
 {
     public function index()
     {
-        $this->ProjectList();
+        //$this->ProjectList();
     }
 
-    public function ProjectList()
+    // 作废
+    private function ProjectList()
     {
+        //$type = $this->Req('type', 1, 'int');
         $tid = $this->Req('tid', 0, 'int');
 
         $fname = $this->Req('fname', '', 'str');
@@ -23,6 +25,8 @@ class ProjectMod extends BaseMod
             $where .= ' AND EXTRACT(YEAR FROM time)=' . $year;
         }
 
+//        if ($type != 1 && $type != 2) $type = 1;
+//        $where .= ' AND type=' . $type;
         if (!empty ($fname)) $where .= ' AND LOWER(name) like \'%' . strtolower($fname) . '%\'';
         if (!empty($fcompany)) $where .= ' AND LOWER(company) like \'%' . strtolower($fcompany) . '%\'';
         if (!empty($fdate0) && empty($fdate1)) $where .= " AND DATE_TRUNC('day', time)='{$fdate0}'";
@@ -144,7 +148,8 @@ class ProjectMod extends BaseMod
         Json::ReturnSuccess();
     }
 
-    public function ProjectFlow()
+    // 作废
+    private function ProjectFlow()
     {
         $pid = $this->Req('pid', 0, 'int');
 
@@ -506,7 +511,7 @@ class ProjectMod extends BaseMod
         Flow2Cls::SetReply($fid, $uid, $replyid, $act);
         ProjectCls::SetNode($pid, ProjectNodeCls::DIVIDE, $fid, ProjectStateCls::ALLOW);
 
-        if ($n3==1) {
+        if ($n3 == 1) {
             ProjectCls::SetNode($pid, ProjectNodeCls::CONFIRM, $fid, ProjectStateCls::BEGIN);
             ProjectCls::SetNode($pid, ProjectNodeCls::CONFIRM_1, $fid, ProjectStateCls::BEGIN);
             ProjectCls::SetNode($pid, ProjectNodeCls::CONFIRM_2, $fid, ProjectStateCls::BEGIN);

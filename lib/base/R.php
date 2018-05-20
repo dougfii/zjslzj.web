@@ -7,12 +7,14 @@ class R
 
     // 菜单
     const MENU_CENTER = 0;
-    const MENU_PROJECT = 1;
+    const MENU_QUALITY = 1;
+    const MENU_SECURITY = 2;
     const MENU_WEBSITE = 3;
     const MENU_SYSTEM = 9;
 
     // project
-    const PROJECT_OTHER = 11;
+    const PROJECT_QUALITY = 11;
+    const PROJECT_SECURITY = 12;
 
     // website
     const WEBSITE_ARTICLE_LIST = 31;

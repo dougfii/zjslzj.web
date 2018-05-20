@@ -26,7 +26,7 @@
 	});
 </script>
 <div class="toolbar">
-	<div class="tool clear"><span class="cap"><?php echo $typename ?>列表</span><?php echo $paged; ?><span class="find clear"><span>名称</span><input type="text" id="fname" size="8" value="<?php echo $fname; ?>"/><span>单位</span><input type="text" id="fcompany" size="8" value="<?php echo $fcompany; ?>"/><span>日期起</span><input type="text" id="fdate0" size="10" class="c" value="<?php echo $fdate0; ?>" readonly/><span>日期止</span><input type="text" id="fdate1" size="10" class="c" value="<?php echo $fdate1; ?>" readonly/><input type="button" class="" id="fok" value="查找"/></span><a href="javascript:;" id="export" class="tooladd">导出</a></div>
+	<div class="tool clear"><span class="cap">安全管理列表</span><?php echo $paged; ?><span class="find clear"><span>名称</span><input type="text" id="fname" size="8" value="<?php echo $fname; ?>"/><span>单位</span><input type="text" id="fcompany" size="8" value="<?php echo $fcompany; ?>"/><span>日期起</span><input type="text" id="fdate0" size="10" class="c" value="<?php echo $fdate0; ?>" readonly/><span>日期止</span><input type="text" id="fdate1" size="10" class="c" value="<?php echo $fdate1; ?>" readonly/><input type="button" class="" id="fok" value="查找"/></span><a href="javascript:;" id="export" class="tooladd">导出</a></div>
 </div>
 <div class="panel paneltool">
 	<table class="tl">
@@ -51,7 +51,7 @@
 			<td class="fid"><?php echo $v['id']; ?></td>
 			<td class="fcet"><?php echo $v['group']; ?></td>
 			<td class="fint"><a href="javascript:;" class="aid" aid="<?php echo $v['id']; ?>" aname="<?php echo $v['act']?'关闭':'开放'; ?>"><?php echo $v['act']?'开放':'关闭'; ?></a></td>
-			<td class="fcet"><a href="?m=Project&a=ProjectFlow&pid=<?php echo $v['id']; ?>"><?php echo $v['name']; ?></a></td>
+			<td class="fcet"><a href="?m=Security&a=ProjectFlow&pid=<?php echo $v['id']; ?>"><?php echo $v['name']; ?></a></td>
 			<td class="fcet"><?php echo $v['company']; ?></td>
 			<td class="fusr"><?php echo $v['contacts']; ?></td>
 			<td class="fmob"><?php echo $v['mobile']; ?></td>

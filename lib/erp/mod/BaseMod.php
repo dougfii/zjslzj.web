@@ -91,10 +91,13 @@ abstract class BaseMod implements IMod
 
     private function Menu()
     {
-        $projects = array();
-        $projects[] = array("ProjectList", "全部工程", R::PROJECT_OTHER);
+        $quality[] = array("ProjectList", "全部工程", R::PROJECT_QUALITY);
         for ($i = Date::Year(); $i >= YEAR_START; $i--) {
-            $projects[] = array("ProjectList&year={$i}", "工程 ({$i})", R::PROJECT_OTHER);
+            $quality[] = array("ProjectList&year={$i}", "工程 ({$i})", R::PROJECT_QUALITY);
+        }
+        $security[] = array("ProjectList", "全部工程", R::PROJECT_SECURITY);
+        for ($i = Date::Year(); $i >= YEAR_START; $i--) {
+            $security[] = array("ProjectList&year={$i}", "工程 ({$i})", R::PROJECT_SECURITY);
         }
 
         $mod = $this->Req('m', '', 'str');
@@ -102,7 +105,8 @@ abstract class BaseMod implements IMod
             //首页
             array('Main', '首页', R::MENU_CENTER, null),//
             //CRM销售部分（日程、活动、任务、商机）
-            array('Project', '工程管理', R::MENU_PROJECT, $projects),//
+            array('Quality', '质量管理', R::MENU_QUALITY, $quality),//
+            array('Security', '安全管理', R::MENU_SECURITY, $security),//
             //销售
             array('Article', '网站管理', R::MENU_WEBSITE, array(//
                 array('ArticleList', '文章列表', R::WEBSITE_ARTICLE_LIST),//

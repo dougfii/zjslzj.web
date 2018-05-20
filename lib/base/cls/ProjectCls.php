@@ -206,13 +206,13 @@ class ProjectCls
         return array($count, $rs);
     }
 
-    public static function Add($gid, $name, $company, $pass, $contacts, $mobile, $email)
+    public static function Add($gid, $type, $name, $company, $pass, $contacts, $mobile, $email)
     {
         $rs = DB::db()->Fetch("
-                INSERT INTO " . self::TABLE . "(gid, name, company, pass, contacts, mobile, email)
-				VALUES(?,?,?,md5(?),?,?,?)
+                INSERT INTO " . self::TABLE . "(gid, type, name, company, pass, contacts, mobile, email)
+				VALUES(?,?,?,?,md5(?),?,?,?)
 				RETURNING id
-				", array($gid, $name, $company, $pass, $contacts, $mobile, $email));
+				", array($gid, $type, $name, $company, $pass, $contacts, $mobile, $email));
         return $rs ['id'];
     }
 
@@ -284,9 +284,9 @@ class ProjectCls
 				", array($id));
     }
 
-    public static function ExistName($name, $selfid = null)
+    public static function ExistName($type, $name, $selfid = null)
     {
-        return $selfid ? self::Count("WHERE del=false AND LOWER(name)=LOWER('{$name}') AND id!={$selfid}") : self::Count("WHERE del=false AND LOWER(name)=LOWER('{$name}')");
+        return $selfid ? self::Count("WHERE del=false AND type={$type} AND LOWER(name)=LOWER('{$name}') AND id!={$selfid}") : self::Count("WHERE del=false AND LOWER(name)=LOWER('{$name}')");
     }
 
     public static function Login($name, $pass)
