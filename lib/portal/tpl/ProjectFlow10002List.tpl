@@ -1,5 +1,5 @@
 <div class="toolbar">
-    <div class="tool clear"><span class="cap">安全生产组织机构管理网络</span><a class="tooladd back" href="javascript:;">返回</a><?php if($new) echo '<a class="tooladd" href="?m=Project&a=ProjectFlow10002">新建</a>'; ?></div>
+    <div class="tool clear"><span class="cap">水利工程建设施工现场安全生产条件检查表</span><a class="tooladd back" href="javascript:;">返回</a><?php if($new) echo '<a class="tooladd" href="?m=Project&a=ProjectFlow10002">新建</a>'; ?></div>
 </div>
 <div class="panel paneltool">
     <?php

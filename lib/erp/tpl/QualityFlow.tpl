@@ -6,7 +6,7 @@
 if(!empty($rs))
 {
     echo '<div class="plbox">';
-    echo '<div class="start"><a href="?m=Quality&a=ProjectFlow0List&pid=' . $pid . '">工程立项</a><span class="state">' . ProjectStateCls::Name($rs["s0"]) . '</span></div>';
+    echo '<div class="start"><a href="?m=Project&a=ProjectFlow0List&pid=' . $pid . '">工程立项</a><span class="state">' . ProjectStateCls::Name($rs["s0"]) . '</span></div>';
     if($rs["n0"]>0){
         echo '<div class="title">质量监督检查</div>';
         // echo '<div class="item"><a href="?m=Quality&a=ProjectFlow4List&pid=' . $pid . '">质量监督检查意见表</a><span class="state">&nbsp;</span></div>';
@@ -68,12 +68,6 @@ if(!empty($rs))
                 }
             }
         }
-
-        echo '<div class="title">安全监督检查</div>';
-        echo '<div class="item">1. <a href="?m=Quality&a=ProjectFlow10001List&pid=' . $pid . '">安全监督申请书</a><span class="state">' . ProjectStateCls::Name($rs["s10001"]) . '</span></div>';
-        echo '<div class="item">2. <a href="?m=Quality&a=ProjectFlow10002List&pid=' . $pid . '">安全生产组织机构管理网络</a><span class="state">' . ProjectStateCls::Name($rs["s10002"]) . '</span></div>';
-        echo '<div class="item">3. <a href="?m=Quality&a=ProjectFlow10003List&pid=' . $pid . '">安全生产条件检查表</a><span class="state">' . ProjectStateCls::Name($rs["s10003"]) . '</span></div>';
-        echo '<div class="item">4. <a href="?m=Quality&a=ProjectFlow10004List&pid=' . $pid . '">施工单位安全责任人汇总表</a><span class="state">' . ProjectStateCls::Name($rs["s10004"]) . '</span></div>';
     }
     echo '</div>';
 }

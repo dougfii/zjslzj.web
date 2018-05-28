@@ -45,10 +45,10 @@
             <table class="tx1">
                 <tr><td class="k">工程名称</td><td class="v" colspan="3"><?php if($edit) echo '<input type="text" class="" id="name" value="' . $name . '" />'; else echo $name; ?></td></tr>
                 <tr><td class="k">建设地点</td><td class="v" colspan="3"><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?></td></tr>
-                <tr><td class="k">实施方案文号</td><td class="v"><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?></td><td class="k">工程总投资</td><td class="v"><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?></td></tr>
+                <tr><td class="k">实施方案文号</td><td class="v"><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?></td><td class="k">工程总投资</td><td class="v"><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?> 万元</td></tr>
                 <tr><td class="k">计划开工时间</td><td class="v"><?php if($edit) echo '<input type="text" class="" onclick="laydate()" readonly id="no" value="' . $no . '" />'; else echo $no; ?></td><td class="k">计划完工时间</td><td class="v"><?php if($edit) echo '<input type="text" class="" onclick="laydate()" readonly id="no" value="' . $no . '" />'; else echo $no; ?></td></tr>
                 <tr><td class="k">建设单位名称</td><td class="v" colspan="3"><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?></td></tr>
-                <tr><td class="k" colspan="2">项目法人（建设单位）批准文号</td><td class="v" colspan="2"><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?></td></tr>
+                <tr><td class="k">项目法人（建设单位）批准文号</td><td class="v" colspan="3"><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?></td></tr>
                 <tr><td class="k" rowspan="4">项目法人<br/>（建设单位）</td><td class="k">联系人 </td><td class="v" colspan="2"><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?></td></tr>
                 <tr><td class="k">联系电话 </td><td class="v" colspan="2"><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?></td></tr>
                 <tr><td class="k">通讯地址</td><td class="v" colspan="2"><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?></td></tr>
@@ -61,9 +61,10 @@
                 <tr><td class="k">监理单位</td><td class="v" colspan="2"><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?></td><td class="v"><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?></td></tr>
                 <tr><td class="k">勘测单位</td><td class="v" colspan="2"><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?></td><td class="v"><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?></td></tr>
                 <tr><td class="k">设计单位</td><td class="v" colspan="2"><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?></td><td class="v"><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?></td></tr>
-                <tr><td colspan="4"><textarea rows="15" style="width:700px;padding:5px;">建设单位安全生产工作计划：</textarea></td></tr>
-                <tr><td colspan="4"><textarea rows="15" style="width:700px;padding:5px;">监理单位安全生产工作计划：</textarea></td></tr>
-                <tr><td colspan="4"><textarea rows="15" style="width:700px;padding:5px;">施工单位安全生产工作计划：</textarea></td></tr>
+                <tr><td class="k">其他参建单位</td><td class="v" colspan="2"><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?></td><td class="v"><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?></td></tr>
+                <tr><td colspan="4"><textarea rows="15" style="width:700px;padding:5px;">项目法人（建设单位）安全生产工作计划：</textarea></td></tr>
+                <tr><td colspan="4"><textarea rows="15" style="width:700px;padding:5px;">监理单位安全工作计划：</textarea></td></tr>
+                <tr><td colspan="4"><textarea rows="15" style="width:700px;padding:5px;">施工单位安全工作计划：</textarea></td></tr>
                 <tr><td colspan="4"><textarea rows="15" style="width:700px;padding:5px;">水利工程建设安全监督机构审查意见：</textarea><div style="text-align:right;"><br/><br/><input type="text"/>（公章）<br/><br/><br/><br/><input type="text" readonly onclick="laydate();"/>（日期）<br/><br/><br/><br/></div></td></tr>
             </table>
             <?php echo $atts; ?>
