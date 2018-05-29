@@ -155,6 +155,15 @@ class ProjectCls
                 $rs[$i]['n924n'] = ProjectNodeCls::Name($rs[$i]['n924']);
                 $rs[$i]['n925n'] = ProjectNodeCls::Name($rs[$i]['n925']);
                 $rs[$i]['n10n'] = ProjectNodeCls::Name($rs[$i]['n10']);
+                $rs[$i]['n9999n'] = ProjectNodeCls::Name($rs[$i]['n9999']);
+                $rs[$i]['n10001n'] = ProjectNodeCls::Name($rs[$i]['n10001']);
+                $rs[$i]['n10002n'] = ProjectNodeCls::Name($rs[$i]['n10002']);
+                $rs[$i]['n10003n'] = ProjectNodeCls::Name($rs[$i]['n10003']);
+                $rs[$i]['n10004n'] = ProjectNodeCls::Name($rs[$i]['n10004']);
+                $rs[$i]['n10005n'] = ProjectNodeCls::Name($rs[$i]['n10005']);
+                $rs[$i]['n10006n'] = ProjectNodeCls::Name($rs[$i]['n10006']);
+                $rs[$i]['n10007n'] = ProjectNodeCls::Name($rs[$i]['n10007']);
+                $rs[$i]['n10008n'] = ProjectNodeCls::Name($rs[$i]['n10008']);
 
                 $rs[$i]['s0n'] = ProjectStateCls::Name($rs[$i]['s0']);
                 $rs[$i]['s1n'] = ProjectStateCls::Name($rs[$i]['s1']);
@@ -186,6 +195,16 @@ class ProjectCls
                 $rs[$i]['s924n'] = ProjectStateCls::Name($rs[$i]['s924']);
                 $rs[$i]['s925n'] = ProjectStateCls::Name($rs[$i]['s925']);
                 $rs[$i]['s10n'] = ProjectStateCls::Name($rs[$i]['s10']);
+                $rs[$i]['s9999n'] = ProjectStateCls::Name($rs[$i]['s9999']);
+                $rs[$i]['s10001n'] = ProjectStateCls::Name($rs[$i]['s10001']);
+                $rs[$i]['s10002n'] = ProjectStateCls::Name($rs[$i]['s10002']);
+                $rs[$i]['s10003n'] = ProjectStateCls::Name($rs[$i]['s10003']);
+                $rs[$i]['s10004n'] = ProjectStateCls::Name($rs[$i]['s10004']);
+                $rs[$i]['s10005n'] = ProjectStateCls::Name($rs[$i]['s10005']);
+                $rs[$i]['s10006n'] = ProjectStateCls::Name($rs[$i]['s10006']);
+                $rs[$i]['s10007n'] = ProjectStateCls::Name($rs[$i]['s10007']);
+                $rs[$i]['s10008n'] = ProjectStateCls::Name($rs[$i]['s10008']);
+                $rs[$i]['s10009n'] = ProjectStateCls::Name($rs[$i]['s10009']);
             }
             return $rs;
         }

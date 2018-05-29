@@ -1,5 +1,5 @@
 <div class="toolbar">
-    <div class="tool clear"><span class="cap">安全监督申请书列表</span><a class="tooladd back" href="javascript:;">返回</a></div>
+    <div class="tool clear"><span class="cap">安全监督申请书</span><a class="tooladd back" href="javascript:;">返回</a></div>
 </div>
 <div class="panel paneltool">
     <?php
@@ -12,7 +12,7 @@
         echo '<th>状态</th>';
         echo '</tr>';
         echo '<tr>';
-        echo '<td><a href="?m=Project&a=ProjectFlow1&pid=' . $pid . '">' . $rl['no'] . '</a></td>';
+        echo '<td><a href="?m=Project&a=ProjectFlow10001&pid=' . $pid . '">' . $rl['name'] . ' ' . $rl['t1'] . '</a></td>';
         echo '<td class="ftim">' . $rl['time'] . '</td>';
         echo '<td class="fsta">' . $state . '</td>';
         echo '</tr>';
@@ -49,11 +49,11 @@
         echo '</tr>';
         foreach($rs as $k => $v){
             echo '<tr>';
-            echo '<td><a href="?m=Project&a=ProjectFlow1&pid=' . $pid . '&id=' . $v['id'] . '">' . $v['no'] . '</a></td>';
+            echo '<td><a href="?m=Project&a=ProjectFlow10001&pid=' . $pid . '&id=' . $v['id'] . '">' . $v['name'] . ' ' . $v['t1'] . '</a></td>';
             echo '<td class="ftim">' . $v['time'] . '</td>';
             echo '<td class="fusr">' . $v['user'] . '</td>';
             echo '<td class="ftim">' . $v['replytime'] . '</td>';
-            echo '<td class="fsta"><a href="?m=Project&a=ProjectReply1View&pid=' . $pid . '&fid=' . $v['id'] . '">查看</a></td>';
+            echo '<td class="fsta"><a href="?m=Project&a=ProjectReply10001View&pid=' . $pid . '&fid=' . $v['id'] . '">查看</a></td>';
             echo '</tr>';
         }
         echo '</table>';

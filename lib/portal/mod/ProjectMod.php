@@ -5820,21 +5820,89 @@ class ProjectMod extends BaseMod
         if ($id > 0) $rs = Flow10001Cls::Instance()->Item($id);
         else $rs = Flow10001Cls::GetLastItem($pid);
 
-        $no = '';
-        $signer = '';
-        $content = '';
-        $date = '';
-        $keywords = '';
+        $t1 = '';
+        $t2 = '';
+        $t3 = '';
+        $t4 = '';
+        $t5 = '';
+        $t6 = '';
+        $t7 = '';
+        $t8 = '';
+        $t9 = '';
+        $t10 = '';
+        $t11 = '';
+        $t12 = '';
+        $t13 = '';
+        $t14 = '';
+        $t15 = '';
+        $t16 = '';
+        $t17 = '';
+        $t18 = '';
+        $t19 = '';
+        $t20 = '';
+        $t21 = '';
+        $t22 = '';
+        $t23 = '';
+        $t24 = '';
+        $t25 = '';
+        $t26 = '';
+        $t27 = '';
+        $t28 = '';
+        $t29 = '';
+        $t30 = '';
+        $t31 = '';
+        $t32 = '';
+        $t33 = '';
+        $t34 = '';
+        $t35 = '';
+        $t36 = '';
+        $t37 = '';
+        $t38 = '';
+        $t39 = '';
 
         $edit = true;
 
         if (!empty($rs) && count($rs) > 0) {
 
-            $no = $rs['no'];
-            $signer = $rs['signer'];
-            $content = $rs['content'];
-            $date = $rs['date'];
-            $keywords = $rs['keywords'];
+            $t1 = $rs['t1'];
+            $t2 = $rs['t2'];
+            $t3 = $rs['t3'];
+            $t4 = $rs['t4'];
+            $t5 = $rs['t5'];
+            $t6 = $rs['t6'];
+            $t7 = $rs['t7'];
+            $t8 = $rs['t8'];
+            $t9 = $rs['t9'];
+            $t10 = $rs['t10'];
+            $t11 = $rs['t11'];
+            $t12 = $rs['t12'];
+            $t13 = $rs['t13'];
+            $t14 = $rs['t14'];
+            $t15 = $rs['t15'];
+            $t16 = $rs['t16'];
+            $t17 = $rs['t17'];
+            $t18 = $rs['t18'];
+            $t19 = $rs['t19'];
+            $t20 = $rs['t20'];
+            $t21 = $rs['t21'];
+            $t22 = $rs['t22'];
+            $t23 = $rs['t23'];
+            $t24 = $rs['t24'];
+            $t25 = $rs['t25'];
+            $t26 = $rs['t26'];
+            $t27 = $rs['t27'];
+            $t28 = $rs['t28'];
+            $t29 = $rs['t29'];
+            $t30 = $rs['t30'];
+            $t31 = $rs['t31'];
+            $t32 = $rs['t32'];
+            $t33 = $rs['t33'];
+            $t34 = $rs['t34'];
+            $t35 = $rs['t35'];
+            $t36 = $rs['t36'];
+            $t37 = $rs['t37'];
+            $t38 = $rs['t38'];
+            $t39 = $rs['t39'];
 
             $edit = ProjectStateCls::IsEdit(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_1));
         }
@@ -5847,11 +5915,45 @@ class ProjectMod extends BaseMod
         $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_1);
 
         $view->rs = $rs;
-        $view->no = $no;
-        $view->signer = $signer;
-        $view->content = $content;
-        $view->date = $date;
-        $view->keywords = $keywords;
+        $view->t1 = $t1;
+        $view->t2 = $t2;
+        $view->t3 = $t3;
+        $view->t4 = $t4;
+        $view->t5 = $t5;
+        $view->t6 = $t6;
+        $view->t7 = $t7;
+        $view->t8 = $t8;
+        $view->t9 = $t9;
+        $view->t10 = $t10;
+        $view->t11 = $t11;
+        $view->t12 = $t12;
+        $view->t13 = $t13;
+        $view->t14 = $t14;
+        $view->t15 = $t15;
+        $view->t16 = $t16;
+        $view->t17 = $t17;
+        $view->t18 = $t18;
+        $view->t19 = $t19;
+        $view->t20 = $t20;
+        $view->t21 = $t21;
+        $view->t22 = $t22;
+        $view->t23 = $t23;
+        $view->t24 = $t24;
+        $view->t25 = $t25;
+        $view->t26 = $t26;
+        $view->t27 = $t27;
+        $view->t28 = $t28;
+        $view->t29 = $t29;
+        $view->t30 = $t30;
+        $view->t31 = $t31;
+        $view->t32 = $t32;
+        $view->t33 = $t33;
+        $view->t34 = $t34;
+        $view->t35 = $t35;
+        $view->t36 = $t36;
+        $view->t37 = $t37;
+        $view->t38 = $t38;
+        $view->t39 = $t39;
 
         $view->pid = $pid;
         //$view->atts = Atts::UploadFixed(Atts::$flow1, AttachmentCls::GetFixedItems($pid, 1), $edit);
@@ -5861,59 +5963,50 @@ class ProjectMod extends BaseMod
         $this->MemberFooter();
     }
 
-    public function ProjectFlow10001Print()
-    {
-        $id = $this->Req('id', 0, 'int');
-        $pid = Flow1Cls::Instance()->Pid($id);
-
-        $this->HeadPrint();
-
-        $view = View::Factory('ProjectFlow10001Print');
-
-        $name = ProjectCls::Instance()->Name($pid);
-        $company = ProjectCls::Instance()->Company($pid);
-
-        $rs = Flow10001Cls::Instance()->Item($id);
-
-        $view->rs = $rs;
-
-        $view->name = $name;
-        $view->company = $company;
-        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_1);
-
-        $view->approve = false;
-
-        //$view->atts = Atts::UploadFixed(Atts::$flow1, AttachmentCls::GetFixedItems($pid, 1), false);
-
-        echo $view->Render();
-
-        $this->FootPrint();
-    }
-
     public function OnProjectFlow10001()
     {
-        $no = $this->Req('no', '', 'str');
-        $signer = $this->Req('signer', '', 'str');
-        $content = $this->Req('content', '', 'str');
-        $date = $this->Req('date', '', 'str');
-        $keywords = $this->Req('keywords', '', 'str');
-        $attachments = $this->Req('attachments', '', 'str');
+        $name = $this->Req('name', '', 'str');
+        $t1 = $this->Req('t1', '', 'str');
+        $t2 = $this->Req('t2', '', 'str');
+        $t3 = $this->Req('t3', '', 'str');
+        $t4 = $this->Req('t4', '', 'str');
+        $t5 = $this->Req('t5', '', 'str');
+        $t6 = $this->Req('t6', '', 'str');
+        $t7 = $this->Req('t7', '', 'str');
+        $t8 = $this->Req('t8', '', 'str');
+        $t9 = $this->Req('t9', '', 'str');
+        $t10 = $this->Req('t10', '', 'str');
+        $t11 = $this->Req('t11', '', 'str');
+        $t12 = $this->Req('t12', '', 'str');
+        $t13 = $this->Req('t13', '', 'str');
+        $t14 = $this->Req('t14', '', 'str');
+        $t15 = $this->Req('t15', '', 'str');
+        $t16 = $this->Req('t16', '', 'str');
+        $t17 = $this->Req('t17', '', 'str');
+        $t18 = $this->Req('t18', '', 'str');
+        $t19 = $this->Req('t19', '', 'str');
+        $t20 = $this->Req('t20', '', 'str');
+        $t21 = $this->Req('t21', '', 'str');
+        $t22 = $this->Req('t22', '', 'str');
+        $t23 = $this->Req('t23', '', 'str');
+        $t24 = $this->Req('t24', '', 'str');
+        $t25 = $this->Req('t25', '', 'str');
+        $t26 = $this->Req('t26', '', 'str');
+        $t27 = $this->Req('t27', '', 'str');
+        $t28 = $this->Req('t28', '', 'str');
+        $t29 = $this->Req('t29', '', 'str');
+        $t30 = $this->Req('t30', '', 'str');
+        $t31 = $this->Req('t31', '', 'str');
 
         $pid = $this->Mid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
-        if (empty($no)) Json::ReturnError('请输入文件编号');
-        if (empty($signer)) Json::ReturnError('请输入签发单位');
-        if (empty($content)) Json::ReturnError('请输入申报内容');
-        if (empty($date)) Json::ReturnError('请输入申报日期');
 
-        if (empty($keywords)) $keywords = '无';
-
-        $id = Flow10001Cls::Add($pid, $no, $signer, $content, $date, $keywords, $attachments);
+        $id = Flow10001Cls::Add($pid, $name, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10, $t11, $t12, $t13, $t14, $t15, $t16, $t17, $t18, $t19, $t20, $t21, $t22, $t23, $t24, $t25, $t26, $t27, $t28, $t29, $t30, $t31, "", "", "", "", "", "", "", "");
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_1, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::APPLY, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::APPLY));
+            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_1));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -5921,7 +6014,7 @@ class ProjectMod extends BaseMod
         Json::ReturnSuccess();
     }
 
-    public function ProjectRep10001y1View()
+    public function ProjectReply10001View()
     {
         $fid = $this->Req('fid', 0, 'int');
 
