@@ -50,6 +50,10 @@ class ProjectNodeCls
     const SECURITY_2 = 10002;
     const SECURITY_3 = 10003;
     const SECURITY_4 = 10004;
+    const SECURITY_5 = 10005;
+    const SECURITY_6 = 10006;
+    const SECURITY_7 = 10007;
+    const SECURITY_8 = 10008;
 
     private static $map = array(//
         0 => '工程立项',//
@@ -104,6 +108,7 @@ class ProjectNodeCls
         }
         return '';
     }
+
     private static $material = array(//
         51 => '重要隐蔽（关键部位）单元工程核备',//
         52 => '阶段验收分部工程质量核备',//

@@ -1,5 +1,5 @@
 <div class="toolbar">
-    <div class="tool clear"><span class="cap">水利工程建设项目施工单位安全责任人汇总表</span><a class="tooladd back" href="javascript:;">返回</a><?php if($new) echo '<a class="tooladd" href="?m=Project&a=ProjectFlow10004">新建</a>'; ?></div>
+    <div class="tool clear"><span class="cap">水利工程建设安全监督检查意见表</span><a class="tooladd back" href="javascript:;">返回</a><?php if($new) echo '<a class="tooladd" href="?m=Project&a=ProjectFlow10005">新建</a>'; ?></div>
 </div>
 <div class="panel paneltool">
     <?php
@@ -12,7 +12,7 @@
         echo '<th>状态</th>';
         echo '</tr>';
         echo '<tr>';
-        echo '<td><a href="?m=Project&a=ProjectFlow10004">' . $rl['no'] . '</a></td>';
+        echo '<td><a href="?m=Project&a=ProjectFlow10005">' . $rl['no'] . '</a></td>';
         echo '<td class="ftim">' . $rl['time'] . '</td>';
         echo '<td class="fsta">' . $state . '</td>';
         echo '</tr>';
@@ -49,11 +49,11 @@
         echo '</tr>';
         foreach($rs as $k => $v){
             echo '<tr>';
-            echo '<td><a href="?m=Project&a=ProjectFlow10004&id=' . $v['id'] . '">' . $v['no'] . '</a></td>';
+            echo '<td><a href="?m=Project&a=ProjectFlow10005&id=' . $v['id'] . '">' . $v['no'] . '</a></td>';
             echo '<td class="ftim">' . $v['time'] . '</td>';
             echo '<td class="fusr">' . $v['user'] . '</td>';
             echo '<td class="ftim">' . $v['replytime'] . '</td>';
-            echo '<td class="fsta"><a href="?m=Project&a=ProjectReply10004View&fid=' . $v['id'] . '">查看</a></td>';
+            echo '<td class="fsta"><a href="?m=Project&a=ProjectReply10005View&fid=' . $v['id'] . '">查看</a></td>';
             echo '</tr>';
         }
         echo '</table>';
