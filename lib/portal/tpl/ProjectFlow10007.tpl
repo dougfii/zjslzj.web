@@ -1,8 +1,37 @@
 <script>
     $(function(){
         $('#add').click(function(){
-            $.post('?m=Project&a=OnProjectFlow10007', {id:$('#id').val(),no:$('#no').val(),signer:$('#signer').val(),content:$('#content').val(),date:$('#date').val(),keywords:$('#keywords').val()}, function (ret){if(ret.code==1)layer.msg('提交成功', 1, function(){location.reload();});else layer.msg(ret.msg, 1);}, 'json');
+            var c = new Array();
+            c[0] = $('#item0').is(':checked') ? 1 : 0;
+            c[1] = $('#item1').is(':checked') ? 1 : 0;
+            c[2] = $('#item2').is(':checked') ? 1 : 0;
+            c[3] = $('#item3').is(':checked') ? 1 : 0;
+            var items1 = makearray('.item1');
+            var items2 = makearray('.item2');
+            var items3 = makearray('.item3');
+            var items4 = makearray('.item4');
+            $.post('?m=Project&a=OnProjectFlow10007', {
+                id:$('#id').val(),name:$('#name').val(),
+                t1:$('#t1').val(),
+                t2:$('#t2').val(),
+                t3:$('#t3').val(),
+                t4:$('#t4').val(),
+                t5:$('#t5').val(),
+                t6:$('#t6').val(),
+                t7:$('#t7').val(),
+                t8:$('#t8').val(),
+                t9:c.join(),
+                'items1[]':items1,'items2[]':items2,'items3[]':items3,'items4[]':items4
+            }, function (ret){if(ret.code==1)layer.msg('提交成功', 1, function(){location.reload();});else layer.msg(ret.msg, 1);}, 'json');
         });
+
+        function makearray(obj){
+            var a = new Array();
+            $.each($(obj), function(i, n){
+                a.push($(this).val());
+            });
+            return a;
+        };
 
         $('.upfile').change(function(){
             var pid = $('#pid').val();
@@ -70,7 +99,7 @@
                 <tr><td class="k">施工单位</td><td class="v" colspan="3"><?php if($edit) echo '<input type="text" class="" id="t5" value="' . $t5 . '" />'; else echo $t5; ?></td></tr>
             </table>
             <?php
-            $c = explode(',', $t10);
+            $c = explode(',', $t9);
             $c = array_pad($c, 3, 0);
             ?>
             <table class="tx1">
@@ -79,17 +108,18 @@
                     <tr><td>序号</td><td>检查日期</td><td>形象进度</td><td>评价等级</td><td>备注</td></tr>
                 </thead>
                 <tbody id="items">
-                <tr class="delitem"><td class="c item0"></td><td class="c"><input type="text" class="item1" onclick="laydate();" size="6"/></td><td class="c"><input type="text" class="item2"/></td><td class="c"><input type="text" class="item3"/></td><td class="c"><input type="text" class="item4"/></td></tr>
                 <?php
                  if(!empty($items))
                  {
                     foreach($items as $k=>$v){
-                            echo '<tr class="delitem"><td class="c item0">' . ($k+1) . '</td><td>';
-                            echo $edit ? '<input type="text" class="w item1" value="' . $v[0] . '"/>' : $v[0];
+                            echo '<tr class="delitem"><td class="c item0">' . ($k+1) . '</td><td class="c">';
+                            echo $edit ? '<input type="text" class="item1" onclick="laydate();" size="6" value="' . $v[0] . '"/>' : $v[0];
                             echo '</td><td class="c">';
-                            echo $edit ? '<input type="text" size="10" class="item2" value="' . $v[1] . '" onclick="laydate();" readonly />' : $v[1];
+                            echo $edit ? '<input type="text" class="item2" value="' . $v[1] . '" />' : $v[1];
                             echo '</td><td class="c">';
-                            echo $edit ? '<input type="text" size="10" class="item3" value="' . $v[2] . '"/>' : $v[2];
+                            echo $edit ? '<input type="text" class="item3" value="' . $v[2] . '"/>' : $v[2];
+                            echo '</td><td class="c">';
+                            echo $edit ? '<input type="text" class="item4" value="' . $v[3] . '"/>' : $v[3];
                             echo '</td></tr>';
                         }
                     }

@@ -7309,35 +7309,6 @@ class ProjectMod extends BaseMod
         $t8 = '';
         $t9 = '';
         $t10 = '';
-        $t11 = '';
-        $t12 = '';
-        $t13 = '';
-        $t14 = '';
-        $t15 = '';
-        $t16 = '';
-        $t17 = '';
-        $t18 = '';
-        $t19 = '';
-        $t20 = '';
-        $t21 = '';
-        $t22 = '';
-        $t23 = '';
-        $t24 = '';
-        $t25 = '';
-        $t26 = '';
-        $t27 = '';
-        $t28 = '';
-        $t29 = '';
-        $t30 = '';
-        $t31 = '';
-        $t32 = '';
-        $t33 = '';
-        $t34 = '';
-        $t35 = '';
-        $t36 = '';
-        $t37 = '';
-        $t38 = '';
-        $t39 = '';
 
         $edit = true;
 
@@ -7354,35 +7325,6 @@ class ProjectMod extends BaseMod
             $t8 = $rs['t8'];
             $t9 = $rs['t9'];
             $t10 = $rs['t10'];
-            $t11 = $rs['t11'];
-            $t12 = $rs['t12'];
-            $t13 = $rs['t13'];
-            $t14 = $rs['t14'];
-            $t15 = $rs['t15'];
-            $t16 = $rs['t16'];
-            $t17 = $rs['t17'];
-            $t18 = $rs['t18'];
-            $t19 = $rs['t19'];
-            $t20 = $rs['t20'];
-            $t21 = $rs['t21'];
-            $t22 = $rs['t22'];
-            $t23 = $rs['t23'];
-            $t24 = $rs['t24'];
-            $t25 = $rs['t25'];
-            $t26 = $rs['t26'];
-            $t27 = $rs['t27'];
-            $t28 = $rs['t28'];
-            $t29 = $rs['t29'];
-            $t30 = $rs['t30'];
-            $t31 = $rs['t31'];
-            $t32 = $rs['t32'];
-            $t33 = $rs['t33'];
-            $t34 = $rs['t34'];
-            $t35 = $rs['t35'];
-            $t36 = $rs['t36'];
-            $t37 = $rs['t37'];
-            $t38 = $rs['t38'];
-            $t39 = $rs['t39'];
 
             $edit = ProjectStateCls::IsEdit(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_7));
         }
@@ -7404,36 +7346,7 @@ class ProjectMod extends BaseMod
         $view->t7 = $t7;
         $view->t8 = $t8;
         $view->t9 = $t9;
-        $view->t10 = $t10;
-        $view->t11 = $t11;
-        $view->t12 = $t12;
-        $view->t13 = $t13;
-        $view->t14 = $t14;
-        $view->t15 = $t15;
-        $view->t16 = $t16;
-        $view->t17 = $t17;
-        $view->t18 = $t18;
-        $view->t19 = $t19;
-        $view->t20 = $t20;
-        $view->t21 = $t21;
-        $view->t22 = $t22;
-        $view->t23 = $t23;
-        $view->t24 = $t24;
-        $view->t25 = $t25;
-        $view->t26 = $t26;
-        $view->t27 = $t27;
-        $view->t28 = $t28;
-        $view->t29 = $t29;
-        $view->t30 = $t30;
-        $view->t31 = $t31;
-        $view->t32 = $t32;
-        $view->t33 = $t33;
-        $view->t34 = $t34;
-        $view->t35 = $t35;
-        $view->t36 = $t36;
-        $view->t37 = $t37;
-        $view->t38 = $t38;
-        $view->t39 = $t39;
+        $view->items = Json::Decode($t10);
 
         $view->pid = $pid;
         //$view->atts = Atts::UploadFixed(Atts::$flow1, AttachmentCls::GetFixedItems($pid, 1), $edit);
@@ -7455,26 +7368,34 @@ class ProjectMod extends BaseMod
         $t7 = $this->Req('t7', '', 'str');
         $t8 = $this->Req('t8', '', 'str');
         $t9 = $this->Req('t9', '', 'str');
-        $t10 = $this->Req('t10', '', 'str');
-        $t11 = $this->Req('t11', '', 'str');
-        $t12 = $this->Req('t12', '', 'str');
-        $t13 = $this->Req('t13', '', 'str');
-        $t14 = $this->Req('t14', '', 'str');
-        $t15 = $this->Req('t15', '', 'str');
-        $t16 = $this->Req('t16', '', 'str');
-        $t17 = $this->Req('t17', '', 'str');
-        $t18 = $this->Req('t18', '', 'str');
-        $t19 = $this->Req('t19', '', 'str');
-        $t20 = $this->Req('t20', '', 'str');
-        $t21 = $this->Req('t21', '', 'str');
-        $t22 = $this->Req('t22', '', 'str');
-        $t23 = $this->Req('t23', '', 'str');
+
+        $items1 = $this->Req('items1', array(), 'array');
+        $items2 = $this->Req('items2', array(), 'array');
+        $items3 = $this->Req('items3', array(), 'array');
+        $items4= $this->Req('items4', array(), 'array');
+
+        $items = array();
+        $num1 = count($items1);
+        $num2 = count($items2);
+        $num3 = count($items3);
+        $num4 = count($items4);
+
+        if ($num1 != $num2 || $num1 != $num3|| $num1 != $num4) Json::ReturnError(ALERT_ERROR);
+        if ($num1 <= 0) Json::ReturnError('请至少添加一个条目');
+        for ($i = 0; $i < $num1; $i++) {
+            if (empty($items1[$i])) Json::ReturnError('请输入序号' . ($i + 1) . '条目的检查日期');
+            if (empty($items2[$i])) Json::ReturnError('请输入序号' . ($i + 1) . '条目的形象进度');
+            if (empty($items3[$i])) Json::ReturnError('请输入序号' . ($i + 1) . '条目的评价等级');
+            $items[$i] = array($items1[$i], $items2[$i], $items3[$i], $items4[$i]);
+        }
+
+        $items = Json::Encode($items);
 
         $pid = $this->Mid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
 
-        $id = Flow10007Cls::Add($pid, $name, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10, $t11, $t12, $t13, $t14, $t15, $t16, $t17, $t18, $t19, $t20, $t21, $t22, $t23, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+        $id = Flow10007Cls::Add($pid, $name, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $items, "","","","","","","","","","","","","","", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_7, $id, ProjectStateCls::APPROVE);
 
         try {
