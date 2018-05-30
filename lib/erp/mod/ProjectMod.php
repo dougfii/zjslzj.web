@@ -5093,6 +5093,136 @@ class ProjectMod extends BaseMod
         $this->Footer();
     }
 
+    public function ProjectFlow10002()
+    {
+        $id = $this->Req('id', 0, 'int');
+        $pid = $this->Req('pid', 0, 'int');
+
+        $this->Header();
+
+        $view = View::Factory('ProjectFlow10002');
+
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        if ($id > 0) $rs = Flow10002Cls::Instance()->Item($id);
+        else $rs = Flow10002Cls::GetLastItem($pid);
+
+        $view->rs = $rs;
+
+        $view->name = $name;
+        $view->company = $company;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_2);
+
+        if ($id > 0) $view->approve = false;
+        else $view->approve = ProjectStateCls::IsApprove(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_2));
+
+        //$view->atts = Atts::UploadFixed(Atts::$flow1, AttachmentCls::GetFixedItems($pid, 1), false, false, true);
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
+    public function OnProjectFlow10002Deny()
+    {
+        $pid = $this->Req('pid', 0, 'int');
+        $fid = $this->Req('fid', 0, 'int');
+        $content = $this->Req('content', '', 'str');
+        $uid = $this->Uid();
+
+        if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
+        if (empty($content)) Json::ReturnError('请输入审批意见');
+
+        $act = 0;
+
+        $replyid = Reply10002Cls::Add($pid, $fid, '', $content, '', $uid, $act);
+        Flow10002Cls::SetReply($fid, $uid, $replyid);
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_2, $fid, ProjectStateCls::DENY);
+
+        MsgCls::Add(1, MsgDirectCls::FROM_USER, $this->Uid(), $pid, '管理员', ProjectCls::Instance()->Name($pid), ProjectNodeCls::SECURITY_2, $fid, ProjectNodeCls::Name(ProjectNodeCls::SECURITY_2) . '被审批退回');
+
+        Json::ReturnSuccess();
+    }
+
+    public function ProjectReply10002()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+
+        $pid = Flow10002Cls::Instance()->Pid($fid);
+        $gc = ProjectCls::GetGroupCompany($pid);
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        $this->Header();
+
+        $view = View::Factory('ProjectReply10002');
+
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        $view->fid = $fid;
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
+    public function OnProjectReply10002()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+        $no = $this->Req('no', '', 'str');
+        $content = $this->Req('content', '', 'str');
+        $date = $this->Req('date', '', 'str');
+        $uid = $this->Uid();
+
+        $pid = Flow10002Cls::Instance()->Pid($fid);
+
+        if ($fid <= 0 || $pid <= 0 || $uid <= 0) Json::ReturnError(ALERT_ERROR);
+        if (empty($no)) Json::ReturnError('请输入文件编号');
+        if (empty($content)) Json::ReturnError('请输入批复内容');
+        if (empty($date)) Json::ReturnError('请输入批复日期');
+
+        $act = 1;
+
+        $replyid = Reply10002Cls::Add($pid, $fid, $no, $content, $date, $uid, $act);
+        Flow10002Cls::SetReply($fid, $uid, $replyid, $act);
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_2, $fid, ProjectStateCls::ALLOW);
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_3, $fid, ProjectStateCls::BEGIN);
+
+        MsgCls::Add(1, MsgDirectCls::FROM_USER, $this->Uid(), $pid, '管理员', ProjectCls::Instance()->Name($pid), ProjectNodeCls::APPLY, $fid, ProjectNodeCls::Name(ProjectNodeCls::APPLY) . '有批复');
+
+        Json::ReturnSuccess();
+    }
+
+    public function ProjectReply10002View()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+        $pid = $this->Req('pid', 0, 'int');
+        //$pid = Flow1Cls::Instance()->Pid($fid);
+        $gc = ProjectCls::GetGroupCompany($pid);
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        $rs = Reply10002Cls::GetLastItem($pid, $fid);
+
+        $this->Header();
+
+        $view = View::Factory('ProjectReply10002View');
+
+        $view->rs = $rs;
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        $view->fid = $fid;
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
     public function ProjectFlow10003List()
     {
         $pid = $this->Req('pid', 0, 'int');
@@ -5123,6 +5253,136 @@ class ProjectMod extends BaseMod
         $this->Footer();
     }
 
+    public function ProjectFlow10003()
+    {
+        $id = $this->Req('id', 0, 'int');
+        $pid = $this->Req('pid', 0, 'int');
+
+        $this->Header();
+
+        $view = View::Factory('ProjectFlow10003');
+
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        if ($id > 0) $rs = Flow10003Cls::Instance()->Item($id);
+        else $rs = Flow10003Cls::GetLastItem($pid);
+
+        $view->rs = $rs;
+
+        $view->name = $name;
+        $view->company = $company;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_3);
+
+        if ($id > 0) $view->approve = false;
+        else $view->approve = ProjectStateCls::IsApprove(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_3));
+
+        //$view->atts = Atts::UploadFixed(Atts::$flow1, AttachmentCls::GetFixedItems($pid, 1), false, false, true);
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
+    public function OnProjectFlow10003Deny()
+    {
+        $pid = $this->Req('pid', 0, 'int');
+        $fid = $this->Req('fid', 0, 'int');
+        $content = $this->Req('content', '', 'str');
+        $uid = $this->Uid();
+
+        if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
+        if (empty($content)) Json::ReturnError('请输入审批意见');
+
+        $act = 0;
+
+        $replyid = Reply10003Cls::Add($pid, $fid, '', $content, '', $uid, $act);
+        Flow10003Cls::SetReply($fid, $uid, $replyid);
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_3, $fid, ProjectStateCls::DENY);
+
+        MsgCls::Add(1, MsgDirectCls::FROM_USER, $this->Uid(), $pid, '管理员', ProjectCls::Instance()->Name($pid), ProjectNodeCls::SECURITY_3, $fid, ProjectNodeCls::Name(ProjectNodeCls::SECURITY_3) . '被审批退回');
+
+        Json::ReturnSuccess();
+    }
+
+    public function ProjectReply10003()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+
+        $pid = Flow10003Cls::Instance()->Pid($fid);
+        $gc = ProjectCls::GetGroupCompany($pid);
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        $this->Header();
+
+        $view = View::Factory('ProjectReply10003');
+
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        $view->fid = $fid;
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
+    public function OnProjectReply10003()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+        $no = $this->Req('no', '', 'str');
+        $content = $this->Req('content', '', 'str');
+        $date = $this->Req('date', '', 'str');
+        $uid = $this->Uid();
+
+        $pid = Flow10003Cls::Instance()->Pid($fid);
+
+        if ($fid <= 0 || $pid <= 0 || $uid <= 0) Json::ReturnError(ALERT_ERROR);
+        if (empty($no)) Json::ReturnError('请输入文件编号');
+        if (empty($content)) Json::ReturnError('请输入批复内容');
+        if (empty($date)) Json::ReturnError('请输入批复日期');
+
+        $act = 1;
+
+        $replyid = Reply10003Cls::Add($pid, $fid, $no, $content, $date, $uid, $act);
+        Flow10003Cls::SetReply($fid, $uid, $replyid, $act);
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_3, $fid, ProjectStateCls::ALLOW);
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_4, $fid, ProjectStateCls::BEGIN);
+
+        MsgCls::Add(1, MsgDirectCls::FROM_USER, $this->Uid(), $pid, '管理员', ProjectCls::Instance()->Name($pid), ProjectNodeCls::APPLY, $fid, ProjectNodeCls::Name(ProjectNodeCls::APPLY) . '有批复');
+
+        Json::ReturnSuccess();
+    }
+
+    public function ProjectReply10003View()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+        $pid = $this->Req('pid', 0, 'int');
+        //$pid = Flow1Cls::Instance()->Pid($fid);
+        $gc = ProjectCls::GetGroupCompany($pid);
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        $rs = Reply10003Cls::GetLastItem($pid, $fid);
+
+        $this->Header();
+
+        $view = View::Factory('ProjectReply10003View');
+
+        $view->rs = $rs;
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        $view->fid = $fid;
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
     public function ProjectFlow10004List()
     {
         $pid = $this->Req('pid', 0, 'int');
@@ -5147,6 +5407,616 @@ class ProjectMod extends BaseMod
         $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_4);
 
         $view->pid = $pid;
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
+    public function ProjectFlow10004()
+    {
+        $id = $this->Req('id', 0, 'int');
+        $pid = $this->Req('pid', 0, 'int');
+
+        $this->Header();
+
+        $view = View::Factory('ProjectFlow10004');
+
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        if ($id > 0) $rs = Flow10004Cls::Instance()->Item($id);
+        else $rs = Flow10004Cls::GetLastItem($pid);
+
+        $view->rs = $rs;
+
+        $view->name = $name;
+        $view->company = $company;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_4);
+
+        if ($id > 0) $view->approve = false;
+        else $view->approve = ProjectStateCls::IsApprove(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_4));
+
+        //$view->atts = Atts::UploadFixed(Atts::$flow1, AttachmentCls::GetFixedItems($pid, 1), false, false, true);
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
+    public function OnProjectFlow10004Deny()
+    {
+        $pid = $this->Req('pid', 0, 'int');
+        $fid = $this->Req('fid', 0, 'int');
+        $content = $this->Req('content', '', 'str');
+        $uid = $this->Uid();
+
+        if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
+        if (empty($content)) Json::ReturnError('请输入审批意见');
+
+        $act = 0;
+
+        $replyid = Reply10004Cls::Add($pid, $fid, '', $content, '', $uid, $act);
+        Flow10004Cls::SetReply($fid, $uid, $replyid);
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_4, $fid, ProjectStateCls::DENY);
+
+        MsgCls::Add(1, MsgDirectCls::FROM_USER, $this->Uid(), $pid, '管理员', ProjectCls::Instance()->Name($pid), ProjectNodeCls::SECURITY_4, $fid, ProjectNodeCls::Name(ProjectNodeCls::SECURITY_4) . '被审批退回');
+
+        Json::ReturnSuccess();
+    }
+
+    public function ProjectReply10004()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+
+        $pid = Flow10004Cls::Instance()->Pid($fid);
+        $gc = ProjectCls::GetGroupCompany($pid);
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        $this->Header();
+
+        $view = View::Factory('ProjectReply10004');
+
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        $view->fid = $fid;
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
+    public function OnProjectReply10004()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+        $no = $this->Req('no', '', 'str');
+        $content = $this->Req('content', '', 'str');
+        $date = $this->Req('date', '', 'str');
+        $uid = $this->Uid();
+
+        $pid = Flow10004Cls::Instance()->Pid($fid);
+
+        if ($fid <= 0 || $pid <= 0 || $uid <= 0) Json::ReturnError(ALERT_ERROR);
+        if (empty($no)) Json::ReturnError('请输入文件编号');
+        if (empty($content)) Json::ReturnError('请输入批复内容');
+        if (empty($date)) Json::ReturnError('请输入批复日期');
+
+        $act = 1;
+
+        $replyid = Reply10004Cls::Add($pid, $fid, $no, $content, $date, $uid, $act);
+        Flow10004Cls::SetReply($fid, $uid, $replyid, $act);
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_4, $fid, ProjectStateCls::ALLOW);
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_5, $fid, ProjectStateCls::BEGIN);
+
+        MsgCls::Add(1, MsgDirectCls::FROM_USER, $this->Uid(), $pid, '管理员', ProjectCls::Instance()->Name($pid), ProjectNodeCls::APPLY, $fid, ProjectNodeCls::Name(ProjectNodeCls::APPLY) . '有批复');
+
+        Json::ReturnSuccess();
+    }
+
+    public function ProjectReply10004View()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+        $pid = $this->Req('pid', 0, 'int');
+        //$pid = Flow1Cls::Instance()->Pid($fid);
+        $gc = ProjectCls::GetGroupCompany($pid);
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        $rs = Reply10004Cls::GetLastItem($pid, $fid);
+
+        $this->Header();
+
+        $view = View::Factory('ProjectReply10004View');
+
+        $view->rs = $rs;
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        $view->fid = $fid;
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
+    public function ProjectFlow10005List()
+    {
+        $pid = $this->Req('pid', 0, 'int');
+
+        $this->Header();
+
+        $view = View::Factory('ProjectFlow10005List');
+
+        $new = true;
+        $rr = array();
+        $rl = Flow10005Cls::GetLastItem($pid);
+        if (!empty($rl) && count($rl) > 0) {
+            $new = ProjectStateCls::IsNew(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_5));
+            if ($rl['replyid'] > 0) $rr = Reply10005Cls::GetLastItem($pid, $rl['replyid']);
+        }
+        $rs = Flow10005Cls::GetApprovedItems($pid);
+
+        $view->rl = $rl;
+        $view->rr = $rr;
+        $view->rs = $rs;
+        $view->new = $new;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_5);
+
+        $view->pid = $pid;
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
+    public function ProjectFlow10005()
+    {
+        $id = $this->Req('id', 0, 'int');
+        $pid = $this->Req('pid', 0, 'int');
+
+        $this->Header();
+
+        $view = View::Factory('ProjectFlow10005');
+
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        if ($id > 0) $rs = Flow10005Cls::Instance()->Item($id);
+        else $rs = Flow10005Cls::GetLastItem($pid);
+
+        $view->rs = $rs;
+
+        $view->name = $name;
+        $view->company = $company;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_5);
+
+        if ($id > 0) $view->approve = false;
+        else $view->approve = ProjectStateCls::IsApprove(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_5));
+
+        //$view->atts = Atts::UploadFixed(Atts::$flow1, AttachmentCls::GetFixedItems($pid, 1), false, false, true);
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
+    public function OnProjectFlow10005Deny()
+    {
+        $pid = $this->Req('pid', 0, 'int');
+        $fid = $this->Req('fid', 0, 'int');
+        $content = $this->Req('content', '', 'str');
+        $uid = $this->Uid();
+
+        if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
+        if (empty($content)) Json::ReturnError('请输入审批意见');
+
+        $act = 0;
+
+        $replyid = Reply10005Cls::Add($pid, $fid, '', $content, '', $uid, $act);
+        Flow10005Cls::SetReply($fid, $uid, $replyid);
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_5, $fid, ProjectStateCls::DENY);
+
+        MsgCls::Add(1, MsgDirectCls::FROM_USER, $this->Uid(), $pid, '管理员', ProjectCls::Instance()->Name($pid), ProjectNodeCls::SECURITY_5, $fid, ProjectNodeCls::Name(ProjectNodeCls::SECURITY_5) . '被审批退回');
+
+        Json::ReturnSuccess();
+    }
+
+    public function ProjectReply10005()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+
+        $pid = Flow10005Cls::Instance()->Pid($fid);
+        $gc = ProjectCls::GetGroupCompany($pid);
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        $this->Header();
+
+        $view = View::Factory('ProjectReply10005');
+
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        $view->fid = $fid;
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
+    public function OnProjectReply10005()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+        $no = $this->Req('no', '', 'str');
+        $content = $this->Req('content', '', 'str');
+        $date = $this->Req('date', '', 'str');
+        $uid = $this->Uid();
+
+        $pid = Flow10005Cls::Instance()->Pid($fid);
+
+        if ($fid <= 0 || $pid <= 0 || $uid <= 0) Json::ReturnError(ALERT_ERROR);
+        if (empty($no)) Json::ReturnError('请输入文件编号');
+        if (empty($content)) Json::ReturnError('请输入批复内容');
+        if (empty($date)) Json::ReturnError('请输入批复日期');
+
+        $act = 1;
+
+        $replyid = Reply10005Cls::Add($pid, $fid, $no, $content, $date, $uid, $act);
+        Flow10005Cls::SetReply($fid, $uid, $replyid, $act);
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_5, $fid, ProjectStateCls::ALLOW);
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_6, $fid, ProjectStateCls::BEGIN);
+
+        MsgCls::Add(1, MsgDirectCls::FROM_USER, $this->Uid(), $pid, '管理员', ProjectCls::Instance()->Name($pid), ProjectNodeCls::APPLY, $fid, ProjectNodeCls::Name(ProjectNodeCls::APPLY) . '有批复');
+
+        Json::ReturnSuccess();
+    }
+
+    public function ProjectReply10005View()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+        $pid = $this->Req('pid', 0, 'int');
+        //$pid = Flow1Cls::Instance()->Pid($fid);
+        $gc = ProjectCls::GetGroupCompany($pid);
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        $rs = Reply10005Cls::GetLastItem($pid, $fid);
+
+        $this->Header();
+
+        $view = View::Factory('ProjectReply10005View');
+
+        $view->rs = $rs;
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        $view->fid = $fid;
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
+    public function ProjectFlow10006List()
+    {
+        $pid = $this->Req('pid', 0, 'int');
+
+        $this->Header();
+
+        $view = View::Factory('ProjectFlow10006List');
+
+        $new = true;
+        $rr = array();
+        $rl = Flow10006Cls::GetLastItem($pid);
+        if (!empty($rl) && count($rl) > 0) {
+            $new = ProjectStateCls::IsNew(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_6));
+            if ($rl['replyid'] > 0) $rr = Reply10006Cls::GetLastItem($pid, $rl['replyid']);
+        }
+        $rs = Flow10006Cls::GetApprovedItems($pid);
+
+        $view->rl = $rl;
+        $view->rr = $rr;
+        $view->rs = $rs;
+        $view->new = $new;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_6);
+
+        $view->pid = $pid;
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
+    public function ProjectFlow10006()
+    {
+        $id = $this->Req('id', 0, 'int');
+        $pid = $this->Req('pid', 0, 'int');
+
+        $this->Header();
+
+        $view = View::Factory('ProjectFlow10006');
+
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        if ($id > 0) $rs = Flow10006Cls::Instance()->Item($id);
+        else $rs = Flow10006Cls::GetLastItem($pid);
+
+        $view->rs = $rs;
+
+        $view->name = $name;
+        $view->company = $company;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_6);
+
+        if ($id > 0) $view->approve = false;
+        else $view->approve = ProjectStateCls::IsApprove(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_6));
+
+        //$view->atts = Atts::UploadFixed(Atts::$flow1, AttachmentCls::GetFixedItems($pid, 1), false, false, true);
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
+    public function OnProjectFlow10006Deny()
+    {
+        $pid = $this->Req('pid', 0, 'int');
+        $fid = $this->Req('fid', 0, 'int');
+        $content = $this->Req('content', '', 'str');
+        $uid = $this->Uid();
+
+        if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
+        if (empty($content)) Json::ReturnError('请输入审批意见');
+
+        $act = 0;
+
+        $replyid = Reply10006Cls::Add($pid, $fid, '', $content, '', $uid, $act);
+        Flow10006Cls::SetReply($fid, $uid, $replyid);
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_6, $fid, ProjectStateCls::DENY);
+
+        MsgCls::Add(1, MsgDirectCls::FROM_USER, $this->Uid(), $pid, '管理员', ProjectCls::Instance()->Name($pid), ProjectNodeCls::SECURITY_6, $fid, ProjectNodeCls::Name(ProjectNodeCls::SECURITY_6) . '被审批退回');
+
+        Json::ReturnSuccess();
+    }
+
+    public function ProjectReply10006()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+
+        $pid = Flow10006Cls::Instance()->Pid($fid);
+        $gc = ProjectCls::GetGroupCompany($pid);
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        $this->Header();
+
+        $view = View::Factory('ProjectReply10006');
+
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        $view->fid = $fid;
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
+    public function OnProjectReply10006()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+        $no = $this->Req('no', '', 'str');
+        $content = $this->Req('content', '', 'str');
+        $date = $this->Req('date', '', 'str');
+        $uid = $this->Uid();
+
+        $pid = Flow10006Cls::Instance()->Pid($fid);
+
+        if ($fid <= 0 || $pid <= 0 || $uid <= 0) Json::ReturnError(ALERT_ERROR);
+        if (empty($no)) Json::ReturnError('请输入文件编号');
+        if (empty($content)) Json::ReturnError('请输入批复内容');
+        if (empty($date)) Json::ReturnError('请输入批复日期');
+
+        $act = 1;
+
+        $replyid = Reply10006Cls::Add($pid, $fid, $no, $content, $date, $uid, $act);
+        Flow10006Cls::SetReply($fid, $uid, $replyid, $act);
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_6, $fid, ProjectStateCls::ALLOW);
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_7, $fid, ProjectStateCls::BEGIN);
+
+        MsgCls::Add(1, MsgDirectCls::FROM_USER, $this->Uid(), $pid, '管理员', ProjectCls::Instance()->Name($pid), ProjectNodeCls::APPLY, $fid, ProjectNodeCls::Name(ProjectNodeCls::APPLY) . '有批复');
+
+        Json::ReturnSuccess();
+    }
+
+    public function ProjectReply10006View()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+        $pid = $this->Req('pid', 0, 'int');
+        //$pid = Flow1Cls::Instance()->Pid($fid);
+        $gc = ProjectCls::GetGroupCompany($pid);
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        $rs = Reply10006Cls::GetLastItem($pid, $fid);
+
+        $this->Header();
+
+        $view = View::Factory('ProjectReply10006View');
+
+        $view->rs = $rs;
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        $view->fid = $fid;
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
+    public function ProjectFlow10007List()
+    {
+        $pid = $this->Req('pid', 0, 'int');
+
+        $this->Header();
+
+        $view = View::Factory('ProjectFlow10007List');
+
+        $new = true;
+        $rr = array();
+        $rl = Flow10007Cls::GetLastItem($pid);
+        if (!empty($rl) && count($rl) > 0) {
+            $new = ProjectStateCls::IsNew(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_7));
+            if ($rl['replyid'] > 0) $rr = Reply10007Cls::GetLastItem($pid, $rl['replyid']);
+        }
+        $rs = Flow10007Cls::GetApprovedItems($pid);
+
+        $view->rl = $rl;
+        $view->rr = $rr;
+        $view->rs = $rs;
+        $view->new = $new;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_7);
+
+        $view->pid = $pid;
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
+    public function ProjectFlow10007()
+    {
+        $id = $this->Req('id', 0, 'int');
+        $pid = $this->Req('pid', 0, 'int');
+
+        $this->Header();
+
+        $view = View::Factory('ProjectFlow10007');
+
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        if ($id > 0) $rs = Flow10007Cls::Instance()->Item($id);
+        else $rs = Flow10007Cls::GetLastItem($pid);
+
+        $view->rs = $rs;
+
+        $view->name = $name;
+        $view->company = $company;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_7);
+
+        if ($id > 0) $view->approve = false;
+        else $view->approve = ProjectStateCls::IsApprove(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_7));
+
+        //$view->atts = Atts::UploadFixed(Atts::$flow1, AttachmentCls::GetFixedItems($pid, 1), false, false, true);
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
+    public function OnProjectFlow10007Deny()
+    {
+        $pid = $this->Req('pid', 0, 'int');
+        $fid = $this->Req('fid', 0, 'int');
+        $content = $this->Req('content', '', 'str');
+        $uid = $this->Uid();
+
+        if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
+        if (empty($content)) Json::ReturnError('请输入审批意见');
+
+        $act = 0;
+
+        $replyid = Reply10007Cls::Add($pid, $fid, '', $content, '', $uid, $act);
+        Flow10007Cls::SetReply($fid, $uid, $replyid);
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_7, $fid, ProjectStateCls::DENY);
+
+        MsgCls::Add(1, MsgDirectCls::FROM_USER, $this->Uid(), $pid, '管理员', ProjectCls::Instance()->Name($pid), ProjectNodeCls::SECURITY_7, $fid, ProjectNodeCls::Name(ProjectNodeCls::SECURITY_7) . '被审批退回');
+
+        Json::ReturnSuccess();
+    }
+
+    public function ProjectReply10007()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+
+        $pid = Flow10007Cls::Instance()->Pid($fid);
+        $gc = ProjectCls::GetGroupCompany($pid);
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        $this->Header();
+
+        $view = View::Factory('ProjectReply10007');
+
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        $view->fid = $fid;
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
+    public function OnProjectReply10007()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+        $no = $this->Req('no', '', 'str');
+        $content = $this->Req('content', '', 'str');
+        $date = $this->Req('date', '', 'str');
+        $uid = $this->Uid();
+
+        $pid = Flow10007Cls::Instance()->Pid($fid);
+
+        if ($fid <= 0 || $pid <= 0 || $uid <= 0) Json::ReturnError(ALERT_ERROR);
+        if (empty($no)) Json::ReturnError('请输入文件编号');
+        if (empty($content)) Json::ReturnError('请输入批复内容');
+        if (empty($date)) Json::ReturnError('请输入批复日期');
+
+        $act = 1;
+
+        $replyid = Reply10007Cls::Add($pid, $fid, $no, $content, $date, $uid, $act);
+        Flow10007Cls::SetReply($fid, $uid, $replyid, $act);
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_7, $fid, ProjectStateCls::ALLOW);
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_8, $fid, ProjectStateCls::BEGIN);
+
+        MsgCls::Add(1, MsgDirectCls::FROM_USER, $this->Uid(), $pid, '管理员', ProjectCls::Instance()->Name($pid), ProjectNodeCls::APPLY, $fid, ProjectNodeCls::Name(ProjectNodeCls::APPLY) . '有批复');
+
+        Json::ReturnSuccess();
+    }
+
+    public function ProjectReply10007View()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+        $pid = $this->Req('pid', 0, 'int');
+        //$pid = Flow1Cls::Instance()->Pid($fid);
+        $gc = ProjectCls::GetGroupCompany($pid);
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        $rs = Reply10007Cls::GetLastItem($pid, $fid);
+
+        $this->Header();
+
+        $view = View::Factory('ProjectReply10007View');
+
+        $view->rs = $rs;
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        $view->fid = $fid;
 
         echo $view->Render();
 
