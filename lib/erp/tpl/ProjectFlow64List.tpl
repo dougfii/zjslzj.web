@@ -1,5 +1,5 @@
 <div class="toolbar">
-    <div class="tool clear"><span class="cap">工程项目质量等级核定表</span><a class="tooladd back" href="javascript:;">返回</a></div>
+    <div class="tool clear"><span class="cap">工程项目质量核定</span><a class="tooladd back" href="javascript:;">返回</a></div>
 </div>
 <div class="panel paneltool">
     <?php

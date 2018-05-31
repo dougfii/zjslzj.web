@@ -1,5 +1,5 @@
 <div class="toolbar">
-    <div class="tool clear"><span class="cap">合同工程完工鉴定书</span><a class="tooladd back" href="javascript:;">返回</a></div>
+    <div class="tool clear"><span class="cap">分部工程验收鉴定书</span><a class="tooladd back" href="javascript:;">返回</a></div>
 </div>
 <div class="panel paneltool">
     <?php
@@ -12,7 +12,7 @@
         echo '<th>状态</th>';
         echo '</tr>';
         echo '<tr>';
-        echo '<td><a href="?m=Project&a=ProjectFlow75&pid=' . $pid . '">合同签定书 ' . $rl['time'] . '</a></td>';
+        echo '<td><a href="?m=Project&a=ProjectFlow77&pid=' . $pid . '">分部工程验收鉴定书' . $rl['time'] . '</a></td>';
         echo '<td class="ftim">' . $rl['time'] . '</td>';
         echo '<td class="fsta">' . $state . '</td>';
         echo '</tr>';
@@ -49,11 +49,11 @@
         echo '</tr>';
         foreach($rs as $k => $v){
             echo '<tr>';
-            echo '<td><a href="?m=Project&a=ProjectFlow75&pid=' . $pid . '&id=' . $v['id'] . '">合同签定书 ' . $v['time'] . '</a></td>';
+            echo '<td><a href="?m=Project&a=ProjectFlow77&pid=' . $pid . '&id=' . $v['id'] . '">分部工程验收鉴定书 ' . $v['time'] . '</a></td>';
             echo '<td class="ftim">' . $v['time'] . '</td>';
             echo '<td class="fusr">' . $v['user'] . '</td>';
             echo '<td class="ftim">' . $v['replytime'] . '</td>';
-            echo '<td class="fsta"><a href="?m=Project&a=ProjectReply75View&pid=' . $pid . '&fid=' . $v['id'] . '">查看</a></td>';
+            echo '<td class="fsta"><a href="?m=Project&a=ProjectReply77View&pid=' . $pid . '&fid=' . $v['id'] . '">查看</a></td>';
             echo '</tr>';
         }
         echo '</table>';

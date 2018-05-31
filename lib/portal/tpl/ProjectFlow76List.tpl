@@ -12,7 +12,7 @@
         echo '<th>状态</th>';
         echo '</tr>';
         echo '<tr>';
-        echo '<td><a href="?m=Project&a=ProjectFlow76">单位工程验收鉴定书 ' . $rl['no'] . '</a></td>';
+        echo '<td><a href="?m=Project&a=ProjectFlow76">单位工程验收鉴定书 ' . $rl['time'] . '</a></td>';
         echo '<td class="ftim">' . $rl['time'] . '</td>';
         echo '<td class="fsta">' . $state . '</td>';
         echo '</tr>';
@@ -49,7 +49,7 @@
         echo '</tr>';
         foreach($rs as $k => $v){
             echo '<tr>';
-            echo '<td><a href="?m=Project&a=ProjectFlow76&id=' . $v['id'] . '">单位工程验收鉴定书 ' . $v['no'] . '</a></td>';
+            echo '<td><a href="?m=Project&a=ProjectFlow76&id=' . $v['id'] . '">单位工程验收鉴定书 ' . $v['time'] . '</a></td>';
             echo '<td class="ftim">' . $v['time'] . '</td>';
             echo '<td class="fusr">' . $v['user'] . '</td>';
             echo '<td class="ftim">' . $v['replytime'] . '</td>';

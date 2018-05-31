@@ -15,6 +15,7 @@ if(!empty($rs)):
             <div class="pa4-content"><?php echo $rs['content']; ?></div>
             <div class="pa4-sign1 clear"><span class="pa4-signer1"><?php echo $gc; ?><br/><?php echo $rs['date']; ?></span></div>
             <input type="hidden" id="fid" value="<?php echo $fid; ?>" />
+            <?php echo $atts; ?>
         </div>
 <?php
 else:

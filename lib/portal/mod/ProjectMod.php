@@ -390,6 +390,8 @@ class ProjectMod extends BaseMod
         $view->name = $name;
         $view->company = $company;
 
+        $view->atts = Atts::UploadDynamic(AttachmentCls::GetDynamicItems($pid, 10000001), false);
+
         echo $view->Render();
 
         $this->MemberFooter();
@@ -4142,6 +4144,151 @@ class ProjectMod extends BaseMod
         $this->MemberFooter();
     }
 
+    public function ProjectFlow77List()
+    {
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectFlow77List');
+
+        $pid = $this->Mid();
+
+        $new = true;
+        $rr = array();
+        $rl = Flow77Cls::GetLastItem($pid);
+        if (!empty($rl) && count($rl) > 0) {
+            $new = ProjectStateCls::IsNew(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::RECORD_7));
+            if ($rl['replyid'] > 0) $rr = Reply1Cls::GetLastItem($pid, $rl['replyid']);
+        }
+        $rs = Flow77Cls::GetApprovedItems($pid);
+
+        $view->rl = $rl;
+        $view->rr = $rr;
+        $view->rs = $rs;
+        $view->new = $new;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::RECORD_7);
+
+        echo $view->Render();
+
+        $this->MemberFooter();
+    }
+
+    public function ProjectFlow77()
+    {
+        $id = $this->Req('id', 0, 'int');
+
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectFlow77');
+
+        $pid = $this->Mid();
+        $gc = ProjectCls::GetGroupCompany($pid);
+
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        if ($id > 0) $rs = Flow77Cls::Instance()->Item($id);
+        else $rs = Flow77Cls::GetLastItem($pid);
+
+        $no = '';
+        $signer = '';
+        $content = '';
+        $date = '';
+        $keywords = '';
+
+        $edit = true;
+
+        if (!empty($rs) && count($rs) > 0) {
+
+            $no = $rs['no'];
+            $signer = $rs['signer'];
+            $content = $rs['content'];
+            $date = $rs['date'];
+            $keywords = $rs['keywords'];
+
+            $edit = ProjectStateCls::IsEdit(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::RECORD_7));
+        }
+
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        $view->edit = $edit;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::RECORD_7);
+
+        $view->no = $no;
+        $view->signer = $signer;
+        $view->content = $content;
+        $view->date = $date;
+        $view->keywords = $keywords;
+
+        $view->pid = $pid;
+        $view->atts = Atts::UploadDynamic(AttachmentCls::GetDynamicItems($pid, 77), $edit);
+
+        echo $view->Render();
+
+        $this->MemberFooter();
+    }
+
+    public function OnProjectFlow77()
+    {
+        $no = $this->Req('no', '', 'str');
+        $signer = $this->Req('signer', '', 'str');
+        $content = $this->Req('content', '', 'str');
+        $date = $this->Req('date', '', 'str');
+        $keywords = $this->Req('keywords', '', 'str');
+        $attachments = $this->Req('attachments', '', 'str');
+
+        $pid = $this->Mid();
+
+        if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
+//        if (empty($no)) Json::ReturnError('请输入文件编号');
+//        if (empty($signer)) Json::ReturnError('请输入签发单位');
+//        if (empty($content)) Json::ReturnError('请输入申报内容');
+//        if (empty($date)) Json::ReturnError('请输入申报日期');
+
+        $id = Flow77Cls::Add($pid, $no, $signer, $content, $date, $keywords, $attachments);
+        ProjectCls::SetNode($pid, ProjectNodeCls::RECORD_7, $id, ProjectStateCls::APPROVE);
+
+        try {
+            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_7, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_7));
+        } catch (Exception $e) {
+            Json::ReturnError($e->getMessage());
+        }
+
+        Json::ReturnSuccess();
+    }
+
+    public function ProjectReply77View()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+
+        $pid = Flow77Cls::Instance()->Pid($fid);
+        $gc = ProjectCls::GetGroupCompany($pid);
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        $rs = Reply77Cls::GetLastItem($pid, $fid);
+
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectReply77View');
+
+        $view->rs = $rs;
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        echo $view->Render();
+
+        $this->MemberFooter();
+    }
+
     public function ProjectFlow8List()
     {
         $this->MemberAuth();
@@ -7372,7 +7519,7 @@ class ProjectMod extends BaseMod
         $items1 = $this->Req('items1', array(), 'array');
         $items2 = $this->Req('items2', array(), 'array');
         $items3 = $this->Req('items3', array(), 'array');
-        $items4= $this->Req('items4', array(), 'array');
+        $items4 = $this->Req('items4', array(), 'array');
 
         $items = array();
         $num1 = count($items1);
@@ -7380,7 +7527,7 @@ class ProjectMod extends BaseMod
         $num3 = count($items3);
         $num4 = count($items4);
 
-        if ($num1 != $num2 || $num1 != $num3|| $num1 != $num4) Json::ReturnError(ALERT_ERROR);
+        if ($num1 != $num2 || $num1 != $num3 || $num1 != $num4) Json::ReturnError(ALERT_ERROR);
         if ($num1 <= 0) Json::ReturnError('请至少添加一个条目');
         for ($i = 0; $i < $num1; $i++) {
             if (empty($items1[$i])) Json::ReturnError('请输入序号' . ($i + 1) . '条目的检查日期');
@@ -7395,7 +7542,7 @@ class ProjectMod extends BaseMod
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
 
-        $id = Flow10007Cls::Add($pid, $name, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $items, "","","","","","","","","","","","","","", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+        $id = Flow10007Cls::Add($pid, $name, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $items, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_7, $id, ProjectStateCls::APPROVE);
 
         try {

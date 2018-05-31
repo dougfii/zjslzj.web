@@ -11,6 +11,60 @@ alter table t_project add column s10006 INTEGER NOT NULL DEFAULT 0;
 alter table t_project add column s10007 INTEGER NOT NULL DEFAULT 0;
 alter table t_project add column s10008 INTEGER NOT NULL DEFAULT 0;
 
+alter table t_project add column n77 INTEGER NOT NULL DEFAULT 0;
+alter table t_project add column s77 INTEGER NOT NULL DEFAULT 0;
+
+-- -----------------------------------------------------
+-- Table t_flow77					工作流文档
+-- -----------------------------------------------------
+DROP SEQUENCE IF EXISTS seq_flow77 CASCADE;
+CREATE SEQUENCE seq_flow77;
+DROP TABLE IF EXISTS t_flow77 CASCADE;
+CREATE TABLE t_flow77
+(
+	id							BIGINT UNIQUE DEFAULT NEXTVAL('seq_flow77') NOT NULL ,
+	pid							BIGINT NOT NULL DEFAULT 0 , -- project id
+	
+	no 							TEXT DEFAULT '' , -- 编号
+	signer						TEXT DEFAULT '' , -- 签发者, 3:核定人
+	date 						TEXT DEFAULT '' , -- 日期
+	content 					TEXT DEFAULT '' , -- 内容, 3:核定意见
+	keywords					TEXT DEFAULT '' , -- 关键词
+	attachments					TEXT DEFAULT '' , -- 附件列表
+
+	uid							BIGINT NOT NULL DEFAULT 0 , -- 最后审批者
+	replytime					TIMESTAMP(0) DEFAULT NULL , -- 最后审批时间
+	replyid						BIGINT NOT NULL DEFAULT 0 , -- 批复回应ID
+	last						TIMESTAMP(0) DEFAULT NULL , -- 最后修改
+
+	act							BOOLEAN NOT NULL DEFAULT false ,
+	del							BOOLEAN NOT NULL DEFAULT false ,
+	time						TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+	PRIMARY KEY (id)
+);
+
+
+-- -----------------------------------------------------
+-- Table t_reply77				工作流批复
+-- -----------------------------------------------------
+DROP SEQUENCE IF EXISTS seq_reply77 CASCADE;
+CREATE SEQUENCE seq_reply77;
+DROP TABLE IF EXISTS t_reply77 CASCADE;
+CREATE TABLE t_reply77
+(
+	id							BIGINT UNIQUE DEFAULT NEXTVAL('seq_reply77') NOT NULL ,
+	pid							BIGINT NOT NULL DEFAULT 0 , -- project id
+	fid							BIGINT NOT NULL DEFAULT 0 , -- flow id
+	no 							TEXT DEFAULT '' , -- 编号
+	date 						TEXT DEFAULT '' , -- 日期
+	content 					TEXT DEFAULT '' , -- 批复
+	uid 						BIGINT NOT NULL DEFAULT 0 , -- 审批者
+	act							BOOLEAN NOT NULL DEFAULT false , -- 审批状态
+	del							BOOLEAN NOT NULL DEFAULT false ,
+	time						TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+	PRIMARY KEY (id)
+);
+
 
 -- -----------------------------------------------------
 -- Table t_flow10001					工作流文档

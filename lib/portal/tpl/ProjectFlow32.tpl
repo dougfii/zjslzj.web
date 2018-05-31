@@ -11,13 +11,13 @@
                 <tr><td class="k">单位工程编号</td><td><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?></td><td class="k">评定日期</td><td><?php if($edit) echo '<input type="text" class="" id="date_ping" value="' . $date_ping . '" onclick="laydate();" readonly size="7" />'; else echo $date_ping; ?></td></tr>
             </table>
             <table class="tx1">
-                <tr><th>序号</th><th>子单位工程名称</th><th>质量等级</th><th>序号</th><th>子单位工程名称</th><th>质量等级</tr>
+                <tr><th>序号</th><th>子单位（分部）工程名称</th><th>质量等级</th><th>序号</th><th>子单位（分部）工程名称</th><th>质量等级</tr>
                 <tr><td class="k">1</td><td><input type="text" class="" id="" value="" /></td><td><input type="text" class="" id="" value="" size="6" /></td><td class="k">2</td><td><input type="text" class="" id="" value="" /></td><td><input type="text" class="" id="" value="" size="6" /></td></tr>
                 <tr><td class="k">3</td><td><input type="text" class="" id="" value="" /></td><td><input type="text" class="" id="" value="" size="6" /></td><td class="k">4</td><td><input type="text" class="" id="" value="" /></td><td><input type="text" class="" id="" value="" size="6" /></td></tr>
                 <tr><td class="k">5</td><td><input type="text" class="" id="" value="" /></td><td><input type="text" class="" id="" value="" size="6" /></td><td class="k">6</td><td><input type="text" class="" id="" value="" /></td><td><input type="text" class="" id="" value="" size="6" /></td></tr>
                 <tr><td class="k">7</td><td><input type="text" class="" id="" value="" /></td><td><input type="text" class="" id="" value="" size="6" /></td><td class="k">8</td><td><input type="text" class="" id="" value="" /></td><td><input type="text" class="" id="" value="" size="6" /></td></tr>
                 <tr><td class="k">9</td><td><input type="text" class="" id="" value="" /></td><td><input type="text" class="" id="" value="" size="6" /></td><td class="k">10</td><td><input type="text" class="" id="" value="" /></td><td><input type="text" class="" id="" value="" size="6" /></td></tr>
-                <tr><td colspan="6">子单位工程共<input type="text" class="" id="" value="" size="4" />个，全部合格，其中优良<input type="text" class="" id="" value="" size="4" />个，优良率<input type="text" class="" id="" value="" size="4" />%，主要子单位工程优良率<input type="text" class="" id="" value="" size="4" />%。</td></tr>
+                <tr><td colspan="6">子单位（分部）工程共<input type="text" class="" id="" value="" size="4" />个，全部合格，其中优良<input type="text" class="" id="" value="" size="4" />个，优良率<input type="text" class="" id="" value="" size="4" />%，主要子单位（分部）工程优良率<input type="text" class="" id="" value="" size="4" />%。</td></tr>
                 <tr><td>外观质量</td><td colspan="5">应得<input type="text" class="" id="" value="" size="4" />分，实得<input type="text" class="" id="" value="" size="4" />分，得分率<input type="text" class="" id="" value="" size="4" />%，外观质量为<input type="text" class="" id="" value="" size="4" />等级。</td></tr>
             </table>
             <table class="tx1">

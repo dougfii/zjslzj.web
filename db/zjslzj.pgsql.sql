@@ -138,6 +138,7 @@ CREATE TABLE t_project
 	n74							INTEGER NOT NULL DEFAULT 0 , -- 节点开放
 	n75							INTEGER NOT NULL DEFAULT 0 , -- 节点开放
 	n76							INTEGER NOT NULL DEFAULT 0 , -- 节点开放
+	n77							INTEGER NOT NULL DEFAULT 0 , -- 节点开放
 	n8							INTEGER NOT NULL DEFAULT 0 , -- 节点开放
 	n9							INTEGER NOT NULL DEFAULT 0 , -- 节点开放
 	n91							INTEGER NOT NULL DEFAULT 0 , -- 节点开放
@@ -184,6 +185,7 @@ CREATE TABLE t_project
 	s74							INTEGER NOT NULL DEFAULT 0 , -- 节点状态
 	s75							INTEGER NOT NULL DEFAULT 0 , -- 节点状态
 	s76							INTEGER NOT NULL DEFAULT 0 , -- 节点状态
+	s77							INTEGER NOT NULL DEFAULT 0 , -- 节点状态
 	s8							INTEGER NOT NULL DEFAULT 0 , -- 节点状态
 	s9							INTEGER NOT NULL DEFAULT 0 , -- 节点状态
 	s91							INTEGER NOT NULL DEFAULT 0 , -- 节点状态
@@ -812,6 +814,7 @@ CREATE TABLE t_flow75
 	PRIMARY KEY (id)
 );
 
+
 -- -----------------------------------------------------
 -- Table t_flow76					工作流文档
 -- -----------------------------------------------------
@@ -840,6 +843,37 @@ CREATE TABLE t_flow76
 	time						TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ,
 	PRIMARY KEY (id)
 );
+
+
+-- -----------------------------------------------------
+-- Table t_flow77					工作流文档
+-- -----------------------------------------------------
+DROP SEQUENCE IF EXISTS seq_flow77 CASCADE;
+CREATE SEQUENCE seq_flow77;
+DROP TABLE IF EXISTS t_flow77 CASCADE;
+CREATE TABLE t_flow77
+(
+	id							BIGINT UNIQUE DEFAULT NEXTVAL('seq_flow77') NOT NULL ,
+	pid							BIGINT NOT NULL DEFAULT 0 , -- project id
+	
+	no 							TEXT DEFAULT '' , -- 编号
+	signer						TEXT DEFAULT '' , -- 签发者, 3:核定人
+	date 						TEXT DEFAULT '' , -- 日期
+	content 					TEXT DEFAULT '' , -- 内容, 3:核定意见
+	keywords					TEXT DEFAULT '' , -- 关键词
+	attachments					TEXT DEFAULT '' , -- 附件列表
+
+	uid							BIGINT NOT NULL DEFAULT 0 , -- 最后审批者
+	replytime					TIMESTAMP(0) DEFAULT NULL , -- 最后审批时间
+	replyid						BIGINT NOT NULL DEFAULT 0 , -- 批复回应ID
+	last						TIMESTAMP(0) DEFAULT NULL , -- 最后修改
+
+	act							BOOLEAN NOT NULL DEFAULT false ,
+	del							BOOLEAN NOT NULL DEFAULT false ,
+	time						TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+	PRIMARY KEY (id)
+);
+
 
 -- -----------------------------------------------------
 -- Table t_flow8					工作流文档
@@ -2054,6 +2088,29 @@ CREATE TABLE t_reply76
 	time						TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ,
 	PRIMARY KEY (id)
 );
+
+
+-- -----------------------------------------------------
+-- Table t_reply77				工作流批复
+-- -----------------------------------------------------
+DROP SEQUENCE IF EXISTS seq_reply77 CASCADE;
+CREATE SEQUENCE seq_reply77;
+DROP TABLE IF EXISTS t_reply77 CASCADE;
+CREATE TABLE t_reply77
+(
+	id							BIGINT UNIQUE DEFAULT NEXTVAL('seq_reply77') NOT NULL ,
+	pid							BIGINT NOT NULL DEFAULT 0 , -- project id
+	fid							BIGINT NOT NULL DEFAULT 0 , -- flow id
+	no 							TEXT DEFAULT '' , -- 编号
+	date 						TEXT DEFAULT '' , -- 日期
+	content 					TEXT DEFAULT '' , -- 批复
+	uid 						BIGINT NOT NULL DEFAULT 0 , -- 审批者
+	act							BOOLEAN NOT NULL DEFAULT false , -- 审批状态
+	del							BOOLEAN NOT NULL DEFAULT false ,
+	time						TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+	PRIMARY KEY (id)
+);
+
 
 -- -----------------------------------------------------
 -- Table t_reply8				工作流批复

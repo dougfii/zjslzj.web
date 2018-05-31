@@ -1,10 +1,10 @@
 <div class="toolbar">
-    <div class="tool clear"><span class="cap">单位工程外观质量结论 - [<?php echo $state; ?>]</span><a class="tooladd back" href="javascript:;">返回</a><?php if($edit) echo '<a class="tooladd" id="add" href="javascript:;">提交</a>'; ?></div>
+    <div class="tool clear"><span class="cap">单位外观质量工程核定 - [<?php echo $state; ?>]</span><a class="tooladd back" href="javascript:;">返回</a><?php if($edit) echo '<a class="tooladd" id="add" href="javascript:;">提交</a>'; ?></div>
 </div>
 <div class="panel paneltool">
     <div class="pagea4">
         <div class="pagea4info">
-            <div class="center">单位工程外观质量结论</div>
+            <div class="center">单位外观质量工程核定</div>
             <table class="tx1">
                 <tr><td class="k">单位工程名称</td><td><?php if($edit) echo '<input type="text" class="" id="attachments" value="' . $attachments . '" />'; else echo $attachments; ?></td><td class="k">施工单位</td><td><?php if($edit) echo '<input type="text" class="" id="comp" value="' . $comp . '" />'; else echo $comp; ?></td></tr>
                 <tr><td class="k">单位工程编号</td><td><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?></td><td class="k">评定日期</td><td><?php if($edit) echo '<input type="text" class="" id="date_ping" value="' . $date_ping . '" onclick="laydate();" readonly />'; else echo $date_ping; ?></td></tr>

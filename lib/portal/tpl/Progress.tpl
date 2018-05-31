@@ -52,6 +52,12 @@ if(!empty($rs))
 
                         if($k==9)
                         {
+                            $m = 75;
+                            echo '<div class="item">　● <a href="?m=Project&a=ProjectFlow' . $m . 'List">' . ProjectNodeCls::AcceptName($m) . '</a><span class="state">' . ProjectStateCls::Name($rs["s{$m}"]) . '</span></div>';
+                            $m = 76;
+                            echo '<div class="item">　● <a href="?m=Project&a=ProjectFlow' . $m . 'List">' . ProjectNodeCls::AcceptName($m) . '</a><span class="state">' . ProjectStateCls::Name($rs["s{$m}"]) . '</span></div>';
+                            $m = 77;
+                            echo '<div class="item">　● <a href="?m=Project&a=ProjectFlow' . $m . 'List">' . ProjectNodeCls::AcceptName($m) . '</a><span class="state">' . ProjectStateCls::Name($rs["s{$m}"]) . '</span></div>';
                             $m = 91;
                             echo '<div class="item">　● <a href="?m=Project&a=ProjectFlow' . $m . 'List">' . ProjectNodeCls::AcceptName($m) . '</a><span class="state">' . ProjectStateCls::Name($rs["s{$m}"]) . '</span></div>';
                             $m = 92;

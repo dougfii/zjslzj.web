@@ -40,7 +40,7 @@
     });
 </script>
 <div class="toolbar">
-    <div class="tool clear"><span class="cap">合同签定书 - [<?php echo $state; ?>]</span><a class="tooladd back" href="javascript:;">返回</a><?php if($edit) echo '<a class="tooladd" id="add" href="javascript:;">提交</a>'; ?></div>
+    <div class="tool clear"><span class="cap">合同工程完工鉴定书 - [<?php echo $state; ?>]</span><a class="tooladd back" href="javascript:;">返回</a><?php if($edit) echo '<a class="tooladd" id="add" href="javascript:;">提交</a>'; ?></div>
 </div>
 <div class="panel paneltool">
     <div class="pagea4">

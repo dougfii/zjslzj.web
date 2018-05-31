@@ -6,7 +6,7 @@
     });
 </script>
 <div class="toolbar">
-    <div class="tool clear"><span class="cap">工程项目质量等级核定表 - [批复]</span><a class="tooladd back" href="javascript:;">返回</a></div>
+    <div class="tool clear"><span class="cap">工程项目质量核定 - [批复]</span><a class="tooladd back" href="javascript:;">返回</a></div>
 </div>
 <div class="panel paneltool">
     <div class="pagea4">
@@ -14,7 +14,7 @@
             <div class="pa4-caption1"><?php echo $gc; ?></div>
             <div class="center">文件编号：<input type="text" class="pae4-text1" id="no" /></div>
             <div class="pa4-redline"></div>
-            <div class="pa4-title1">关于对<?php echo $name; ?>工程项目质量等级核定表的批复</div>
+            <div class="pa4-title1">关于对<?php echo $name; ?>工程项目质量核定的批复</div>
             <div class="pa4-company"><?php echo $company; ?>:</div>
             <div class=""><textarea rows="30" class="pa4-textarea1" id="content"></textarea></div>
             <div class="pa4-sign1 clear"><span class="pa4-signer1"><?php echo $gc; ?><br/>日期：<input type="text" class="pae4-text1" id="date" /></span></div>

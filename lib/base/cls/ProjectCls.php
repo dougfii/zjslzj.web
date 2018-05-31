@@ -145,6 +145,7 @@ class ProjectCls
                 $rs[$i]['n74n'] = ProjectNodeCls::Name($rs[$i]['n74']);
                 $rs[$i]['n75n'] = ProjectNodeCls::Name($rs[$i]['n75']);
                 $rs[$i]['n76n'] = ProjectNodeCls::Name($rs[$i]['n76']);
+                $rs[$i]['n77n'] = ProjectNodeCls::Name($rs[$i]['n77']);
                 $rs[$i]['n8n'] = ProjectNodeCls::Name($rs[$i]['n8']);
                 $rs[$i]['n9n'] = ProjectNodeCls::Name($rs[$i]['n9']);
                 $rs[$i]['n91n'] = ProjectNodeCls::Name($rs[$i]['n91']);
@@ -185,6 +186,7 @@ class ProjectCls
                 $rs[$i]['s74n'] = ProjectStateCls::Name($rs[$i]['s74']);
                 $rs[$i]['s75n'] = ProjectStateCls::Name($rs[$i]['s75']);
                 $rs[$i]['s76n'] = ProjectStateCls::Name($rs[$i]['s76']);
+                $rs[$i]['s77n'] = ProjectStateCls::Name($rs[$i]['s77']);
                 $rs[$i]['s8n'] = ProjectStateCls::Name($rs[$i]['s8']);
                 $rs[$i]['s9n'] = ProjectStateCls::Name($rs[$i]['s9']);
                 $rs[$i]['s91n'] = ProjectStateCls::Name($rs[$i]['s91']);

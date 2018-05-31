@@ -15,7 +15,7 @@
     });
 </script>
 <div class="toolbar">
-    <div class="tool clear"><span class="cap">单位工程外观质量结论 - [<?php echo $state; ?>]</span><a class="tooladd back" href="javascript:;">返回</a></div>
+    <div class="tool clear"><span class="cap">单位外观质量工程核定 - [<?php echo $state; ?>]</span><a class="tooladd back" href="javascript:;">返回</a></div>
 </div>
 <div class="panel paneltool">
     <?php
@@ -33,7 +33,7 @@
     <?php endif; ?>
     <div class="pagea4">
         <div class="pagea4info">
-            <div class="center">单位工程外观质量结论</div>
+            <div class="center">单位外观质量工程核定</div>
             <table class="tx1">
                 <tr><td class="k">单位工程名称</td><td class="v"><?php echo $rs['attachments']; ?></td><td class="k">施工单位</td><td class="v"><?php echo $rs['comp']; ?></td></tr>
                 <tr><td class="k">单位工程编号</td><td class="v"><?php echo $rs['no']; ?></td><td class="k">评定日期</td><td class="v"><?php echo $rs['date_ping']; ?></td></tr>

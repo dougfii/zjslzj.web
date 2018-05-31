@@ -1,16 +1,16 @@
 <script>
     $(function(){
         $('#allow').click(function(){
-            $.post('?m=Project&a=OnProjectFlow75Allow', {pid:$('#pid').val(),fid:$('#fid').val(),content:$('#content').val()}, function (ret){if(ret.code==1)layer.msg('批复完成', 1, function(){location.reload();});else layer.msg(ret.msg, 1);}, 'json');
+            $.post('?m=Project&a=OnProjectFlow77Allow', {pid:$('#pid').val(),fid:$('#fid').val(),content:$('#content').val()}, function (ret){if(ret.code==1)layer.msg('批复完成', 1, function(){location.reload();});else layer.msg(ret.msg, 1);}, 'json');
         });
 
         $('#deny').click(function(){
-            $.post('?m=Project&a=OnProjectFlow75Deny', {pid:$('#pid').val(),fid:$('#fid').val(),content:$('#content').val()}, function (ret){if(ret.code==1)layer.msg('批复完成', 1, function(){location.reload();});else layer.msg(ret.msg, 1);}, 'json');
+            $.post('?m=Project&a=OnProjectFlow77Deny', {pid:$('#pid').val(),fid:$('#fid').val(),content:$('#content').val()}, function (ret){if(ret.code==1)layer.msg('批复完成', 1, function(){location.reload();});else layer.msg(ret.msg, 1);}, 'json');
         });
     });
 </script>
 <div class="toolbar">
-    <div class="tool clear"><span class="cap">合同工程完工鉴定书 - [<?php echo $state; ?>]</span><a class="tooladd back" href="javascript:;">返回</a></div>
+    <div class="tool clear"><span class="cap">分部工程验收鉴定书 - [<?php echo $state; ?>]</span><a class="tooladd back" href="javascript:;">返回</a></div>
 </div>
 <div class="panel paneltool">
     <?php

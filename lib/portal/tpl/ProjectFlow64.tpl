@@ -130,12 +130,12 @@
     });
 </script>
 <div class="toolbar">
-    <div class="tool clear"><span class="cap">工程项目质量等级核定表 - [<?php echo $state; ?>]</span><a class="tooladd back" href="javascript:;">返回</a><?php if($edit) echo '<a class="tooladd" id="add" href="javascript:;">提交</a>'; ?></div>
+    <div class="tool clear"><span class="cap">工程项目质量核定 - [<?php echo $state; ?>]</span><a class="tooladd back" href="javascript:;">返回</a><?php if($edit) echo '<a class="tooladd" id="add" href="javascript:;">提交</a>'; ?></div>
 </div>
 <div class="panel paneltool">
     <div class="pagea4">
         <div class="pagea4info">
-            <div class="center">工程项目质量等级核定表</div>
+            <div class="center">工程项目质量核定</div>
             <table class="tx1">
                 <tr><td class="k">工程项目名称</td><td class="v"><?php if($edit) echo '<input type="text" class="" id="name" value="' . $name . '" />'; else echo $name; ?></td><td class="k">项目法人</td><td class="v"><?php if($edit) echo '<input type="text" class="" id="signer" value="' . $signer . '" />'; else echo $signer; ?></td></tr>
                 <tr><td class="k">工程等级</td><td class="v"><?php if($edit) echo '<input type="text" class="" id="no" value="' . $no . '" />'; else echo $no; ?></td><td class="k">核定时间</td><td class="v"><?php if($edit) echo '<input type="text" class="" id="date" value="' . $date . '" onclick="laydate();" readonly />'; else echo $date; ?></td></tr>

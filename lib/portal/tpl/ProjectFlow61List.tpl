@@ -1,5 +1,5 @@
 <div class="toolbar">
-    <div class="tool clear"><span class="cap">大型枢纽分部验收结论</span><a class="tooladd back" href="javascript:;">返回</a><?php if($new) echo '<a class="tooladd" href="?m=Project&a=ProjectFlow61">新建</a>'; ?></div>
+    <div class="tool clear"><span class="cap">大型枢纽工程主要建筑物分部工程质量核定</span><a class="tooladd back" href="javascript:;">返回</a><?php if($new) echo '<a class="tooladd" href="?m=Project&a=ProjectFlow61">新建</a>'; ?></div>
 </div>
 <div class="panel paneltool">
     <?php

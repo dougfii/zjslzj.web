@@ -10,7 +10,7 @@
     });
 </script>
 <div class="toolbar">
-    <div class="tool clear"><span class="cap">大型枢纽分部验收结论 - [<?php echo $state; ?>]</span><a class="tooladd back" href="javascript:;">返回</a></div>
+    <div class="tool clear"><span class="cap">大型枢纽工程主要建筑物分部工程质量核定 - [<?php echo $state; ?>]</span><a class="tooladd back" href="javascript:;">返回</a></div>
 </div>
 <div class="panel paneltool">
     <?php
@@ -28,7 +28,7 @@
     <?php endif; ?>
     <div class="pagea4">
         <div class="pagea4info">
-            <div class="center">大型枢纽分部验收结论</div>
+            <div class="center">大型枢纽工程主要建筑物分部工程质量核定</div>
             <table class="tx1">
                 <tr><td class="k">单位工程名称</td><td class="v"><?php echo $rs['comp']; ?></td><td class="k">项目法人</td><td class="v"><?php echo $rs['signer']; ?></td></tr>
                 <tr><td class="k">单位工程编号</td><td class="v"><?php echo $rs['no']; ?></td><td class="k">核定时间</td><td class="v"><?php echo $rs['date']; ?></td></tr>

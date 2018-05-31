@@ -35,6 +35,7 @@ class ProjectNodeCls
     const RECORD_4 = 74;
     const RECORD_5 = 75;
     const RECORD_6 = 76;
+    const RECORD_7 = 77;
     const ACCEPT_1 = 91;
     const ACCEPT_2 = 92;
     const ACCEPT_21 = 921;
@@ -128,10 +129,10 @@ class ProjectNodeCls
     }
 
     private static $check = array(//
-        61 => '大型枢纽分部验收结论',//
-        62 => '单位工程外观质量结论',//
-        63 => '单位工程质量等级核定表',//
-        64 => '工程项目质量等级核定表',//
+        61 => '大型枢纽工程主要建筑物分部工程质量核定',//
+        62 => '单位外观质量工程核定',//
+        63 => '单位工程质量核定',//
+        64 => '工程项目质量核定',//
     );
 
     public static function CheckItems()
@@ -152,8 +153,6 @@ class ProjectNodeCls
         72 => '地基验槽签证',//
         73 => '质量缺陷备案',//
         74 => '工程质量事故处理结果',//
-        75 => '合同签定书',//
-        76 => '单位工程验收鉴定书',//
     );
 
     public static function RecordItems()
@@ -170,6 +169,9 @@ class ProjectNodeCls
     }
 
     private static $accept = array(//
+        75 => '合同工程完工鉴定书',//
+        76 => '单位工程验收鉴定书',//
+        77 => '分部工程验收鉴定书',//
         91 => '法人验收',//
         92 => '政府验收',//
     );
