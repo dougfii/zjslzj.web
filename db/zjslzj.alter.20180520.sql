@@ -6,13 +6,20 @@ alter table t_project add column n10005 INTEGER NOT NULL DEFAULT 0;
 alter table t_project add column n10006 INTEGER NOT NULL DEFAULT 0;
 alter table t_project add column n10007 INTEGER NOT NULL DEFAULT 0;
 alter table t_project add column n10008 INTEGER NOT NULL DEFAULT 0;
+alter table t_project add column n10009 INTEGER NOT NULL DEFAULT 0;
+alter table t_project add column n10010 INTEGER NOT NULL DEFAULT 0;
 alter table t_project add column s10005 INTEGER NOT NULL DEFAULT 0;
 alter table t_project add column s10006 INTEGER NOT NULL DEFAULT 0;
 alter table t_project add column s10007 INTEGER NOT NULL DEFAULT 0;
 alter table t_project add column s10008 INTEGER NOT NULL DEFAULT 0;
+alter table t_project add column s10009 INTEGER NOT NULL DEFAULT 0;
+alter table t_project add column s10010 INTEGER NOT NULL DEFAULT 0;
 
 alter table t_project add column n77 INTEGER NOT NULL DEFAULT 0;
 alter table t_project add column s77 INTEGER NOT NULL DEFAULT 0;
+
+alter table t_project add column n37 INTEGER NOT NULL DEFAULT 0;
+alter table t_project add column s37 INTEGER NOT NULL DEFAULT 0;
 
 -- -----------------------------------------------------
 -- Table t_flow77					工作流文档
@@ -618,6 +625,136 @@ CREATE TABLE t_flow10008
 
 
 -- -----------------------------------------------------
+-- Table t_flow10009					工作流文档
+-- -----------------------------------------------------
+DROP SEQUENCE IF EXISTS seq_flow10009 CASCADE;
+CREATE SEQUENCE seq_flow10009;
+DROP TABLE IF EXISTS t_flow10009 CASCADE;
+CREATE TABLE t_flow10009
+(
+	id							BIGINT UNIQUE DEFAULT NEXTVAL('seq_flow10009') NOT NULL ,
+	pid							BIGINT NOT NULL DEFAULT 0 , -- project id
+	
+	name						TEXT DEFAULT '' , -- 工程名称
+
+	t1							TEXT DEFAULT '' ,
+	t2							TEXT DEFAULT '' ,
+	t3							TEXT DEFAULT '' ,
+	t4							TEXT DEFAULT '' ,
+	t5							TEXT DEFAULT '' ,
+	t6							TEXT DEFAULT '' ,
+	t7							TEXT DEFAULT '' ,
+	t8							TEXT DEFAULT '' ,
+	t9							TEXT DEFAULT '' ,
+	t10							TEXT DEFAULT '' ,
+	t11							TEXT DEFAULT '' ,
+	t12							TEXT DEFAULT '' ,
+	t13							TEXT DEFAULT '' ,
+	t14							TEXT DEFAULT '' ,
+	t15							TEXT DEFAULT '' ,
+	t16							TEXT DEFAULT '' ,
+	t17							TEXT DEFAULT '' ,
+	t18							TEXT DEFAULT '' ,
+	t19							TEXT DEFAULT '' ,
+	t20							TEXT DEFAULT '' ,
+	t21							TEXT DEFAULT '' ,
+	t22							TEXT DEFAULT '' ,
+	t23							TEXT DEFAULT '' ,
+	t24							TEXT DEFAULT '' ,
+	t25							TEXT DEFAULT '' ,
+	t26							TEXT DEFAULT '' ,
+	t27							TEXT DEFAULT '' ,
+	t28							TEXT DEFAULT '' ,
+	t29							TEXT DEFAULT '' ,
+	t30							TEXT DEFAULT '' ,
+	t31							TEXT DEFAULT '' ,
+	t32							TEXT DEFAULT '' ,
+	t33							TEXT DEFAULT '' ,
+	t34							TEXT DEFAULT '' ,
+	t35							TEXT DEFAULT '' ,
+	t36							TEXT DEFAULT '' ,
+	t37							TEXT DEFAULT '' ,
+	t38							TEXT DEFAULT '' ,
+	t39							TEXT DEFAULT '' ,
+	
+	uid							BIGINT NOT NULL DEFAULT 0 , -- 最后审批者
+	replytime					TIMESTAMP(0) DEFAULT NULL , -- 最后审批时间
+	replyid						BIGINT NOT NULL DEFAULT 0 , -- 批复回应ID
+	last						TIMESTAMP(0) DEFAULT NULL , -- 最后修改
+	
+	act							BOOLEAN NOT NULL DEFAULT false ,
+	del							BOOLEAN NOT NULL DEFAULT false ,
+	time						TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+	PRIMARY KEY (id)
+);
+
+
+-- -----------------------------------------------------
+-- Table t_flow10010					工作流文档
+-- -----------------------------------------------------
+DROP SEQUENCE IF EXISTS seq_flow10010 CASCADE;
+CREATE SEQUENCE seq_flow10010;
+DROP TABLE IF EXISTS t_flow10010 CASCADE;
+CREATE TABLE t_flow10010
+(
+	id							BIGINT UNIQUE DEFAULT NEXTVAL('seq_flow10010') NOT NULL ,
+	pid							BIGINT NOT NULL DEFAULT 0 , -- project id
+	
+	name						TEXT DEFAULT '' , -- 工程名称
+
+	t1							TEXT DEFAULT '' ,
+	t2							TEXT DEFAULT '' ,
+	t3							TEXT DEFAULT '' ,
+	t4							TEXT DEFAULT '' ,
+	t5							TEXT DEFAULT '' ,
+	t6							TEXT DEFAULT '' ,
+	t7							TEXT DEFAULT '' ,
+	t8							TEXT DEFAULT '' ,
+	t9							TEXT DEFAULT '' ,
+	t10							TEXT DEFAULT '' ,
+	t11							TEXT DEFAULT '' ,
+	t12							TEXT DEFAULT '' ,
+	t13							TEXT DEFAULT '' ,
+	t14							TEXT DEFAULT '' ,
+	t15							TEXT DEFAULT '' ,
+	t16							TEXT DEFAULT '' ,
+	t17							TEXT DEFAULT '' ,
+	t18							TEXT DEFAULT '' ,
+	t19							TEXT DEFAULT '' ,
+	t20							TEXT DEFAULT '' ,
+	t21							TEXT DEFAULT '' ,
+	t22							TEXT DEFAULT '' ,
+	t23							TEXT DEFAULT '' ,
+	t24							TEXT DEFAULT '' ,
+	t25							TEXT DEFAULT '' ,
+	t26							TEXT DEFAULT '' ,
+	t27							TEXT DEFAULT '' ,
+	t28							TEXT DEFAULT '' ,
+	t29							TEXT DEFAULT '' ,
+	t30							TEXT DEFAULT '' ,
+	t31							TEXT DEFAULT '' ,
+	t32							TEXT DEFAULT '' ,
+	t33							TEXT DEFAULT '' ,
+	t34							TEXT DEFAULT '' ,
+	t35							TEXT DEFAULT '' ,
+	t36							TEXT DEFAULT '' ,
+	t37							TEXT DEFAULT '' ,
+	t38							TEXT DEFAULT '' ,
+	t39							TEXT DEFAULT '' ,
+	
+	uid							BIGINT NOT NULL DEFAULT 0 , -- 最后审批者
+	replytime					TIMESTAMP(0) DEFAULT NULL , -- 最后审批时间
+	replyid						BIGINT NOT NULL DEFAULT 0 , -- 批复回应ID
+	last						TIMESTAMP(0) DEFAULT NULL , -- 最后修改
+	
+	act							BOOLEAN NOT NULL DEFAULT false ,
+	del							BOOLEAN NOT NULL DEFAULT false ,
+	time						TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+	PRIMARY KEY (id)
+);
+
+
+-- -----------------------------------------------------
 -- Table t_reply10005				工作流批复
 -- -----------------------------------------------------
 DROP SEQUENCE IF EXISTS seq_reply10005 CASCADE;
@@ -703,3 +840,50 @@ CREATE TABLE t_reply10008
 	time						TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ,
 	PRIMARY KEY (id)
 );
+
+
+-- -----------------------------------------------------
+-- Table t_reply10009				工作流批复
+-- -----------------------------------------------------
+DROP SEQUENCE IF EXISTS seq_reply10009 CASCADE;
+CREATE SEQUENCE seq_reply10009;
+DROP TABLE IF EXISTS t_reply10009 CASCADE;
+CREATE TABLE t_reply10009
+(
+	id							BIGINT UNIQUE DEFAULT NEXTVAL('seq_reply10009') NOT NULL ,
+	pid							BIGINT NOT NULL DEFAULT 0 , -- project id
+	fid							BIGINT NOT NULL DEFAULT 0 , -- flow id
+	no 							TEXT DEFAULT '' , -- 编号
+	date 						TEXT DEFAULT '' , -- 日期
+	content 					TEXT DEFAULT '' , -- 批复
+	uid 						BIGINT NOT NULL DEFAULT 0 , -- 审批者
+	act							BOOLEAN NOT NULL DEFAULT false , -- 审批状态
+	del							BOOLEAN NOT NULL DEFAULT false ,
+	time						TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+	PRIMARY KEY (id)
+);
+
+
+-- -----------------------------------------------------
+-- Table t_reply10010				工作流批复
+-- -----------------------------------------------------
+DROP SEQUENCE IF EXISTS seq_reply10010 CASCADE;
+CREATE SEQUENCE seq_reply10010;
+DROP TABLE IF EXISTS t_reply10010 CASCADE;
+CREATE TABLE t_reply10010
+(
+	id							BIGINT UNIQUE DEFAULT NEXTVAL('seq_reply10010') NOT NULL ,
+	pid							BIGINT NOT NULL DEFAULT 0 , -- project id
+	fid							BIGINT NOT NULL DEFAULT 0 , -- flow id
+	no 							TEXT DEFAULT '' , -- 编号
+	date 						TEXT DEFAULT '' , -- 日期
+	content 					TEXT DEFAULT '' , -- 批复
+	uid 						BIGINT NOT NULL DEFAULT 0 , -- 审批者
+	act							BOOLEAN NOT NULL DEFAULT false , -- 审批状态
+	del							BOOLEAN NOT NULL DEFAULT false ,
+	time						TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+	PRIMARY KEY (id)
+);
+
+
+

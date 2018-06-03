@@ -1,5 +1,5 @@
 <div class="toolbar">
-    <div class="tool clear"><span class="cap">水利工程建设安全监督检查意见表</span><a class="tooladd back" href="javascript:;">返回</a></div>
+    <div class="tool clear"><span class="cap">水利工程建设安全监督检查意见表</span><a class="tooladd back" href="javascript:;">返回</a><a class="tooladd" href="?m=Project&a=ProjectFlow10005&pid=<?php echo $pid; ?>">发送新检查意见表</a></div>
 </div>
 <div class="panel paneltool">
     <?php
@@ -9,28 +9,12 @@
         echo '<tr>';
         echo '<th>编号</th>';
         echo '<th>发表时间</th>';
-        echo '<th>状态</th>';
+        echo '<th>阅读时间</th>';
         echo '</tr>';
         echo '<tr>';
         echo '<td><a href="?m=Project&a=ProjectFlow10005&pid=' . $pid . '">' . $rl['name'] . ' ' . $rl['time'] . '</a></td>';
         echo '<td class="ftim">' . $rl['time'] . '</td>';
-        echo '<td class="fsta">' . $state . '</td>';
-        echo '</tr>';
-        echo '</table>';
-        echo '<br/>';
-    }
-
-    if(!empty($rr)){
-        echo '<table class="tl">';
-        echo '<tr>';
-        echo '<th>最后审退批复</th>';
-        echo '<th>批复者</th>';
-        echo '<th>批复时间</th>';
-        echo '</tr>';
-        echo '<tr>';
-        echo '<td>' . $rr['content'] . '</td>';
-        echo '<td class="fusr">' . $rr['user'] . '</td>';
-        echo '<td class="ftim">' . $rr['time'] . '</td>';
+        echo '<td class="ftim">' . $rl['last'] . '</td>';
         echo '</tr>';
         echo '</table>';
         echo '<br/>';
@@ -42,18 +26,14 @@
         echo '<div>审批通过</div><table class="tl">';
         echo '<tr>';
         echo '<th>编号</th>';
-        echo '<th>申报时间</th>';
-        echo '<th>批复者</th>';
-        echo '<th>批复时间</th>';
-        echo '<th>批复</th>';
+        echo '<th>发表时间</th>';
+        echo '<th>阅读时间</th>';
         echo '</tr>';
         foreach($rs as $k => $v){
             echo '<tr>';
             echo '<td><a href="?m=Project&a=ProjectFlow10005&pid=' . $pid . '&id=' . $v['id'] . '">' . $v['name'] . ' ' . $v['time'] . '</a></td>';
             echo '<td class="ftim">' . $v['time'] . '</td>';
-            echo '<td class="fusr">' . $v['user'] . '</td>';
-            echo '<td class="ftim">' . $v['replytime'] . '</td>';
-            echo '<td class="fsta"><a href="?m=Project&a=ProjectReply10005View&pid=' . $pid . '&fid=' . $v['id'] . '">查看</a></td>';
+            echo '<td class="ftim">' . $v['last'] . '</td>';
             echo '</tr>';
         }
         echo '</table>';

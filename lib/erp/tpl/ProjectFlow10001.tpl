@@ -6,7 +6,7 @@
     });
 </script>
 <div class="toolbar">
-    <div class="tool clear"><span class="cap">外观质量检查与评定项目确认 - [<?php echo $state; ?>]</span><a class="tooladd back" href="javascript:;">返回</a></div>
+    <div class="tool clear"><span class="cap"> 安全监督申请书 - [<?php echo $state; ?>]</span><a class="tooladd back" href="javascript:;">返回</a></div>
 </div>
 <div class="panel paneltool">
     <?php
@@ -24,7 +24,31 @@
     <?php endif; ?>
     <div class="pagea4">
         <div class="pagea4info">
-            <div class="center">江苏省水利工程建设安全监督申请书</div>
+            <br/><br/>
+            <div class="pa4-title1">江苏省水利工程建设安全监督</div>
+            <div class="pa4-title1">申 请 书</div>
+            <br/><br/><br/><br/>
+            <div style="margin-left:200px;">
+                <div>编　　号：（<?php echo $rs['t32']; ?>）申（<?php echo $rs['t33']; ?>）第<?php echo $rs['t34']; ?>号</div>
+                <br/><br/>
+                <div>申请单位：<?php echo $rs['t35']; ?>（盖章）</div>
+                <br/><br/>
+                <div>申请日期：<?php echo $rs['t36']; ?>　　　　</div>
+            </div>
+            <br/><br/><br/><br/>
+            <div class="center">江苏省水利厅印制</div>
+            <br/><br/><br/><br/><br/><br/><br/><br/>
+            <div class="center">填写说明</div>
+            <div class="tx1" style="line-height:150%;padding:10px;">
+                <p>一、本书由项目法人负责填报。</p>
+                <p>二、本书须在水利工程开工前填报，填写时不得使用铅笔、圆珠笔，字迹应清晰、整洁，最好使用计算机打印。</p>
+                <p>三、本书由水利工程建设安全监督机构统一编号。</p>
+                <p>四、申请人须按本书要求逐项填报有关内容，各项内容如纸张不够，可加附页。</p>
+                <p>五、本书填写一式二份，一份回执。</p>
+            </div>
+            <br/>
+        </div>
+        <div class="pagea4info">
             <table class="tx1">
                 <tr><td class="k">工程名称</td><td class="v" colspan="3"><?php echo $name; ?></td></tr>
                 <tr><td class="k">建设地点</td><td class="v" colspan="3"><?php echo $rs['t1']; ?></td></tr>

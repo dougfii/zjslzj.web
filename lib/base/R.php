@@ -9,19 +9,19 @@ class R
     const MENU_CENTER = 0;
     const MENU_QUALITY = 1;
     const MENU_SECURITY = 2;
-    const MENU_WEBSITE = 3;
+    const MENU_WEBSITE = 7;
     const MENU_SYSTEM = 9;
 
     // project
     const PROJECT_QUALITY = 11;
-    const PROJECT_SECURITY = 12;
+    const PROJECT_SECURITY = 21;
 
     // website
-    const WEBSITE_ARTICLE_LIST = 31;
-    const WEBSITE_ARTICLE_TYPE = 32;
-    const WEBSITE_ADVERTISER = 33;
-    const WEBSITE_LINKER = 34;
-    const WEBSITE_COPYRIGHT = 35;
+    const WEBSITE_ARTICLE_LIST = 71;
+    const WEBSITE_ARTICLE_TYPE = 72;
+    const WEBSITE_ADVERTISER = 73;
+    const WEBSITE_LINKER = 74;
+    const WEBSITE_COPYRIGHT = 75;
 
     //system
     const SYSTEM_USER = 91;

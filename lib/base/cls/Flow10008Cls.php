@@ -105,6 +105,15 @@ class Flow10008Cls
                 ", array($uid, $replyid, $act, $id));
     }
 
+    public static function SetLast($id)
+    {
+        DB::db()->Query("
+                UPDATE " . self::TABLE . "
+                SET last=CURRENT_TIMESTAMP
+                WHERE id=? AND last ISNULL
+                ", array($id));
+    }
+
     public static function SetAct($id)
     {
         DB::db()->Query("

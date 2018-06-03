@@ -23,7 +23,8 @@ class Atts
     public static $flow925 = array('项目法人委托检测报告', '工程项目施工质量评定表（竣工验收阶段提供）');
     public static $flow9242 = array('工程项目质量监督人员情况表', '工程建设过程中质量监督检查意见汇总表');
     public static $flow9252 = array('工程项目质量监督人员情况表', '工程建设过程中质量监督检查意见汇总表');
-
+    public static $flow10009 = array('项目法人安全工作总结');
+    public static $flow100012 = array('安全监督计划要点', '项目法人安全生产管理检查评分表', '监理单位安全生产管理检查评分表', '江苏省水利工程建设安全施工标准化工地考核表');
 
     public static function UploadFixed($atts, $rs, $edit = false, $title = true, $admin = false)
     {

@@ -1,8 +1,8 @@
 <?php
 
-class Flow10005Cls
+class Flow10010Cls
 {
-    const TABLE = 't_flow10005';
+    const TABLE = 't_flow10010';
     private static $list = array();
     private static $instance = null;
 
@@ -103,15 +103,6 @@ class Flow10005Cls
                 SET uid=?, replyid=?, replytime=CURRENT_TIMESTAMP, act=?
                 WHERE id=?
                 ", array($uid, $replyid, $act, $id));
-    }
-
-    public static function SetLast($id)
-    {
-        DB::db()->Query("
-                UPDATE " . self::TABLE . "
-                SET last=CURRENT_TIMESTAMP
-                WHERE id=? AND last ISNULL
-                ", array($id));
     }
 
     public static function SetAct($id)

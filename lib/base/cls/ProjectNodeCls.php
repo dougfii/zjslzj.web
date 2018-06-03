@@ -23,6 +23,7 @@ class ProjectNodeCls
     const CONFIRM_4 = 34;
     const CONFIRM_5 = 35;
     const CONFIRM_6 = 36;
+    const CONFIRM_7 = 37;
     const MATERIAL_1 = 51;
     const MATERIAL_2 = 52;
     const CHECK_1 = 61;
@@ -55,6 +56,8 @@ class ProjectNodeCls
     const SECURITY_6 = 10006;
     const SECURITY_7 = 10007;
     const SECURITY_8 = 10008;
+    const SECURITY_9 = 10009;
+    const SECURITY_10 = 10010;
 
     private static $map = array(//
         0 => '工程立项',//
@@ -95,6 +98,7 @@ class ProjectNodeCls
         34 => '单元工程质量评定表',//
         35 => '单位工程检验评价',//
         36 => '工程项目质量评定',//
+        37 => '工序质量评表',//
     );
 
     public static function ConfirmItems()

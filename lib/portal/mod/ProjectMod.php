@@ -1320,6 +1320,153 @@ class ProjectMod extends BaseMod
         $this->MemberFooter();
     }
 
+    public function ProjectFlow37List()
+    {
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectFlow37List');
+
+        $pid = $this->Mid();
+
+        $new = true;
+        $rr = array();
+        $rl = Flow37Cls::GetLastItem($pid);
+        if (!empty($rl) && count($rl) > 0) {
+            $new = ProjectStateCls::IsNew(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::CONFIRM_7));
+            if ($rl['replyid'] > 0) $rr = Reply1Cls::GetLastItem($pid, $rl['replyid']);
+        }
+        $rs = Flow37Cls::GetApprovedItems($pid);
+
+        $view->rl = $rl;
+        $view->rr = $rr;
+        $view->rs = $rs;
+        $view->new = $new;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::CONFIRM_7);
+
+        echo $view->Render();
+
+        $this->MemberFooter();
+    }
+
+    public function ProjectFlow37()
+    {
+        $id = $this->Req('id', 0, 'int');
+
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectFlow37');
+
+        $pid = $this->Mid();
+        $gc = ProjectCls::GetGroupCompany($pid);
+
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        if ($id > 0) $rs = Flow37Cls::Instance()->Item($id);
+        else $rs = Flow37Cls::GetLastItem($pid);
+
+        $t1 = '';
+        $t2 = '';
+        $t3 = '';
+        $t4 = '';
+        $t5 = '';
+        $t6 = '';
+
+        $edit = true;
+
+        if (!empty($rs) && count($rs) > 0) {
+
+            $name = $rs['name'];
+            $t1 = $rs['t1'];
+            $t2 = $rs['t2'];
+            $t3 = $rs['t3'];
+            $t4 = $rs['t4'];
+            $t5 = $rs['t5'];
+            $t6 = $rs['t6'];
+
+            $edit = ProjectStateCls::IsEdit(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::CONFIRM_7));
+        }
+
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        $view->edit = $edit;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::CONFIRM_7);
+
+        $view->rs = $rs;
+        $view->t1 = $t1;
+        $view->t2 = $t2;
+        $view->t3 = $t3;
+        $view->t4 = $t4;
+        $view->t5 = $t5;
+        $view->t6 = $t6;
+
+        $view->pid = $pid;
+        //$view->atts = Atts::UploadFixed(Atts::$flow37, AttachmentCls::GetFixedItems($pid, 37), $edit);
+
+        echo $view->Render();
+
+        $this->MemberFooter();
+    }
+
+    public function OnProjectFlow37()
+    {
+        $name = $this->Req('name', '', 'str');
+        $t1 = $this->Req('t1', '', 'str');
+        $t2 = $this->Req('t2', '', 'str');
+        $t3 = $this->Req('t3', '', 'str');
+        $t4 = $this->Req('t4', '', 'str');
+        $t5 = $this->Req('t5', '', 'str');
+        $t6 = $this->Req('t6', '', 'str');
+
+        $pid = $this->Mid();
+
+        if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
+
+        $id = Flow37Cls::Add($pid, $name, $t1, $t2, $t3, $t4, $t5, $t6, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+        ProjectCls::SetNode($pid, ProjectNodeCls::CONFIRM_7, $id, ProjectStateCls::APPROVE);
+
+        try {
+            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CONFIRM_7, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CONFIRM_7));
+        } catch (Exception $e) {
+            Json::ReturnError($e->getMessage());
+        }
+
+        Json::ReturnSuccess();
+    }
+
+    public function ProjectReply37View()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+
+        $pid = Flow37Cls::Instance()->Pid($fid);
+        $gc = ProjectCls::GetGroupCompany($pid);
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        $rs = Reply37Cls::GetLastItem($pid, $fid);
+
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectReply37View');
+
+        $view->rs = $rs;
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        echo $view->Render();
+
+        $this->MemberFooter();
+    }
+
     public function ProjectFlow4List()
     {
         $this->MemberAuth();
@@ -6145,12 +6292,17 @@ class ProjectMod extends BaseMod
         $t29 = $this->Req('t29', '', 'str');
         $t30 = $this->Req('t30', '', 'str');
         $t31 = $this->Req('t31', '', 'str');
+        $t32 = $this->Req('t32', '', 'str');
+        $t33 = $this->Req('t33', '', 'str');
+        $t34 = $this->Req('t34', '', 'str');
+        $t35 = $this->Req('t35', '', 'str');
+        $t36 = $this->Req('t36', '', 'str');
 
         $pid = $this->Mid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
 
-        $id = Flow10001Cls::Add($pid, $name, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10, $t11, $t12, $t13, $t14, $t15, $t16, $t17, $t18, $t19, $t20, $t21, $t22, $t23, $t24, $t25, $t26, $t27, $t28, $t29, $t30, $t31, "", "", "", "", "", "", "", "");
+        $id = Flow10001Cls::Add($pid, $name, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10, $t11, $t12, $t13, $t14, $t15, $t16, $t17, $t18, $t19, $t20, $t21, $t22, $t23, $t24, $t25, $t26, $t27, $t28, $t29, $t30, $t31, $t32, $t33, $t34, $t35, $t36, "", "", "");
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_1, $id, ProjectStateCls::APPROVE);
 
         try {
@@ -6183,6 +6335,8 @@ class ProjectMod extends BaseMod
         $view->gc = $gc;
         $view->name = $name;
         $view->company = $company;
+
+        $view->atts = Atts::UploadFixed(Atts::$flow100012, AttachmentCls::GetFixedItems($pid, 100012), false, false, true);
 
         echo $view->Render();
 
@@ -6501,152 +6655,14 @@ class ProjectMod extends BaseMod
         if ($id > 0) $rs = Flow10003Cls::Instance()->Item($id);
         else $rs = Flow10003Cls::GetLastItem($pid);
 
-        $t1 = '';
-        $t2 = '';
-        $t3 = '';
-        $t4 = '';
-        $t5 = '';
-        $t6 = '';
-        $t7 = '';
-        $t8 = '';
-        $t9 = '';
-        $t10 = '';
-        $t11 = '';
-        $t12 = '';
-        $t13 = '';
-        $t14 = '';
-        $t15 = '';
-        $t16 = '';
-        $t17 = '';
-        $t18 = '';
-        $t19 = '';
-        $t20 = '';
-        $t21 = '';
-        $t22 = '';
-        $t23 = '';
-        $t24 = '';
-        $t25 = '';
-        $t26 = '';
-        $t27 = '';
-        $t28 = '';
-        $t29 = '';
-        $t30 = '';
-        $t31 = '';
-        $t32 = '';
-        $t33 = '';
-        $t34 = '';
-        $t35 = '';
-        $t36 = '';
-        $t37 = '';
-        $t38 = '';
-        $t39 = '';
-        $t40 = '';
-        $t41 = '';
-        $t42 = '';
-        $t43 = '';
-        $t44 = '';
-        $t45 = '';
-        $t46 = '';
-        $t47 = '';
-        $t48 = '';
-        $t49 = '';
-        $t50 = '';
-        $t51 = '';
-        $t52 = '';
-        $t53 = '';
-        $t54 = '';
-        $t55 = '';
-        $t56 = '';
-        $t57 = '';
-        $t58 = '';
-        $t59 = '';
-        $t60 = '';
-        $t61 = '';
-        $t62 = '';
-        $t63 = '';
-        $t64 = '';
-        $t65 = '';
-        $t66 = '';
-        $t67 = '';
-        $t68 = '';
-        $t69 = '';
-        $t70 = '';
+        $items = '';
 
         $edit = true;
 
         if (!empty($rs) && count($rs) > 0) {
 
             $name = $rs['name'];
-            $t1 = $rs['t1'];
-            $t2 = $rs['t2'];
-            $t3 = $rs['t3'];
-            $t4 = $rs['t4'];
-            $t5 = $rs['t5'];
-            $t6 = $rs['t6'];
-            $t7 = $rs['t7'];
-            $t8 = $rs['t8'];
-            $t9 = $rs['t9'];
-            $t10 = $rs['t10'];
-            $t11 = $rs['t11'];
-            $t12 = $rs['t12'];
-            $t13 = $rs['t13'];
-            $t14 = $rs['t14'];
-            $t15 = $rs['t15'];
-            $t16 = $rs['t16'];
-            $t17 = $rs['t17'];
-            $t18 = $rs['t18'];
-            $t19 = $rs['t19'];
-            $t20 = $rs['t20'];
-            $t21 = $rs['t21'];
-            $t22 = $rs['t22'];
-            $t23 = $rs['t23'];
-            $t24 = $rs['t24'];
-            $t25 = $rs['t25'];
-            $t26 = $rs['t26'];
-            $t27 = $rs['t27'];
-            $t28 = $rs['t28'];
-            $t29 = $rs['t29'];
-            $t30 = $rs['t30'];
-            $t31 = $rs['t31'];
-            $t32 = $rs['t32'];
-            $t33 = $rs['t33'];
-            $t34 = $rs['t34'];
-            $t35 = $rs['t35'];
-            $t36 = $rs['t36'];
-            $t37 = $rs['t37'];
-            $t38 = $rs['t38'];
-            $t39 = $rs['t39'];
-            $t40 = $rs['t40'];
-            $t41 = $rs['t41'];
-            $t42 = $rs['t42'];
-            $t43 = $rs['t43'];
-            $t44 = $rs['t44'];
-            $t45 = $rs['t45'];
-            $t46 = $rs['t46'];
-            $t47 = $rs['t47'];
-            $t48 = $rs['t48'];
-            $t49 = $rs['t49'];
-            $t50 = $rs['t50'];
-            $t51 = $rs['t51'];
-            $t52 = $rs['t52'];
-            $t53 = $rs['t53'];
-            $t54 = $rs['t54'];
-            $t55 = $rs['t55'];
-            $t56 = $rs['t56'];
-            $t57 = $rs['t57'];
-            $t58 = $rs['t58'];
-            $t59 = $rs['t59'];
-            $t60 = $rs['t60'];
-            $t61 = $rs['t61'];
-            $t62 = $rs['t62'];
-            $t63 = $rs['t63'];
-            $t64 = $rs['t64'];
-            $t65 = $rs['t65'];
-            $t66 = $rs['t66'];
-            $t67 = $rs['t67'];
-            $t68 = $rs['t68'];
-            $t69 = $rs['t69'];
-            $t70 = $rs['t70'];
+            $items = Json::Decode($rs['t1']);
 
             $edit = ProjectStateCls::IsEdit(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_3));
         }
@@ -6659,76 +6675,7 @@ class ProjectMod extends BaseMod
         $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_3);
 
         $view->rs = $rs;
-        $view->t1 = $t1;
-        $view->t2 = $t2;
-        $view->t3 = $t3;
-        $view->t4 = $t4;
-        $view->t5 = $t5;
-        $view->t6 = $t6;
-        $view->t7 = $t7;
-        $view->t8 = $t8;
-        $view->t9 = $t9;
-        $view->t10 = $t10;
-        $view->t11 = $t11;
-        $view->t12 = $t12;
-        $view->t13 = $t13;
-        $view->t14 = $t14;
-        $view->t15 = $t15;
-        $view->t16 = $t16;
-        $view->t17 = $t17;
-        $view->t18 = $t18;
-        $view->t19 = $t19;
-        $view->t20 = $t20;
-        $view->t21 = $t21;
-        $view->t22 = $t22;
-        $view->t23 = $t23;
-        $view->t24 = $t24;
-        $view->t25 = $t25;
-        $view->t26 = $t26;
-        $view->t27 = $t27;
-        $view->t28 = $t28;
-        $view->t29 = $t29;
-        $view->t30 = $t30;
-        $view->t31 = $t31;
-        $view->t32 = $t32;
-        $view->t33 = $t33;
-        $view->t34 = $t34;
-        $view->t35 = $t35;
-        $view->t36 = $t36;
-        $view->t37 = $t37;
-        $view->t38 = $t38;
-        $view->t39 = $t39;
-        $view->t40 = $t40;
-        $view->t41 = $t41;
-        $view->t42 = $t42;
-        $view->t43 = $t43;
-        $view->t44 = $t44;
-        $view->t45 = $t45;
-        $view->t46 = $t46;
-        $view->t47 = $t47;
-        $view->t48 = $t48;
-        $view->t49 = $t49;
-        $view->t50 = $t50;
-        $view->t51 = $t51;
-        $view->t52 = $t52;
-        $view->t53 = $t53;
-        $view->t54 = $t54;
-        $view->t55 = $t55;
-        $view->t56 = $t56;
-        $view->t57 = $t57;
-        $view->t58 = $t58;
-        $view->t59 = $t59;
-        $view->t60 = $t60;
-        $view->t61 = $t61;
-        $view->t62 = $t62;
-        $view->t63 = $t63;
-        $view->t64 = $t64;
-        $view->t65 = $t65;
-        $view->t66 = $t66;
-        $view->t67 = $t67;
-        $view->t68 = $t68;
-        $view->t69 = $t69;
-        $view->t70 = $t70;
+        $view->items = $items;
 
         $view->pid = $pid;
         //$view->atts = Atts::UploadFixed(Atts::$flow1, AttachmentCls::GetFixedItems($pid, 1), $edit);
@@ -6741,82 +6688,44 @@ class ProjectMod extends BaseMod
     public function OnProjectFlow10003()
     {
         $name = $this->Req('name', '', 'str');
-        $t1 = $this->Req('t1', '', 'str');
-        $t2 = $this->Req('t2', '', 'str');
-        $t3 = $this->Req('t3', '', 'str');
-        $t4 = $this->Req('t4', '', 'str');
-        $t5 = $this->Req('t5', '', 'str');
-        $t6 = $this->Req('t6', '', 'str');
-        $t7 = $this->Req('t7', '', 'str');
-        $t8 = $this->Req('t8', '', 'str');
-        $t9 = $this->Req('t9', '', 'str');
-        $t10 = $this->Req('t10', '', 'str');
-        $t11 = $this->Req('t11', '', 'str');
-        $t12 = $this->Req('t12', '', 'str');
-        $t13 = $this->Req('t13', '', 'str');
-        $t14 = $this->Req('t14', '', 'str');
-        $t15 = $this->Req('t15', '', 'str');
-        $t16 = $this->Req('t16', '', 'str');
-        $t17 = $this->Req('t17', '', 'str');
-        $t18 = $this->Req('t18', '', 'str');
-        $t19 = $this->Req('t19', '', 'str');
-        $t20 = $this->Req('t20', '', 'str');
-        $t21 = $this->Req('t21', '', 'str');
-        $t22 = $this->Req('t22', '', 'str');
-        $t23 = $this->Req('t23', '', 'str');
-        $t24 = $this->Req('t24', '', 'str');
-        $t25 = $this->Req('t25', '', 'str');
-        $t26 = $this->Req('t26', '', 'str');
-        $t27 = $this->Req('t27', '', 'str');
-        $t28 = $this->Req('t28', '', 'str');
-        $t29 = $this->Req('t29', '', 'str');
-        $t30 = $this->Req('t30', '', 'str');
-        $t31 = $this->Req('t31', '', 'str');
-        $t32 = $this->Req('t32', '', 'str');
-        $t33 = $this->Req('t33', '', 'str');
-        $t34 = $this->Req('t34', '', 'str');
-        $t35 = $this->Req('t35', '', 'str');
-        $t36 = $this->Req('t36', '', 'str');
-        $t37 = $this->Req('t37', '', 'str');
-        $t38 = $this->Req('t38', '', 'str');
-        $t39 = $this->Req('t39', '', 'str');
-        $t40 = $this->Req('t40', '', 'str');
-        $t41 = $this->Req('t41', '', 'str');
-        $t42 = $this->Req('t42', '', 'str');
-        $t43 = $this->Req('t43', '', 'str');
-        $t44 = $this->Req('t44', '', 'str');
-        $t45 = $this->Req('t45', '', 'str');
-        $t46 = $this->Req('t46', '', 'str');
-        $t47 = $this->Req('t47', '', 'str');
-        $t48 = $this->Req('t48', '', 'str');
-        $t49 = $this->Req('t49', '', 'str');
-        $t50 = $this->Req('t50', '', 'str');
-        $t51 = $this->Req('t51', '', 'str');
-        $t52 = $this->Req('t52', '', 'str');
-        $t53 = $this->Req('t53', '', 'str');
-        $t54 = $this->Req('t54', '', 'str');
-        $t55 = $this->Req('t55', '', 'str');
-        $t56 = $this->Req('t56', '', 'str');
-        $t57 = $this->Req('t57', '', 'str');
-        $t58 = $this->Req('t58', '', 'str');
-        $t59 = $this->Req('t59', '', 'str');
-        $t60 = $this->Req('t60', '', 'str');
-        $t61 = $this->Req('t61', '', 'str');
-        $t62 = $this->Req('t62', '', 'str');
-        $t63 = $this->Req('t63', '', 'str');
-        $t64 = $this->Req('t64', '', 'str');
-        $t65 = $this->Req('t65', '', 'str');
-        $t66 = $this->Req('t66', '', 'str');
-        $t67 = $this->Req('t67', '', 'str');
-        $t68 = $this->Req('t68', '', 'str');
-        $t69 = $this->Req('t69', '', 'str');
-        $t70 = $this->Req('t70', '', 'str');
 
         $pid = $this->Mid();
 
+        $items0 = $this->Req('items0', array(), 'array');
+        $items1 = $this->Req('items1', array(), 'array');
+        $items2 = $this->Req('items2', array(), 'array');
+        $items3 = $this->Req('items3', array(), 'array');
+        $items4 = $this->Req('items4', array(), 'array');
+        $items5 = $this->Req('items5', array(), 'array');
+        $items6 = $this->Req('items6', array(), 'array');
+
+        $items = array();
+        $num0 = count($items0);
+        $num1 = count($items1);
+        $num2 = count($items2);
+        $num3 = count($items3);
+        $num4 = count($items4);
+        $num5 = count($items5);
+        $num6 = count($items6);
+
+        if ($num0 != $num1 || $num0 != $num2 || $num0 != $num3 || $num0 != $num4 || $num0 != $num5 || $num0 != $num6) Json::ReturnError(ALERT_ERROR);
+        if ($num1 <= 0) Json::ReturnError('请至少添加一个条目');
+        for ($i = 0; $i < $num1; $i++) {
+            if (empty($items0[$i])) Json::ReturnError('请输入序号' . ($i + 1) . '条目的单位名称');
+            if (empty($items1[$i])) Json::ReturnError('请输入序号' . ($i + 1) . '条目的责任人');
+//            if (empty($items2[$i])) Json::ReturnError('请输入序号' . ($i + 1) . '条目的姓名');
+//            if (empty($items3[$i])) Json::ReturnError('请输入序号' . ($i + 1) . '条目的职务／职称');
+//            if (empty($items4[$i])) Json::ReturnError('请输入序号' . ($i + 1) . '条目的身份证号码');
+//            if (empty($items5[$i])) Json::ReturnError('请输入序号' . ($i + 1) . '条目的安全生产培训及证书情况');
+//            if (empty($items6[$i])) Json::ReturnError('请输入序号' . ($i + 1) . '条目的责任范围');
+            $items[$i] = array($items0[$i], $items1[$i], $items2[$i], $items3[$i], $items4[$i], $items5[$i], $items6[$i]);
+        }
+
+        $items = Json::Encode($items);
+
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
 
-        $id = Flow10003Cls::Add($pid, $name, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10, $t11, $t12, $t13, $t14, $t15, $t16, $t17, $t18, $t19, $t20, $t21, $t22, $t23, $t24, $t25, $t26, $t27, $t28, $t29, $t30, $t31, $t32, $t33, $t34, $t35, $t36, $t37, $t38, $t39, $t40, $t41, $t42, $t43, $t44, $t45, $t46, $t47, $t48, $t49, $t50, $t51, $t52, $t53, $t54, $t55, $t56, $t57, $t58, $t59, $t60, $t61, $t62, $t63, $t64, $t65, $t66, $t67, $t68, $t69, $t70);
+        $id = Flow10003Cls::Add($pid, $name, $items, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_3, $id, ProjectStateCls::APPROVE);
 
         try {
@@ -7091,6 +7000,7 @@ class ProjectMod extends BaseMod
     public function ProjectFlow10005()
     {
         $id = $this->Req('id', 0, 'int');
+        $pid = $this->Mid();
 
         $this->MemberAuth();
 
@@ -7098,68 +7008,32 @@ class ProjectMod extends BaseMod
 
         $view = View::Factory('ProjectFlow10005');
 
-        $pid = $this->Mid();
-        $gc = ProjectCls::GetGroupCompany($pid);
-
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
+        $gc = ProjectCls::GetGroupCompany($pid);
 
         if ($id > 0) $rs = Flow10005Cls::Instance()->Item($id);
         else $rs = Flow10005Cls::GetLastItem($pid);
 
-        $t1 = '';
-        $t2 = '';
-        $t3 = '';
-        $t4 = '';
-        $t5 = '';
-        $t6 = '';
-        $t7 = '';
-        $t8 = '';
-        $t9 = '';
-        $t10 = '';
+        $view->rs = $rs;
 
-        $edit = true;
-
-        if (!empty($rs) && count($rs) > 0) {
-
-            $name = $rs['name'];
-            $t1 = $rs['t1'];
-            $t2 = $rs['t2'];
-            $t3 = $rs['t3'];
-            $t4 = $rs['t4'];
-            $t5 = $rs['t5'];
-            $t6 = $rs['t6'];
-            $t7 = $rs['t7'];
-            $t8 = $rs['t8'];
-            $t9 = $rs['t9'];
-            $t10 = $rs['t10'];
-
-            $edit = ProjectStateCls::IsEdit(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_5));
-        }
-
-        $view->gc = $gc;
         $view->name = $name;
         $view->company = $company;
-
-        $view->edit = $edit;
+        $view->gc = $gc;
         $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_5);
 
-        $view->rs = $rs;
-        $view->t1 = $t1;
-        $view->t2 = $t2;
-        $view->t3 = $t3;
-        $view->t4 = $t4;
-        $view->t5 = $t5;
-        $view->t6 = $t6;
-        $view->t7 = $t7;
-        $view->t8 = $t8;
-        $view->t9 = $t9;
-        $view->t10 = $t10;
+        if ($id > 0) $view->approve = false;
+        else $view->approve = ProjectStateCls::IsApprove(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_5));
 
-        $view->pid = $pid;
-        //$view->atts = Atts::UploadFixed(Atts::$flow1, AttachmentCls::GetFixedItems($pid, 1), $edit);
+        //$view->atts = Atts::UploadFixed(Atts::$flow1, AttachmentCls::GetFixedItems($pid, 1), false, false, true);
 
         echo $view->Render();
+
+        if (!empty($rs)) {
+            Flow10005Cls::SetLast($rs["id"]);
+            Flow10005Cls::SetReply($rs["id"], 0, 0, 1);
+            ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_5, $rs["id"], ProjectStateCls::ALLOW);
+        }
 
         $this->MemberFooter();
     }
@@ -7595,16 +7469,16 @@ class ProjectMod extends BaseMod
         $rr = array();
         $rl = Flow10008Cls::GetLastItem($pid);
         if (!empty($rl) && count($rl) > 0) {
-            $new = ProjectStateCls::IsNew(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_5));
+            $new = ProjectStateCls::IsNew(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_8));
             if ($rl['replyid'] > 0) $rr = Reply1Cls::GetLastItem($pid, $rl['replyid']);
         }
-        $rs = Flow10004Cls::GetApprovedItems($pid);
+        $rs = Flow10008Cls::GetApprovedItems($pid);
 
         $view->rl = $rl;
         $view->rr = $rr;
         $view->rs = $rs;
         $view->new = $new;
-        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_5);
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_8);
 
         echo $view->Render();
 
@@ -7614,6 +7488,7 @@ class ProjectMod extends BaseMod
     public function ProjectFlow10008()
     {
         $id = $this->Req('id', 0, 'int');
+        $pid = $this->Mid();
 
         $this->MemberAuth();
 
@@ -7621,32 +7496,191 @@ class ProjectMod extends BaseMod
 
         $view = View::Factory('ProjectFlow10008');
 
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+        $gc = ProjectCls::GetGroupCompany($pid);
+
+        if ($id > 0) $rs = Flow10008Cls::Instance()->Item($id);
+        else $rs = Flow10008Cls::GetLastItem($pid);
+
+        $view->rs = $rs;
+
+        $view->name = $name;
+        $view->company = $company;
+        $view->gc = $gc;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_8);
+
+        if ($id > 0) $view->approve = false;
+        else $view->approve = ProjectStateCls::IsApprove(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_8));
+
+        //$view->atts = Atts::UploadFixed(Atts::$flow1, AttachmentCls::GetFixedItems($pid, 1), false, false, true);
+
+        echo $view->Render();
+
+        if (!empty($rs)) {
+            Flow10008Cls::SetLast($rs["id"]);
+            Flow10008Cls::SetReply($rs["id"], 0, 0, 1);
+            ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_8, $rs["id"], ProjectStateCls::ALLOW);
+        }
+
+        $this->MemberFooter();
+    }
+
+    public function OnProjectFlow10008()
+    {
+        $name = $this->Req('name', '', 'str');
+        $t1 = $this->Req('t1', '', 'str');
+        $t2 = $this->Req('t2', '', 'str');
+        $t3 = $this->Req('t3', '', 'str');
+        $t4 = $this->Req('t4', '', 'str');
+        $t5 = $this->Req('t5', '', 'str');
+        $t6 = $this->Req('t6', '', 'str');
+        $t7 = $this->Req('t7', '', 'str');
+        $t8 = $this->Req('t8', '', 'str');
+        $t9 = $this->Req('t9', '', 'str');
+
+        $items1 = $this->Req('items1', array(), 'array');
+        $items2 = $this->Req('items2', array(), 'array');
+        $items3 = $this->Req('items3', array(), 'array');
+        $items4 = $this->Req('items4', array(), 'array');
+
+        $items = array();
+        $num1 = count($items1);
+        $num2 = count($items2);
+        $num3 = count($items3);
+        $num4 = count($items4);
+
+        if ($num1 != $num2 || $num1 != $num3 || $num1 != $num4) Json::ReturnError(ALERT_ERROR);
+        if ($num1 <= 0) Json::ReturnError('请至少添加一个条目');
+        for ($i = 0; $i < $num1; $i++) {
+            if (empty($items1[$i])) Json::ReturnError('请输入序号' . ($i + 1) . '条目的检查日期');
+            if (empty($items2[$i])) Json::ReturnError('请输入序号' . ($i + 1) . '条目的形象进度');
+            if (empty($items3[$i])) Json::ReturnError('请输入序号' . ($i + 1) . '条目的评价等级');
+            $items[$i] = array($items1[$i], $items2[$i], $items3[$i], $items4[$i]);
+        }
+
+        $items = Json::Encode($items);
+
+        $pid = $this->Mid();
+
+        if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
+
+        $id = Flow10008Cls::Add($pid, $name, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $items, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_8, $id, ProjectStateCls::APPROVE);
+
+        try {
+            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_8, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_8));
+        } catch (Exception $e) {
+            Json::ReturnError($e->getMessage());
+        }
+
+        Json::ReturnSuccess();
+    }
+
+    public function ProjectReply10008View()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+
+        $pid = Flow10008Cls::Instance()->Pid($fid);
+        $gc = ProjectCls::GetGroupCompany($pid);
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        $rs = Reply10008Cls::GetLastItem($pid, $fid);
+
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectReply10008View');
+
+        $view->rs = $rs;
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        echo $view->Render();
+
+        $this->MemberFooter();
+    }
+
+    public function ProjectFlow10009List()
+    {
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectFlow10009List');
+
+        $pid = $this->Mid();
+
+        $new = true;
+        $rr = array();
+        $rl = Flow10009Cls::GetLastItem($pid);
+        if (!empty($rl) && count($rl) > 0) {
+            $new = ProjectStateCls::IsNew(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_9));
+            if ($rl['replyid'] > 0) $rr = Reply1Cls::GetLastItem($pid, $rl['replyid']);
+        }
+        $rs = Flow10009Cls::GetApprovedItems($pid);
+
+        $view->rl = $rl;
+        $view->rr = $rr;
+        $view->rs = $rs;
+        $view->new = $new;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_9);
+
+        echo $view->Render();
+
+        $this->MemberFooter();
+    }
+
+    public function ProjectFlow10009()
+    {
+        $id = $this->Req('id', 0, 'int');
+
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectFlow10009');
+
         $pid = $this->Mid();
         $gc = ProjectCls::GetGroupCompany($pid);
 
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
 
-        if ($id > 0) $rs = Flow10008Cls::Instance()->Item($id);
-        else $rs = Flow10008Cls::GetLastItem($pid);
+        if ($id > 0) $rs = Flow10009Cls::Instance()->Item($id);
+        else $rs = Flow10009Cls::GetLastItem($pid);
 
-        $no = '';
-        $signer = '';
-        $content = '';
-        $date = '';
-        $keywords = '';
+        $t1 = '';
+        $t2 = '';
+        $t3 = '';
+        $t4 = '';
+        $t5 = '';
+        $t6 = '';
+        $t7 = '';
+        $t8 = '';
+        $t9 = '';
+        $t10 = '';
 
         $edit = true;
 
         if (!empty($rs) && count($rs) > 0) {
 
-            $no = $rs['no'];
-            $signer = $rs['signer'];
-            $content = $rs['content'];
-            $date = $rs['date'];
-            $keywords = $rs['keywords'];
+            $name = $rs['name'];
+            $t1 = $rs['t1'];
+            $t2 = $rs['t2'];
+            $t3 = $rs['t3'];
+            $t4 = $rs['t4'];
+            $t5 = $rs['t5'];
+            $t6 = $rs['t6'];
+            $t7 = $rs['t7'];
+            $t8 = $rs['t8'];
+            $t9 = $rs['t9'];
+            $t10 = $rs['t10'];
 
-            $edit = ProjectStateCls::IsEdit(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_5));
+            $edit = ProjectStateCls::IsEdit(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_9));
         }
 
         $view->gc = $gc;
@@ -7654,17 +7688,226 @@ class ProjectMod extends BaseMod
         $view->company = $company;
 
         $view->edit = $edit;
-        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_5);
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_9);
 
         $view->rs = $rs;
-        $view->no = $no;
-        $view->signer = $signer;
-        $view->content = $content;
-        $view->date = $date;
-        $view->keywords = $keywords;
+        $view->t1 = $t1;
+        $view->t2 = $t2;
+        $view->t3 = $t3;
+        $view->t4 = $t4;
+        $view->t5 = $t5;
+        $view->t6 = $t6;
+        $view->t7 = $t7;
+        $view->t8 = $t8;
+        $view->t9 = $t9;
+        $view->t10 = $t10;
 
         $view->pid = $pid;
-        //$view->atts = Atts::UploadFixed(Atts::$flow1, AttachmentCls::GetFixedItems($pid, 1), $edit);
+        $view->atts = Atts::UploadFixed(Atts::$flow10009, AttachmentCls::GetFixedItems($pid, 10009), $edit);
+
+        echo $view->Render();
+
+        $this->MemberFooter();
+    }
+
+    public function OnProjectFlow10009()
+    {
+        $name = $this->Req('name', '', 'str');
+        $t1 = $this->Req('t1', '', 'str');
+        $t2 = $this->Req('t2', '', 'str');
+        $t3 = $this->Req('t3', '', 'str');
+        $t4 = $this->Req('t4', '', 'str');
+        $t5 = $this->Req('t5', '', 'str');
+        $t6 = $this->Req('t6', '', 'str');
+        $t7 = $this->Req('t7', '', 'str');
+        $t8 = $this->Req('t8', '', 'str');
+        $t9 = $this->Req('t9', '', 'str');
+        $t10 = $this->Req('t10', '', 'str');
+
+        $pid = $this->Mid();
+
+        if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
+
+        $id = Flow10009Cls::Add($pid, $name, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_9, $id, ProjectStateCls::APPROVE);
+
+        try {
+            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_9, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_9));
+        } catch (Exception $e) {
+            Json::ReturnError($e->getMessage());
+        }
+
+        Json::ReturnSuccess();
+    }
+
+    public function ProjectReply10009View()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+
+        $pid = Flow10009Cls::Instance()->Pid($fid);
+        $gc = ProjectCls::GetGroupCompany($pid);
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        $rs = Reply10009Cls::GetLastItem($pid, $fid);
+
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectReply10009View');
+
+        $view->rs = $rs;
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        echo $view->Render();
+
+        $this->MemberFooter();
+    }
+
+    public function ProjectFlow10010List()
+    {
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectFlow10010List');
+
+        $pid = $this->Mid();
+
+        $new = true;
+        $rr = array();
+        $rl = Flow10010Cls::GetLastItem($pid);
+        if (!empty($rl) && count($rl) > 0) {
+            $new = ProjectStateCls::IsNew(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_10));
+            if ($rl['replyid'] > 0) $rr = Reply1Cls::GetLastItem($pid, $rl['replyid']);
+        }
+        $rs = Flow10010Cls::GetApprovedItems($pid);
+
+        $view->rl = $rl;
+        $view->rr = $rr;
+        $view->rs = $rs;
+        $view->new = $new;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_10);
+
+        echo $view->Render();
+
+        $this->MemberFooter();
+    }
+
+    public function ProjectFlow10010()
+    {
+        $id = $this->Req('id', 0, 'int');
+
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectFlow10010');
+
+        $pid = $this->Mid();
+        $gc = ProjectCls::GetGroupCompany($pid);
+
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        if ($id > 0) $rs = Flow10010Cls::Instance()->Item($id);
+        else $rs = Flow10010Cls::GetLastItem($pid);
+
+        $t1 = '';
+        $t2 = '';
+        $t3 = '';
+        $t4 = '';
+        $t5 = '';
+        $t6 = '';
+
+        $edit = true;
+
+        if (!empty($rs) && count($rs) > 0) {
+
+            $name = $rs['name'];
+            $t1 = $rs['t1'];
+            $t2 = $rs['t2'];
+            $t3 = $rs['t3'];
+            $t4 = $rs['t4'];
+            $t5 = $rs['t5'];
+            $t6 = $rs['t6'];
+
+            $edit = ProjectStateCls::IsEdit(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_10));
+        }
+
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
+
+        $view->edit = $edit;
+        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::SECURITY_10);
+
+        $view->rs = $rs;
+        $view->t1 = $t1;
+        $view->t2 = $t2;
+        $view->t3 = $t3;
+        $view->t4 = $t4;
+        $view->t5 = $t5;
+        $view->t6 = $t6;
+
+        $view->pid = $pid;
+        //$view->atts = Atts::UploadFixed(Atts::$flow10010, AttachmentCls::GetFixedItems($pid, 10010), $edit);
+
+        echo $view->Render();
+
+        $this->MemberFooter();
+    }
+
+    public function OnProjectFlow10010()
+    {
+        $name = $this->Req('name', '', 'str');
+        $t1 = $this->Req('t1', '', 'str');
+        $t2 = $this->Req('t2', '', 'str');
+        $t3 = $this->Req('t3', '', 'str');
+        $t4 = $this->Req('t4', '', 'str');
+        $t5 = $this->Req('t5', '', 'str');
+        $t6 = $this->Req('t6', '', 'str');
+
+        $pid = $this->Mid();
+
+        if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
+
+        $id = Flow10010Cls::Add($pid, $name, $t1, $t2, $t3, $t4, $t5, $t6, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_10, $id, ProjectStateCls::APPROVE);
+
+        try {
+            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_10, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_10));
+        } catch (Exception $e) {
+            Json::ReturnError($e->getMessage());
+        }
+
+        Json::ReturnSuccess();
+    }
+
+    public function ProjectReply10010View()
+    {
+        $fid = $this->Req('fid', 0, 'int');
+
+        $pid = Flow10010Cls::Instance()->Pid($fid);
+        $gc = ProjectCls::GetGroupCompany($pid);
+        $name = ProjectCls::Instance()->Name($pid);
+        $company = ProjectCls::Instance()->Company($pid);
+
+        $rs = Reply10010Cls::GetLastItem($pid, $fid);
+
+        $this->MemberAuth();
+
+        $this->MemberHeader();
+
+        $view = View::Factory('ProjectReply10010View');
+
+        $view->rs = $rs;
+        $view->gc = $gc;
+        $view->name = $name;
+        $view->company = $company;
 
         echo $view->Render();
 

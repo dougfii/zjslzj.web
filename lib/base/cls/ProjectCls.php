@@ -128,7 +128,13 @@ class ProjectCls
                 $rs[$i]['n0n'] = ProjectNodeCls::Name($rs[$i]['n0']);
                 $rs[$i]['n1n'] = ProjectNodeCls::Name($rs[$i]['n1']);
                 $rs[$i]['n2n'] = ProjectNodeCls::Name($rs[$i]['n2']);
-                $rs[$i]['n3n'] = ProjectNodeCls::Name($rs[$i]['n3']);
+                $rs[$i]['n31n'] = ProjectNodeCls::Name($rs[$i]['n31']);
+                $rs[$i]['n32n'] = ProjectNodeCls::Name($rs[$i]['n32']);
+                $rs[$i]['n33n'] = ProjectNodeCls::Name($rs[$i]['n33']);
+                $rs[$i]['n34n'] = ProjectNodeCls::Name($rs[$i]['n34']);
+                $rs[$i]['n35n'] = ProjectNodeCls::Name($rs[$i]['n35']);
+                $rs[$i]['n36n'] = ProjectNodeCls::Name($rs[$i]['n36']);
+                $rs[$i]['n37n'] = ProjectNodeCls::Name($rs[$i]['n37']);
                 $rs[$i]['n4n'] = ProjectNodeCls::Name($rs[$i]['n4']);
                 $rs[$i]['n5n'] = ProjectNodeCls::Name($rs[$i]['n5']);
                 $rs[$i]['n51n'] = ProjectNodeCls::Name($rs[$i]['n51']);
@@ -165,11 +171,19 @@ class ProjectCls
                 $rs[$i]['n10006n'] = ProjectNodeCls::Name($rs[$i]['n10006']);
                 $rs[$i]['n10007n'] = ProjectNodeCls::Name($rs[$i]['n10007']);
                 $rs[$i]['n10008n'] = ProjectNodeCls::Name($rs[$i]['n10008']);
+                $rs[$i]['n10009n'] = ProjectNodeCls::Name($rs[$i]['n10009']);
+                $rs[$i]['n10010n'] = ProjectNodeCls::Name($rs[$i]['n10010']);
 
                 $rs[$i]['s0n'] = ProjectStateCls::Name($rs[$i]['s0']);
                 $rs[$i]['s1n'] = ProjectStateCls::Name($rs[$i]['s1']);
                 $rs[$i]['s2n'] = ProjectStateCls::Name($rs[$i]['s2']);
-                $rs[$i]['s3n'] = ProjectStateCls::Name($rs[$i]['s3']);
+                $rs[$i]['s31n'] = ProjectStateCls::Name($rs[$i]['s31']);
+                $rs[$i]['s32n'] = ProjectStateCls::Name($rs[$i]['s32']);
+                $rs[$i]['s33n'] = ProjectStateCls::Name($rs[$i]['s33']);
+                $rs[$i]['s34n'] = ProjectStateCls::Name($rs[$i]['s34']);
+                $rs[$i]['s35n'] = ProjectStateCls::Name($rs[$i]['s35']);
+                $rs[$i]['s36n'] = ProjectStateCls::Name($rs[$i]['s36']);
+                $rs[$i]['s37n'] = ProjectStateCls::Name($rs[$i]['s37']);
                 $rs[$i]['s4n'] = ProjectStateCls::Name($rs[$i]['s4']);
                 $rs[$i]['s5n'] = ProjectStateCls::Name($rs[$i]['s5']);
                 $rs[$i]['s51n'] = ProjectStateCls::Name($rs[$i]['s51']);
@@ -207,6 +221,7 @@ class ProjectCls
                 $rs[$i]['s10007n'] = ProjectStateCls::Name($rs[$i]['s10007']);
                 $rs[$i]['s10008n'] = ProjectStateCls::Name($rs[$i]['s10008']);
                 $rs[$i]['s10009n'] = ProjectStateCls::Name($rs[$i]['s10009']);
+                $rs[$i]['s10010n'] = ProjectStateCls::Name($rs[$i]['s10010']);
             }
             return $rs;
         }

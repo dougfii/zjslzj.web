@@ -24,6 +24,17 @@ class QualityMod extends BaseMod
             $where .= ' AND EXTRACT(YEAR FROM time)=' . $year;
         }
 
+        if ($this->Uid() == 1) {
+        } else {
+            $gids = GroupCls::Instance()->GetChildrenIds(UserCls::Instance()->Gid($this->Uid()), true);
+            if (!empty($gids) && count($gids) > 0) {
+                $gids = implode(',', $gids);
+                $where .= ' AND gid IN (' . $gids . ')';
+            } else {
+                $where .= ' AND 1=2';
+            }
+        }
+
         $where .= ' AND type=' . $type;
         if (!empty ($fname)) $where .= ' AND LOWER(name) like \'%' . strtolower($fname) . '%\'';
         if (!empty($fcompany)) $where .= ' AND LOWER(company) like \'%' . strtolower($fcompany) . '%\'';

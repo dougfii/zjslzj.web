@@ -34,6 +34,11 @@
                 t29:$('#t29').val(),
                 t30:$('#t30').val(),
                 t31:$('#t31').val(),
+                t32:$('#t32').val(),
+                t33:$('#t33').val(),
+                t34:$('#t34').val(),
+                t35:$('#t35').val(),
+                t36:$('#t36').val(),
             }, function (ret){if(ret.code==1)layer.msg('提交成功', 1, function(){location.reload();});else layer.msg(ret.msg, 1);}, 'json');
         });
 
@@ -74,7 +79,31 @@
 <div class="panel paneltool">
     <div class="pagea4">
         <div class="pagea4info">
-            <div class="center">江苏省水利工程建设安全监督申请书</div>
+            <br/><br/>
+            <div class="pa4-title1">江苏省水利工程建设安全监督</div>
+            <div class="pa4-title1">申 请 书</div>
+            <br/><br/><br/><br/>
+            <div style="margin-left:200px;">
+                <div>编　　号：（<?php if($edit) echo '<input type="text" size="5" class="pae4-text1" id="t32" value="' . $t32 . '" />'; else echo $t32; ?>）申（<?php if($edit) echo '<input type="text" size="5" class="pae4-text1" id="t33" value="' . $t33 . '" />'; else echo $t33; ?>）第<?php if($edit) echo '<input type="text" size="5" class="pae4-text1" id="t34" value="' . $t34 . '" />'; else echo $t34; ?>号</div>
+                <br/><br/>
+                <div>申请单位：<?php if($edit) echo '<input type="text" class="pae4-text1" id="t35" value="' . $t35 . '" />'; else echo $t35; ?>（盖章）</div>
+                <br/><br/>
+                <div>申请日期：<?php if($edit) echo '<input type="text" onclick="laydate();" class="pae4-text1" id="t36" value="' . $t36 . '" />'; else echo $t36; ?>　　　　</div>
+            </div>
+            <br/><br/><br/><br/>
+            <div class="center">江苏省水利厅印制</div>
+            <br/><br/><br/><br/><br/><br/><br/><br/>
+            <div class="center">填写说明</div>
+            <div class="tx1" style="line-height:150%;padding:10px;">
+                <p>一、本书由项目法人负责填报。</p>
+                <p>二、本书须在水利工程开工前填报，填写时不得使用铅笔、圆珠笔，字迹应清晰、整洁，最好使用计算机打印。</p>
+                <p>三、本书由水利工程建设安全监督机构统一编号。</p>
+                <p>四、申请人须按本书要求逐项填报有关内容，各项内容如纸张不够，可加附页。</p>
+                <p>五、本书填写一式二份，一份回执。</p>
+            </div>
+            <br/>
+        </div>
+        <div class="pagea4info">
             <table class="tx1">
                 <tr><td class="k">工程名称</td><td class="v" colspan="3"><?php if($edit) echo '<input type="text" class="" id="name" value="' . $name . '" />'; else echo $name; ?></td></tr>
                 <tr><td class="k">建设地点</td><td class="v" colspan="3"><?php if($edit) echo '<input type="text" class="" id="t1" value="' . $t1 . '" />'; else echo $t1; ?></td></tr>
