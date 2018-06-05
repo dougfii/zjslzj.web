@@ -7,7 +7,7 @@ class Atts
     public static $flow51 = array('重要隐蔽（关键部位）单元工程质量等级签证', '重要隐蔽（关键部位）单元工程质量评定表');
     public static $flow52 = array('重要隐蔽（关键部位）单元工程质量等级核备表', '分部工程质量评定表', '分部工程验收鉴定书');
     public static $flow61 = array('重要隐蔽（关键部位）单元工程质量等级核备表', '分部工程质量评定表', '分部工程验收鉴定书');
-    public static $flow63 = array('单位工程质量评定表', '工程外观质量评定表', '单位工程验收鉴定书');
+    public static $flow63 = array('单位工程验收鉴定书');
     public static $flow64 = array('项目法人质量核定申请', '质量核定申报书', '项目法人委托检测报告', '工程项目质量评定表');
     public static $flow71 = array();
     public static $flow72 = array();

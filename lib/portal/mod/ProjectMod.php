@@ -1332,12 +1332,14 @@ class ProjectMod extends BaseMod
 
         $new = true;
         $rr = array();
-        $rl = Flow37Cls::GetLastItem($pid);
-        if (!empty($rl) && count($rl) > 0) {
-            $new = ProjectStateCls::IsNew(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::CONFIRM_7));
-            if ($rl['replyid'] > 0) $rr = Reply1Cls::GetLastItem($pid, $rl['replyid']);
-        }
-        $rs = Flow37Cls::GetApprovedItems($pid);
+        $rl = array();
+        $rs = array();
+//        $rl = Flow31Cls::GetLastItem($pid);
+//        if (!empty($rl) && count($rl) > 0) {
+//            $new = ProjectStateCls::IsNew(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::CONFIRM_4));
+//            if ($rl['replyid'] > 0) $rr = Reply1Cls::GetLastItem($pid, $rl['replyid']);
+//        }
+//        $rs = Flow31Cls::GetApprovedItems($pid);
 
         $view->rl = $rl;
         $view->rr = $rr;
@@ -1362,34 +1364,91 @@ class ProjectMod extends BaseMod
 
         $pid = $this->Mid();
         $gc = ProjectCls::GetGroupCompany($pid);
-
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
 
         if ($id > 0) $rs = Flow37Cls::Instance()->Item($id);
         else $rs = Flow37Cls::GetLastItem($pid);
 
-        $t1 = '';
-        $t2 = '';
-        $t3 = '';
-        $t4 = '';
-        $t5 = '';
-        $t6 = '';
+        $no = '';
+        $signer = '';
+        $content = '';
+        $date = '';
+
+        $comp = '';
+        $date_ping = '';
+
+        $datas = array();
+
+        $m11 = '';
+        $m12 = '';
+        $m13 = '';
+        $m21 = '';
+        $m22 = '';
+        $m23 = '';
+        $m31 = '';
+        $m32 = '';
+        $m33 = '';
+        $m41 = '';
+        $m42 = '';
+        $m43 = '';
+        $m51 = '';
+        $m52 = '';
+        $m53 = '';
+        $m61 = '';
+        $m62 = '';
+        $m63 = '';
 
         $edit = true;
 
         if (!empty($rs) && count($rs) > 0) {
-
             $name = $rs['name'];
-            $t1 = $rs['t1'];
-            $t2 = $rs['t2'];
-            $t3 = $rs['t3'];
-            $t4 = $rs['t4'];
-            $t5 = $rs['t5'];
-            $t6 = $rs['t6'];
+            $no = $rs['no'];
+            $signer = $rs['signer'];
+            $content = $rs['content'];
+            $date = $rs['date'];
+
+            $comp = $rs['comp'];
+            $date_ping = $rs['date_ping'];
+
+            $datas = Json::Decode($rs['items']);
+
+            $m11 = $rs['m11'];
+            $m12 = $rs['m12'];
+            $m13 = $rs['m13'];
+            $m21 = $rs['m21'];
+            $m22 = $rs['m22'];
+            $m23 = $rs['m23'];
+            $m31 = $rs['m31'];
+            $m32 = $rs['m32'];
+            $m33 = $rs['m33'];
+            $m41 = $rs['m41'];
+            $m42 = $rs['m42'];
+            $m43 = $rs['m43'];
+            $m51 = $rs['m51'];
+            $m52 = $rs['m52'];
+            $m53 = $rs['m53'];
+            $m61 = $rs['m61'];
+            $m62 = $rs['m62'];
+            $m63 = $rs['m63'];
 
             $edit = ProjectStateCls::IsEdit(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::CONFIRM_7));
         }
+
+        $table = isset($datas['table']) ? $datas['table'] : array();
+        $items = isset($datas['items']) ? $datas['items'] : array();
+        $totals = isset($datas['totals']) ? $datas['totals'] : array();
+        $amounts = isset($datas['amounts']) ? $datas['amounts'] : array();
+
+        $data = array();
+        $maxcols = 0;
+        if (!empty($table)) {
+            list($data, $maxcols) = $table;
+            $_SESSION['facade_ds'] = $table;
+        }
+
+        $tables = $this->FacadeTableOk($data, $maxcols, $items, $totals, $amounts, $edit);
+        $_SESSION['facade_table'] = $tables;
 
         $view->gc = $gc;
         $view->name = $name;
@@ -1398,74 +1457,186 @@ class ProjectMod extends BaseMod
         $view->edit = $edit;
         $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::CONFIRM_7);
 
-        $view->rs = $rs;
-        $view->t1 = $t1;
-        $view->t2 = $t2;
-        $view->t3 = $t3;
-        $view->t4 = $t4;
-        $view->t5 = $t5;
-        $view->t6 = $t6;
+        $view->no = $no;
+        $view->signer = $signer;
+        $view->content = $content;
+        $view->date = $date;
 
-        $view->pid = $pid;
-        //$view->atts = Atts::UploadFixed(Atts::$flow37, AttachmentCls::GetFixedItems($pid, 37), $edit);
+        $view->comp = $comp;
+        $view->date_ping = $date_ping;
 
-        echo $view->Render();
+        $view->tables = $tables;
+        $view->cols = $maxcols;
 
-        $this->MemberFooter();
-    }
-
-    public function OnProjectFlow37()
-    {
-        $name = $this->Req('name', '', 'str');
-        $t1 = $this->Req('t1', '', 'str');
-        $t2 = $this->Req('t2', '', 'str');
-        $t3 = $this->Req('t3', '', 'str');
-        $t4 = $this->Req('t4', '', 'str');
-        $t5 = $this->Req('t5', '', 'str');
-        $t6 = $this->Req('t6', '', 'str');
-
-        $pid = $this->Mid();
-
-        if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
-
-        $id = Flow37Cls::Add($pid, $name, $t1, $t2, $t3, $t4, $t5, $t6, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
-        ProjectCls::SetNode($pid, ProjectNodeCls::CONFIRM_7, $id, ProjectStateCls::APPROVE);
-
-        try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CONFIRM_7, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CONFIRM_7));
-        } catch (Exception $e) {
-            Json::ReturnError($e->getMessage());
-        }
-
-        Json::ReturnSuccess();
-    }
-
-    public function ProjectReply37View()
-    {
-        $fid = $this->Req('fid', 0, 'int');
-
-        $pid = Flow37Cls::Instance()->Pid($fid);
-        $gc = ProjectCls::GetGroupCompany($pid);
-        $name = ProjectCls::Instance()->Name($pid);
-        $company = ProjectCls::Instance()->Company($pid);
-
-        $rs = Reply37Cls::GetLastItem($pid, $fid);
-
-        $this->MemberAuth();
-
-        $this->MemberHeader();
-
-        $view = View::Factory('ProjectReply37View');
-
-        $view->rs = $rs;
-        $view->gc = $gc;
-        $view->name = $name;
-        $view->company = $company;
+        $view->m11 = $m11;
+        $view->m12 = $m12;
+        $view->m13 = $m13;
+        $view->m21 = $m21;
+        $view->m22 = $m22;
+        $view->m23 = $m23;
+        $view->m31 = $m31;
+        $view->m32 = $m32;
+        $view->m33 = $m33;
+        $view->m41 = $m41;
+        $view->m42 = $m42;
+        $view->m43 = $m43;
+        $view->m51 = $m51;
+        $view->m52 = $m52;
+        $view->m53 = $m53;
+        $view->m61 = $m61;
+        $view->m62 = $m62;
+        $view->m63 = $m63;
 
         echo $view->Render();
 
         $this->MemberFooter();
     }
+//    public function ProjectFlow37List()
+//    {
+//        $this->MemberAuth();
+//
+//        $this->MemberHeader();
+//
+//        $view = View::Factory('ProjectFlow37List');
+//
+//        $pid = $this->Mid();
+//
+//        $new = true;
+//        $rr = array();
+//        $rl = Flow37Cls::GetLastItem($pid);
+//        if (!empty($rl) && count($rl) > 0) {
+//            $new = ProjectStateCls::IsNew(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::CONFIRM_7));
+//            if ($rl['replyid'] > 0) $rr = Reply1Cls::GetLastItem($pid, $rl['replyid']);
+//        }
+//        $rs = Flow37Cls::GetApprovedItems($pid);
+//
+//        $view->rl = $rl;
+//        $view->rr = $rr;
+//        $view->rs = $rs;
+//        $view->new = $new;
+//        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::CONFIRM_7);
+//
+//        echo $view->Render();
+//
+//        $this->MemberFooter();
+//    }
+//
+//    public function ProjectFlow37()
+//    {
+//        $id = $this->Req('id', 0, 'int');
+//
+//        $this->MemberAuth();
+//
+//        $this->MemberHeader();
+//
+//        $view = View::Factory('ProjectFlow37');
+//
+//        $pid = $this->Mid();
+//        $gc = ProjectCls::GetGroupCompany($pid);
+//
+//        $name = ProjectCls::Instance()->Name($pid);
+//        $company = ProjectCls::Instance()->Company($pid);
+//
+//        if ($id > 0) $rs = Flow37Cls::Instance()->Item($id);
+//        else $rs = Flow37Cls::GetLastItem($pid);
+//
+//        $t1 = '';
+//        $t2 = '';
+//        $t3 = '';
+//        $t4 = '';
+//        $t5 = '';
+//        $t6 = '';
+//
+//        $edit = true;
+//
+//        if (!empty($rs) && count($rs) > 0) {
+//
+//            $name = $rs['name'];
+//            $t1 = $rs['t1'];
+//            $t2 = $rs['t2'];
+//            $t3 = $rs['t3'];
+//            $t4 = $rs['t4'];
+//            $t5 = $rs['t5'];
+//            $t6 = $rs['t6'];
+//
+//            $edit = ProjectStateCls::IsEdit(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::CONFIRM_7));
+//        }
+//
+//        $view->gc = $gc;
+//        $view->name = $name;
+//        $view->company = $company;
+//
+//        $view->edit = $edit;
+//        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::CONFIRM_7);
+//
+//        $view->rs = $rs;
+//        $view->t1 = $t1;
+//        $view->t2 = $t2;
+//        $view->t3 = $t3;
+//        $view->t4 = $t4;
+//        $view->t5 = $t5;
+//        $view->t6 = $t6;
+//
+//        $view->pid = $pid;
+//        //$view->atts = Atts::UploadFixed(Atts::$flow37, AttachmentCls::GetFixedItems($pid, 37), $edit);
+//
+//        echo $view->Render();
+//
+//        $this->MemberFooter();
+//    }
+//
+//    public function OnProjectFlow37()
+//    {
+//        $name = $this->Req('name', '', 'str');
+//        $t1 = $this->Req('t1', '', 'str');
+//        $t2 = $this->Req('t2', '', 'str');
+//        $t3 = $this->Req('t3', '', 'str');
+//        $t4 = $this->Req('t4', '', 'str');
+//        $t5 = $this->Req('t5', '', 'str');
+//        $t6 = $this->Req('t6', '', 'str');
+//
+//        $pid = $this->Mid();
+//
+//        if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
+//
+//        $id = Flow37Cls::Add($pid, $name, $t1, $t2, $t3, $t4, $t5, $t6, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+//        ProjectCls::SetNode($pid, ProjectNodeCls::CONFIRM_7, $id, ProjectStateCls::APPROVE);
+//
+//        try {
+//            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CONFIRM_7, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CONFIRM_7));
+//        } catch (Exception $e) {
+//            Json::ReturnError($e->getMessage());
+//        }
+//
+//        Json::ReturnSuccess();
+//    }
+//
+//    public function ProjectReply37View()
+//    {
+//        $fid = $this->Req('fid', 0, 'int');
+//
+//        $pid = Flow37Cls::Instance()->Pid($fid);
+//        $gc = ProjectCls::GetGroupCompany($pid);
+//        $name = ProjectCls::Instance()->Name($pid);
+//        $company = ProjectCls::Instance()->Company($pid);
+//
+//        $rs = Reply37Cls::GetLastItem($pid, $fid);
+//
+//        $this->MemberAuth();
+//
+//        $this->MemberHeader();
+//
+//        $view = View::Factory('ProjectReply37View');
+//
+//        $view->rs = $rs;
+//        $view->gc = $gc;
+//        $view->name = $name;
+//        $view->company = $company;
+//
+//        echo $view->Render();
+//
+//        $this->MemberFooter();
+//    }
 
     public function ProjectFlow4List()
     {
