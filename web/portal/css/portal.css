@@ -16,7 +16,7 @@ a:hover { text-decoration: none; color: #e4393c; }
 body { }
 .head { background: url('/img/adv0.jpg') no-repeat center top; box-shadow: 0px 5px 8px #ddd; }
 .body, .menu, .foot { margin: 0 auto; width: 1000px; }
-.logo { display: inline-block; width: 500px; height: 50px; background: url('/img/logo.png') no-repeat;margin-top:28px; }
+.logo { display: inline-block; width: 520px; height: 50px; background: url('/img/logo.png') no-repeat;margin-top:28px; }
 .tenet { float: right; display: inline-block; width: 360px; height: 105px; background: url('/img/tenet.png') no-repeat; }
 .menubar { height: 36px; line-height: 36px; border-top: #2576b7 solid 1px; border-bottom: #2576b7 solid 1px;; background: rgba(77, 166, 255, 0.3) !important; background: #4da6ff; filter: Alpha(opacity=30); }
 .menu { position: relative; height: 36px; line-height: 36px; }

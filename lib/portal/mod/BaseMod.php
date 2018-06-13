@@ -232,7 +232,7 @@ abstract class BaseMod implements IMod
                 $s .= '<li><a href="?a=articles&id=' . $v . '">' . ArticleTypeCls::Instance()->Name($v) . '</a></li>';
             }
         }
-        $s .= '<li><a href="/?a=feedback">质量投诉</a></li>';
+        //$s .= '<li><a href="/?a=feedback">质量投诉</a></li>';
         $s .= '<li><a href="/?a=contacts">联系我们</a></li>';
         $s .= '</ul>';
         return $s;

@@ -72,16 +72,19 @@
         </div>
         <div class="panel-index-right">
             <div class="clear">
-                <div class="panel-index">
-                    <div class="cap-introduction"><span class="panel-index-more"><a href="?a=article&id=1" target="_blank">详细内容 &raquo;</a></span></div>
-                    <div class="list-introduction"><?php if(!empty($rb)) echo '<img src="' . $rb['pic'] . '"/>　　' . $rb['content'] ; ?></div>
-                </div>
-            </div>
-            <div class="clear">
                 <div class="cap-operation"></div>
                 <div class="list-operation">
                     <a href="?m=project" target="_blank" class="btn-apply"><i></i>工程监督在线申报</a>
                     <a href="http://manage.demo.xzslzj.cn" target="_blank" class="btn-panel"><i></i>业务系统管理中心</a>
+                    <br/><br/>
+                    <div style="text-align:center;font-size:12px;"><a href="/?a=feedback">质量安全投诉</a></div>
+                </div>
+            </div>
+            <br/><br/>
+            <div class="clear">
+                <div class="panel-index">
+                    <div class="cap-introduction"><span class="panel-index-more"><a href="?a=article&id=1" target="_blank">详细内容 &raquo;</a></span></div>
+                    <div class="list-introduction"><?php if(!empty($rb)) echo '<img src="' . $rb['pic'] . '"/>　　' . $rb['content'] ; ?></div>
                 </div>
             </div>
         </div>

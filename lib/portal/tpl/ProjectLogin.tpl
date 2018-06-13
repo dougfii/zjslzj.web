@@ -59,8 +59,8 @@
     </div>
     <div class="loginj hidden">
         <div class="logint">新工程监督在线申请</div>
-        质监类型：<select id="jtype"><option>请选择类型</option><option value="1">工程质量监督</option><option value="2">安全质量监督</option></select><br/>
-        质监机构：<?php echo $gid; ?><br/>
+        监督类型：<select id="jtype"><option>请选择类型</option><option value="1">工程质量监督</option><option value="2">工程安全监督</option></select><br/>
+        监督机构：<?php echo $gid; ?><br/>
         工程名称：<input type="text" id="jname" placeholder="请输入工程名称" autofocus/><br/>
         申请单位：<input type="text" id="jcompany" placeholder="请输入申报单位" autofocus/><br/>
         登录密码：<input type="password" id="jpass" placeholder="请输入登录密码"/><br/>
