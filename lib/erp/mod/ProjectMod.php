@@ -5092,7 +5092,7 @@ class ProjectMod extends BaseMod
         if ($id > 0) $view->approve = false;
         else $view->approve = ProjectStateCls::IsApprove(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::SECURITY_1));
 
-        //$view->atts = Atts::UploadFixed(Atts::$flow1, AttachmentCls::GetFixedItems($pid, 1), false, false, true);
+        $view->atts = Atts::UploadFixed(Atts::$flow10001, AttachmentCls::GetFixedItems($pid, 10001), false, false, true);
 
         echo $view->Render();
 

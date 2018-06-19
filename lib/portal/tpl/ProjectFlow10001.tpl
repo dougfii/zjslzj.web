@@ -44,7 +44,7 @@
 
         $('.upfile').change(function(){
             var pid = $('#pid').val();
-            var tid = 1;
+            var tid = 10001;
             var no = $(this).attr('fid');
             var name = $(this).attr('fname');
             upload(pid, tid, no, name);

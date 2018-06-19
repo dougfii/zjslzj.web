@@ -6422,7 +6422,7 @@ class ProjectMod extends BaseMod
         $view->t39 = $t39;
 
         $view->pid = $pid;
-        //$view->atts = Atts::UploadFixed(Atts::$flow1, AttachmentCls::GetFixedItems($pid, 1), $edit);
+        $view->atts = Atts::UploadFixed(Atts::$flow10001, AttachmentCls::GetFixedItems($pid, 10001), $edit);
 
         echo $view->Render();
 
