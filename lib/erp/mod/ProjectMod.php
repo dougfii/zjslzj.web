@@ -525,6 +525,7 @@ class ProjectMod extends BaseMod
             ProjectCls::SetNode($pid, ProjectNodeCls::CONFIRM_5, $fid, ProjectStateCls::BEGIN);
             ProjectCls::SetNode($pid, ProjectNodeCls::CONFIRM_6, $fid, ProjectStateCls::BEGIN);
             ProjectCls::SetNode($pid, ProjectNodeCls::CONFIRM_6, $fid, ProjectStateCls::BEGIN);
+            ProjectCls::SetNode($pid, ProjectNodeCls::CONFIRM_7, $fid, ProjectStateCls::BEGIN);
         }
         if ($n4) ProjectCls::SetNode($pid, ProjectNodeCls::SUGGEST, $fid, ProjectStateCls::BEGIN);
         if ($n5) {
@@ -5133,14 +5134,27 @@ class ProjectMod extends BaseMod
 
         $view = View::Factory('ProjectReply10001');
 
+        $edit = true;
+
+        $view->edit = $edit;
+
         $view->gc = $gc;
         $view->name = $name;
         $view->fname = $name;
         $view->company = $company;
 
-        $view->fid = $fid;
+        $view->t1 = '';
+        $view->t2 = '';
+        $view->t3 = '';
+        $view->t4 = '';
+        $view->t5 = '';
+        $view->t6 = '';
 
-        $view->atts = Atts::UploadFixed(Atts::$flow100012, AttachmentCls::GetFixedItems($pid, 100012), true, false, true);
+        $view->fid = $fid;
+        $view->pid = $pid;
+
+        //$view->atts = Atts::UploadFixed(Atts::$flow100012, AttachmentCls::GetFixedItems($pid, 100012), true, false, true);
+        $view->atts = Atts::UploadDynamic(AttachmentCls::GetDynamicItems($pid, 100012), $edit, false, true);
 
         echo $view->Render();
 
@@ -5153,21 +5167,27 @@ class ProjectMod extends BaseMod
         $no = $this->Req('no', '', 'str');
         $content = $this->Req('content', '', 'str');
         $date = $this->Req('date', '', 'str');
+        $t1 = $this->Req('t1', '', 'str');
+        $t2 = $this->Req('t2', '', 'str');
+        $t3 = $this->Req('t3', '', 'str');
+        $t4 = $this->Req('t4', '', 'str');
+        $t5 = $this->Req('t5', '', 'str');
+        $t6 = $this->Req('t6', '', 'str');
         $uid = $this->Uid();
 
         $pid = Flow10001Cls::Instance()->Pid($fid);
 
         if ($fid <= 0 || $pid <= 0 || $uid <= 0) Json::ReturnError(ALERT_ERROR);
-        if (empty($no)) Json::ReturnError('请输入文件编号');
-        if (empty($content)) Json::ReturnError('请输入批复内容');
-        if (empty($date)) Json::ReturnError('请输入批复日期');
+//        if (empty($no)) Json::ReturnError('请输入文件编号');
+//        if (empty($content)) Json::ReturnError('请输入批复内容');
+//        if (empty($date)) Json::ReturnError('请输入批复日期');
 
         $act = 1;
 
-        $replyid = Reply10001Cls::Add($pid, $fid, $no, $content, $date, $uid, $act);
+        $replyid = Reply10001Cls::Add($pid, $fid, $no, $content, $date, $t1, $t2, $t3, $t4, $t5, $t6, $uid, $act);
         Flow10001Cls::SetReply($fid, $uid, $replyid, $act);
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_1, $fid, ProjectStateCls::ALLOW);
-        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_2, $fid, ProjectStateCls::BEGIN);
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_5, $fid, ProjectStateCls::BEGIN);
 
         MsgCls::Add(1, MsgDirectCls::FROM_USER, $this->Uid(), $pid, '管理员', ProjectCls::Instance()->Name($pid), ProjectNodeCls::APPLY, $fid, ProjectNodeCls::Name(ProjectNodeCls::APPLY) . '有批复');
 
@@ -5196,7 +5216,8 @@ class ProjectMod extends BaseMod
 
         $view->fid = $fid;
 
-        $view->atts = Atts::UploadFixed(Atts::$flow100012, AttachmentCls::GetFixedItems($pid, 100012), false, false, true);
+        //$view->atts = Atts::UploadFixed(Atts::$flow100012, AttachmentCls::GetFixedItems($pid, 100012), false, false, true);
+        $view->atts = Atts::UploadDynamic(AttachmentCls::GetDynamicItems($pid, 100012), false, false, true);
 
         echo $view->Render();
 
@@ -5817,7 +5838,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_5, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $pid, 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_5, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_5));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $pid, 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_5, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_5));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -6019,6 +6040,8 @@ class ProjectMod extends BaseMod
 
         $view = View::Factory('ProjectReply10006');
 
+        $edit = true;
+        $view->edit = $edit;
         $view->gc = $gc;
         $view->name = $name;
         $view->company = $company;
@@ -6050,7 +6073,7 @@ class ProjectMod extends BaseMod
         $replyid = Reply10006Cls::Add($pid, $fid, $no, $content, $date, $uid, $act);
         Flow10006Cls::SetReply($fid, $uid, $replyid, $act);
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_6, $fid, ProjectStateCls::ALLOW);
-        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_7, $fid, ProjectStateCls::BEGIN);
+        ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_9, $fid, ProjectStateCls::BEGIN);
 
         MsgCls::Add(1, MsgDirectCls::FROM_USER, $this->Uid(), $pid, '管理员', ProjectCls::Instance()->Name($pid), ProjectNodeCls::APPLY, $fid, ProjectNodeCls::Name(ProjectNodeCls::APPLY) . '有批复');
 
@@ -6556,6 +6579,8 @@ class ProjectMod extends BaseMod
 
         $view = View::Factory('ProjectReply10009');
 
+        $edit = true;
+        $view->edit = $edit;
         $view->gc = $gc;
         $view->name = $name;
         $view->company = $company;

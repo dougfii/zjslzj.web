@@ -69,13 +69,13 @@ class Reply10001Cls
     }
 
 
-    public static function Add($pid, $fid, $no, $content, $date, $uid, $act)
+    public static function Add($pid, $fid, $no, $content, $date, $t1, $t2, $t3, $t4, $t5, $t6, $uid, $act)
     {
         $rs = DB::db()->Fetch("
-                INSERT INTO " . self::TABLE . "(pid, fid, no, content, date, uid, act)
-				VALUES(?,?,?,?,?,?,?)
+                INSERT INTO " . self::TABLE . "(pid, fid, no, content, date, t1, t2, t3, t4, t5, t6, uid, act)
+				VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)
 				RETURNING id
-				", array($pid, $fid, $no, $content, $date, $uid, $act));
+				", array($pid, $fid, $no, $content, $date, $t1, $t2, $t3, $t4, $t5, $t6, $uid, $act));
         return $rs ['id'];
     }
 

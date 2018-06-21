@@ -21,6 +21,14 @@ alter table t_project add column s77 INTEGER NOT NULL DEFAULT 0;
 alter table t_project add column n37 INTEGER NOT NULL DEFAULT 0;
 alter table t_project add column s37 INTEGER NOT NULL DEFAULT 0;
 
+alter table t_reply10001 add column t1 TEXT DEFAULT '';
+alter table t_reply10001 add column t2 TEXT DEFAULT '';
+alter table t_reply10001 add column t3 TEXT DEFAULT '';
+alter table t_reply10001 add column t4 TEXT DEFAULT '';
+alter table t_reply10001 add column t5 TEXT DEFAULT '';
+alter table t_reply10001 add column t6 TEXT DEFAULT '';
+
+
 -- -----------------------------------------------------
 -- Table t_flow77					工作流文档
 -- -----------------------------------------------------

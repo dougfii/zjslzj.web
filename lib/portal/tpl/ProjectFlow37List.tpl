@@ -1,5 +1,5 @@
 <div class="toolbar">
-    <div class="tool clear"><span class="cap">工序质量评表</span><a class="tooladd back" href="javascript:;">返回</a><?php if($new) echo '<a class="tooladd" href="?m=Project&a=ProjectFlow37">新建</a>'; ?></div>
+    <div class="tool clear"><span class="cap">工序单元工程质量评表</span><a class="tooladd back" href="javascript:;">返回</a><?php if($new) echo '<a class="tooladd" href="?m=Project&a=ProjectFlow37">新建</a>'; ?></div>
 </div>
 <div class="panel paneltool">
     <?php

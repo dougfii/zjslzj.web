@@ -106,7 +106,7 @@ class MsgCls
 
     public static function GetUserUnread()
     {
-        $rs = self::Items("WHERE del=false AND read=false AND direct=" . MsgDirectCls::FROM_PROJECT, 'ORDER BY id DESC', 0, 0);
+        $rs = self::Items("WHERE del=false AND read=false AND (direct=" . MsgDirectCls::FROM_QUALITY . "OR direct=" . MsgDirectCls::FROM_SECURITY . ")", "ORDER BY id DESC", 0, 0);
         return ($rs && count($rs) > 0) ? $rs : array();
     }
 

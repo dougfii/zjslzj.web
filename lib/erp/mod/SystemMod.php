@@ -124,7 +124,18 @@ class SystemMod extends BaseMod
         $name = $this->Req('name', '', 'str');
         $company = $this->Req('company', '', 'str');
 
-        echo Json::Out(GroupBiz::Add($fid, $name, $company, true));
+        try {
+            DB::db()->BeginTransaction();
+
+            GroupCls::Add($fid, $name, $company, true);
+
+            DB::db()->Commit();
+        } catch (Exception $e) {
+            DB::db()->RollBack();
+            Json::ReturnError(ALERT_ERROR);
+        }
+
+        Json::ReturnSuccess();
     }
 
     public function OnGroupEdit()
@@ -135,7 +146,18 @@ class SystemMod extends BaseMod
         $name = $this->Req('name', '', 'str');
         $company = $this->Req('company', '', 'str');
 
-        echo Json::Out(GroupBiz::Edit($id, $fid, $name, $company, true));
+        try {
+            DB::db()->BeginTransaction();
+
+            GroupCls::Edit($id, $fid, $name, $company, true);
+
+            DB::db()->Commit();
+        } catch (Exception $e) {
+            DB::db()->RollBack();
+            Json::ReturnError(ALERT_ERROR);
+        }
+
+        Json::ReturnSuccess();
     }
 
     public function OnGroupDelete()
@@ -143,6 +165,19 @@ class SystemMod extends BaseMod
         $id = $this->Req('id', 0, 'int');
 
         echo GroupBiz::Delete($id);
+
+        try {
+            DB::db()->BeginTransaction();
+
+            GroupCls::Delete($id);
+
+            DB::db()->Commit();
+        } catch (Exception $e) {
+            DB::db()->RollBack();
+            Json::ReturnError(ALERT_ERROR);
+        }
+
+        Json::ReturnSuccess();
     }
 
     public function OnGroupPermission()
@@ -282,18 +317,39 @@ class SystemMod extends BaseMod
         $oid = $this->Req('oid', 0, 'int');
         $name = $this->Req('name', '', 'str');
 
-        echo Json::Out(OrgBiz::Add($fid, $oid, $name, true));
+        try {
+            DB::db()->BeginTransaction();
+
+            OrgCls::Add($fid, $oid, $name, true);
+
+            DB::db()->Commit();
+        } catch (Exception $e) {
+            DB::db()->RollBack();
+            Json::ReturnError(ALERT_ERROR);
+        }
+
+        Json::ReturnSuccess();
     }
 
     public function OnOrgEdit()
     {
-        Json::ReturnError('ddd');
         $id = $this->Req('id', 0, 'int');
         $fid = $this->Req('fid', 0, 'int');
         $gid = $this->Req('gid', -1, 'int');
         $name = $this->Req('name', '', 'str');
 
-        echo Json::Out(OrgBiz::Edit($id, $gid, $fid, $name, true));
+        try {
+            DB::db()->BeginTransaction();
+
+            OrgCls::Edit($id, $gid, $fid, $name, true);
+
+            DB::db()->Commit();
+        } catch (Exception $e) {
+            DB::db()->RollBack();
+            Json::ReturnError(ALERT_ERROR);
+        }
+
+        Json::ReturnSuccess();
     }
 
     public function UserAdd()
@@ -356,7 +412,18 @@ class SystemMod extends BaseMod
         $admin = $this->Req('admin', 0, 'int');
         $act = $this->Req('act', 1, 'int');
 
-        echo Json::Out(UserBiz::Add($gid, $oid, $username, $name, $password, $serial, $sex, $mobile, $imei, $email, $lead, $admin, $act));
+        try {
+            DB::db()->BeginTransaction();
+
+            UserCls::Add($gid, $oid, $username, $name, $password, $serial, $sex, $mobile, $imei, $email, $lead, $admin, $act);
+
+            DB::db()->Commit();
+        } catch (Exception $e) {
+            DB::db()->RollBack();
+            Json::ReturnError(ALERT_ERROR);
+        }
+
+        Json::ReturnSuccess();
     }
 
     public function OnUsersEdit()
@@ -403,12 +470,9 @@ class SystemMod extends BaseMod
 
     public function OnUserDelete()
     {
-        $id = UUID::Check(Url::Req('id', '', 'str'));
+        $id = $this->Req('id', 0, 'int');
 
-        if ($id == md5('1')) {
-            echo '系统管理员不允许删除, 您可以通过编辑员工界面修改密码';
-            return;
-        }
+        if ($id === 1) Json::ReturnError("系统管理员不允许删除, 您可以通过编辑员工界面修改密码");
 
         // TODO:
         /*
@@ -423,11 +487,10 @@ class SystemMod extends BaseMod
             DB::db()->Commit();
         } catch (Exception $e) {
             DB::db()->RollBack();
-            echo ALERT_ERROR;
-            return;
+            Json::ReturnError(ALERT_ERROR);
         }
 
-        echo 1;
+        Json::ReturnSuccess();
     }
 
     public function OnUserPermission()

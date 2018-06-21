@@ -3076,6 +3076,12 @@ CREATE TABLE t_reply10001
 	no 							TEXT DEFAULT '' , -- 编号
 	date 						TEXT DEFAULT '' , -- 日期
 	content 					TEXT DEFAULT '' , -- 批复
+	t1							TEXT DEFAULT '' ,
+	t2							TEXT DEFAULT '' ,
+	t3							TEXT DEFAULT '' ,
+	t4							TEXT DEFAULT '' ,
+	t5							TEXT DEFAULT '' ,
+	t6							TEXT DEFAULT '' ,
 	uid 						BIGINT NOT NULL DEFAULT 0 , -- 审批者
 	act							BOOLEAN NOT NULL DEFAULT false , -- 审批状态
 	del							BOOLEAN NOT NULL DEFAULT false ,

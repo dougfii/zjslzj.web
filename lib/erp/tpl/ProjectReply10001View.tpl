@@ -6,18 +6,26 @@
 <?php
 if(!empty($rs)):
 ?>
-        <div class="pagea4info">
-            <div class="pa4-caption1"><?php echo $gc; ?></div>
-            <div class="center">镇水质监<?php echo $rs['no']; ?>号</div>
-            <div class="pa4-redline"></div>
-            <div class="pa4-title1">关于对<?php echo $name; ?>安全监督的批复</div>
-            <div class="pa4-company"><?php echo $company; ?>:</div>
-            <div class="pa4-content"><?php echo $rs['content']; ?></div>
-            <div class="pa4-sign1 clear"><span class="pa4-signer1"><?php echo $gc; ?><br/><?php echo $rs['date']; ?></span></div>
-            <input type="hidden" id="fid" value="<?php echo $fid; ?>" />
+        <div class="pagea4info clear">
+            <div class="pa4-title1">水利工程建设安全监督通知书</div>
+            <div><?php echo $rs["t1"]; ?>：</div>
             <br/><br/>
-            <?php echo $atts; ?>
+            <div>　　根据你单位的申请，按照《江苏省水利工程建设安全监督工作指导意见》对 <?php echo $rs["t2"]; ?> 工程进行安全监督。本项目监督负责人为 <?php echo $rs["t3"]; ?>。</div>
+            <br/>
+            <div>　　现将该工程安全监督计划发给你们，请按监督计划配合安全监督工作顺利进行。</div>
+            <br/><br/>
+            <div>　　特此通知。</div>
+            <br/><br/><br/><br/><br/><br/>
+            <div class="right">
+                <div><?php echo $gc; ?></div>
+                <br/><br/>
+                <div>申请日期：<?php echo $rs["t6"]; ?></div>
+            </div>
+            <br/><br/><br/><br/>
         </div>
+        <br/><br/><br/><br/>
+        <?php echo $atts; ?>
+        <br/><br/><br/><br/>
 <?php
 else:
     echo HTML::AlertError();

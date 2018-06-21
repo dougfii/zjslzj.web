@@ -15,10 +15,11 @@
         echo '<tr><th>序号</th><th>发送者</th><th>消息</th><th>时间</th><th>操作</th></tr>';
         foreach($rs as $v)
         {
+            $direct = ($v['direct'] == MsgDirectCls::FROM_QUALITY) ? 'Quality' : 'Security';
             echo '<tr>';
             echo '<td class="fid">' . $v['id'] . '</td>';
             echo '<td class="fproj">' . $v['sender'] . '</td>';
-            echo '<td class=""><a href="?m=Project&a=ProjectFlow&pid=' . $v['objid'] . '">' . $v['msg'] . '</a></td>';
+            echo '<td class=""><a href="?m=' . $direct . '&a=ProjectFlow&pid=' . $v['objid'] . '">' . $v['msg'] . '</a></td>';
             echo '<td class="ftime">' . $v['time'] . '</td>';
             echo '<td class="fsta"><a href="javascript:;" class="read" rid="' . $v['id'] . '">已读</a></td>';
             echo '</tr>';

@@ -98,7 +98,7 @@ class ProjectNodeCls
         34 => '单元工程质量评定表',//
         35 => '单位工程检验评价',//
         36 => '工程项目质量评定',//
-        37 => '工序质量评表',//
+        37 => '工序单元工程质量评表',//
     );
 
     public static function ConfirmItems()

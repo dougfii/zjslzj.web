@@ -1,28 +1,35 @@
 <script>
     $(function(){
         $('#allow').click(function(){
-            $.post('?m=Project&a=OnProjectReply10001', {fid:$('#fid').val(),no:$('#no').val(),content:$('#content').val(),date:$('#date').val()}, function (ret){if(ret.code==1)layer.msg('批复完成', 1, function(){history.back();});else layer.msg(ret.msg, 1);}, 'json');
+            $.post('?m=Project&a=OnProjectReply10001', {
+                fid:$('#fid').val(),
+                t1:$('#t1').val(),
+                t2:$('#t2').val(),
+                t3:$('#t3').val(),
+                t4:$('#t4').val(),
+                t5:$('#t5').val(),
+                t6:$('#t6').val(),
+            }, function (ret){if(ret.code==1)layer.msg('批复完成', 1, function(){history.back();});else layer.msg(ret.msg, 1);}, 'json');
         });
 
         $('.upfile').change(function(){
             var pid = $('#pid').val();
             var tid = 100012;
-            var no = $(this).attr('fid');
-            var name = $(this).attr('fname');
-            upload(pid, tid, no, name);
+            upload(pid, tid);
         });
 
-        function upload(pid, tid, no, name){
+        function upload(pid, tid){
             $.ajaxFileUpload({
-                url:'?m=Upload&a=UpFlowFixed&no='+no,
+                url:'?m=Upload&a=UpFlowDynamic',
                 secureuri:false,
-                fileElementId:'upfile'+no,
+                fileElementId:'upfile',
                 dataType:'json',
                 success: function(ret, status) {
                     if(ret.state=='SUCCESS') {
-                        $.post('?m=Project&a=OnUpFlowFixed', {pid:pid,tid:tid,no:no,name:name,file:ret.name,url:ret.url,ext:ret.type,size:ret.size}, function (rt){
-                            if(rt.code==1)layer.msg('上传完成', 1, function(){
-                                $('#atta'+no).html('<a href="'+ret.url+'" target="_blank">'+name+'</a>');
+                        $.post('?m=Project&a=OnUpFlowDynamic', {pid:pid,tid:tid,no:0,name:ret.originalName,file:ret.name,url:ret.url,ext:ret.type,size:ret.size}, function (rt){
+                            if(rt.code==1&&rt.msg>0)layer.msg('上传完成', 1, function(){
+                                $('.atts ul').append('<li id="atta'+rt.msg+'"><a href="'+ret.url+'" target="_blank">'+ret.originalName+'</a>　　<a href="javascript:;" class="upd" did="'+rt.msg+'">删除</a></li>');
+                                $('#attb').html('<span class="up">添加上传<input type="file" id="upfile" class="upfile" name="upfile" /></span>');
                             });else layer.msg(rt.msg, 1);
                         }, 'json');
                     }
@@ -40,32 +47,29 @@
 </div>
 <div class="panel paneltool">
     <div class="pagea4">
-        <div class="pagea4info">
-            <div class="pa4-caption1"><?php echo $gc; ?></div>
-            <div class="center">镇水质监<input type="text" class="pae4-text1" id="no" />号</div>
-            <div class="pa4-redline"></div>
-            <div class="pa4-title1">关于对<?php echo $name; ?>安全监督的批复</div>
-            <div class="pa4-company"><?php echo $company; ?>:</div>
-            <div class=""><textarea rows="30" class="pa4-textarea1" id="content">
-        建设管理处：
-
-    你处《关于申请        安全监督的报告》（文号）收悉。根据省水利厅《江苏省水利工程建设安全监督工作指导意见》（苏水规〔2009〕4号）精神，经研究，接受你处安全监督申请，成立        安全监督项目组，负责该工程施工期安全监督工作。人员由    、     、组成，    为组长。
-
-    现将《        安全监督计划要点》、《项目法人安全生产管理检查评分表》、《监理单位安全管理检查评分表》和《江苏省水利工程建设安全施工标准化工地考核表》印发给你们，请结合工程实际细化后遵照执行。
-
-    请你处按照《安全生产法》、《建设工程安全生产管理条例》、《水利工程建设安全生产管理规定》、《江苏省水利工程建设安全生产管理规定》、《江苏省水利基本建设项目危险性较大工程安全专项施工方案编制实施办法》等有关规定，督促参建单位建立健全安全生产组织机构，制定并落实安全生产责任制，狠抓安全生产各项措施的落实，并按照安全监督计划要求，配合做好各阶段安全监督管理相关工作。
-
-
-联 系 人：
-联系电话：
-E-mail:
-</textarea></div>
-            <div class="pa4-sign1 clear"><span class="pa4-signer1"><?php echo $gc; ?><br/>日期：<input type="text" class="pae4-text1" id="date" onclick="laydate();" readonly /></span></div>
-            <input type="hidden" id="fid" value="<?php echo $fid; ?>" />
+        <div class="pagea4info clear">
+            <div class="pa4-title1">水利工程建设安全监督通知书</div>
+            <div><?php if($edit) echo '<input type="text" class="pae4-text1" id="t1" value="' . $t1 . '" />'; else echo $t1; ?>：</div>
             <br/><br/>
-            <?php echo $atts; ?>
+            <div>　　根据你单位的申请，按照《江苏省水利工程建设安全监督工作指导意见》对 <?php if($edit) echo '<input type="text" class="pae4-text1" id="t2" value="' . $t2 . '" />'; else echo $t2; ?> 工程进行安全监督。本项目监督负责人为 <?php if($edit) echo '<input type="text" class="pae4-text1" id="t3" value="' . $t3 . '" />'; else echo $t3; ?>。</div>
+            <br/>
+            <div>　　现将该工程安全监督计划发给你们，请按监督计划配合安全监督工作顺利进行。</div>
+            <br/><br/>
+            <div>　　特此通知。</div>
+            <br/><br/><br/><br/><br/><br/>
+            <div class="right">
+                <div><?php echo $gc; ?></div>
+                <br/><br/>
+                <div>申请日期：<?php if($edit) echo '<input type="text" onclick="laydate();" class="pae4-text1" id="t6" value="' . $t6 . '" />'; else echo $t6; ?></div>
+            </div>
+            <br/><br/><br/><br/>
         </div>
+        <br/><br/><br/><br/>
+        <?php echo $atts; ?>
+        <br/><br/><br/><br/>
         <div class="pagedialog-buttons"><a href="javascript:;" class="btn" id="allow">同意</a></div>
         <br/>
+        <input type="hidden" id="pid" value="<?php echo $pid; ?>" />
+        <input type="hidden" id="fid" value="<?php echo $fid; ?>" />
     </div>
 </div>

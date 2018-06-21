@@ -75,7 +75,7 @@ class ProjectMod extends BaseMod
         $_SESSION ['mname'] = $name;
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $id, 1, $name, '管理员', ProjectNodeCls::INIT, $id, '新注册');
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $id, 1, $name, '管理员', ProjectNodeCls::INIT, $id, '新注册');
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -330,7 +330,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::APPLY, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::APPLY, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::APPLY));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::APPLY, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::APPLY));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -507,7 +507,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::DIVIDE, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::DIVIDE, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::DIVIDE));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::DIVIDE, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::DIVIDE));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -873,7 +873,7 @@ class ProjectMod extends BaseMod
         if (isset($_SESSION['facade_table'])) unset($_SESSION['facade_table']);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CONFIRM_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CONFIRM_1));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CONFIRM_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CONFIRM_1));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -1603,7 +1603,7 @@ class ProjectMod extends BaseMod
 //        ProjectCls::SetNode($pid, ProjectNodeCls::CONFIRM_7, $id, ProjectStateCls::APPROVE);
 //
 //        try {
-//            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CONFIRM_7, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CONFIRM_7));
+//            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CONFIRM_7, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CONFIRM_7));
 //        } catch (Exception $e) {
 //            Json::ReturnError($e->getMessage());
 //        }
@@ -1757,7 +1757,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SUGGEST, $fid, ProjectStateCls::ALLOW);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SUGGEST, $replyid, '回复' . ProjectNodeCls::Name(ProjectNodeCls::SUGGEST));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SUGGEST, $replyid, '回复' . ProjectNodeCls::Name(ProjectNodeCls::SUGGEST));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -1986,7 +1986,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::MATERIAL_1, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::MATERIAL_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::MATERIAL_1));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::MATERIAL_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::MATERIAL_1));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -2221,7 +2221,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::MATERIAL_2, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::MATERIAL_2, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::MATERIAL_2));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::MATERIAL_2, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::MATERIAL_2));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -2456,7 +2456,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::CHECK_1, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CHECK_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CHECK_1));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CHECK_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CHECK_1));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -2832,7 +2832,7 @@ class ProjectMod extends BaseMod
         if (isset($_SESSION['facade_table'])) unset($_SESSION['facade_table']);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CHECK_2, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CHECK_2));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CHECK_2, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CHECK_2));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -3076,7 +3076,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::CHECK_3, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CHECK_3, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CHECK_3));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CHECK_3, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CHECK_3));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -3317,7 +3317,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::CHECK_4, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CHECK_4, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CHECK_4));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CHECK_4, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CHECK_4));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -3462,7 +3462,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::RECORD_1, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_1));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_1));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -3730,7 +3730,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::RECORD_2, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_2, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_2));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_2, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_2));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -3992,7 +3992,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::RECORD_3, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_3, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_3));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_3, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_3));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -4137,7 +4137,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::RECORD_4, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_4, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_4));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_4, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_4));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -4282,7 +4282,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::RECORD_5, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_5, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_5));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_5, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_5));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -4427,7 +4427,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::RECORD_6, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_6, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_6));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_6, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_6));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -4572,7 +4572,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::RECORD_7, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_7, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_7));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_7, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_7));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -4737,7 +4737,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::PROGRESS, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::PROGRESS, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::PROGRESS));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::PROGRESS, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::PROGRESS));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -4902,7 +4902,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::ACCEPT_1, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_1));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_1));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -5131,7 +5131,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::ACCEPT_21, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_21, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_21));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_21, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_21));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -5360,7 +5360,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::ACCEPT_22, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_22, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_22));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_22, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_22));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -5589,7 +5589,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::ACCEPT_23, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_23, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_23));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_23, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_23));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -5818,7 +5818,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::ACCEPT_24, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_24, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_24));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_24, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_24));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -6047,7 +6047,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::ACCEPT_25, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_25, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_25));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_25, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_25));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -6201,7 +6201,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::INSPECT, $fid, ProjectStateCls::ALLOW);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::INSPECT, $replyid, '回复' . ProjectNodeCls::Name(ProjectNodeCls::INSPECT));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::INSPECT, $replyid, '回复' . ProjectNodeCls::Name(ProjectNodeCls::INSPECT));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -6477,7 +6477,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_1, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_1));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_1));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -6507,7 +6507,8 @@ class ProjectMod extends BaseMod
         $view->name = $name;
         $view->company = $company;
 
-        $view->atts = Atts::UploadFixed(Atts::$flow100012, AttachmentCls::GetFixedItems($pid, 100012), false, false, true);
+        //$view->atts = Atts::UploadFixed(Atts::$flow100012, AttachmentCls::GetFixedItems($pid, 100012), false, false, true);
+        $view->atts = Atts::UploadDynamic(AttachmentCls::GetDynamicItems($pid, 100012), false);
 
         echo $view->Render();
 
@@ -6742,7 +6743,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_2, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_2, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_2));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_2, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_2));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -6900,7 +6901,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_3, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_3, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_3));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_3, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_3));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -7103,7 +7104,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_4, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_4, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_4));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_4, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_4));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -7231,7 +7232,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_5, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_5, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_5));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_5, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_5));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -7407,7 +7408,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_6, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_6, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_6));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_6, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_6));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -7591,7 +7592,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_7, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_7, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_7));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_7, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_7));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -7740,7 +7741,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_8, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_8, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_8));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_8, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_8));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -7903,7 +7904,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_9, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_9, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_9));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_9, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_9));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -8050,7 +8051,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_10, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_PROJECT, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_10, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_10));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_10, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_10));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
