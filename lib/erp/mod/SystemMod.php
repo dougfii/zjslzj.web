@@ -164,16 +164,9 @@ class SystemMod extends BaseMod
     {
         $id = $this->Req('id', 0, 'int');
 
-        echo GroupBiz::Delete($id);
-
         try {
-            DB::db()->BeginTransaction();
-
             GroupCls::Delete($id);
-
-            DB::db()->Commit();
         } catch (Exception $e) {
-            DB::db()->RollBack();
             Json::ReturnError(ALERT_ERROR);
         }
 
@@ -352,6 +345,19 @@ class SystemMod extends BaseMod
         Json::ReturnSuccess();
     }
 
+    public function OnOrgDelete()
+    {
+        $id = $this->Req('id', 0, 'int');
+
+        try {
+            OrgCls::Delete($id);
+        } catch (Exception $e) {
+            Json::ReturnError(ALERT_ERROR);
+        }
+
+        Json::ReturnSuccess();
+    }
+
     public function UserAdd()
     {
         $this->Header();
@@ -480,13 +486,8 @@ class SystemMod extends BaseMod
          */
 
         try {
-            DB::db()->BeginTransaction();
-
             UserCls::Delete($id);
-
-            DB::db()->Commit();
         } catch (Exception $e) {
-            DB::db()->RollBack();
             Json::ReturnError(ALERT_ERROR);
         }
 

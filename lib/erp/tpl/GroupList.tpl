@@ -24,6 +24,11 @@
             layer.confirm('您确认需要删除吗?\n此操作不可恢复!', function(i){layer.close(i);$.post('?m=System&a=OnGroupDelete', {id:id}, function(ret){if(ret.code==1)location.href='<?php echo Url::REQUEST_URI(); ?>';else layer.msg(ret.msg, 2, -1);}, 'json');});
         });
 
+        $('.delorg').click(function(){
+            var id=$(this).attr('did');
+            layer.confirm('您确认需要删除吗?\n此操作不可恢复!', function(i){layer.close(i);$.post('?m=System&a=OnOrgDelete', {id:id}, function(ret){if(ret.code==1)location.href='<?php echo Url::REQUEST_URI(); ?>';else layer.msg(ret.msg, 2, -1);}, 'json');});
+        });
+
         $('.deluser').click(function(){
             var id=$(this).attr('did');
             layer.confirm('您确认需要删除吗?\n此操作不可恢复!', function(i){layer.close(i);$.post('?m=System&a=OnUserDelete', {id:id}, function(ret){if(ret.code==1)location.href='<?php echo Url::REQUEST_URI(); ?>';else layer.msg(ret.msg, 2, -1);}, 'json');});
