@@ -10,8 +10,7 @@ class OrgCls
 
     public static function Instance()
     {
-        if (self::$instance == null)
-        {
+        if (self::$instance == null) {
             self::$instance = new self ();
         }
         return self::$instance;
@@ -27,8 +26,7 @@ class OrgCls
         $cache = new Cache ();
         $list = $cache->get('system', self::CACHE);
 
-        if ($list !== false && is_array($list))
-        {
+        if ($list !== false && is_array($list)) {
             self::$list = $list;
             return;
         }
@@ -38,10 +36,8 @@ class OrgCls
                 WHERE del=false
                 ORDER BY id ASC
                 ");
-        if ($rs && count($rs) > 0)
-        {
-            foreach ($rs as $k => $v)
-            {
+        if ($rs && count($rs) > 0) {
+            foreach ($rs as $k => $v) {
                 self::$list [$v ['id']] = $v;
             }
 
@@ -162,17 +158,26 @@ class OrgCls
 
     public static function ExistName($fid, $name, $selfid = null)
     {
-        foreach (self::$list as $k => $v)
-        {
-            if (empty ($selfid))
-            {
+        foreach (self::$list as $k => $v) {
+            if (empty ($selfid)) {
                 if ($v ['fid'] == $fid && strtolower($v ['name']) == strtolower($name))
                     return true;
-            }
-            else
-            {
+            } else {
                 if ($v ['fid'] == $fid && strtolower($v ['name']) == strtolower($name) && $v ['id'] != $selfid)
                     return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function ExistOrg($gids)
+    {
+        if (empty($gids) || !is_array($gids)) return false;
+
+        foreach (self::$list as $k => $v) {
+            foreach ($gids as $m => $n) {
+                if ($v["gid"] == $n && $v["del"] == false && $v["act"] == true) return true;
             }
         }
 
@@ -185,8 +190,7 @@ class OrgCls
         $rs = array();
         if ($self)
             $rs [] = $id;
-        foreach (self::$list as $k => $v)
-        {
+        foreach (self::$list as $k => $v) {
             if ($v ['fid'] == $id)
                 $rs [] = $k;
         }
@@ -201,10 +205,8 @@ class OrgCls
             $rs [] = $id;
 
         $next = self::GetNextIds($id);
-        if (!empty($next))
-        {
-            foreach ($next as $k => $v)
-            {
+        if (!empty($next)) {
+            foreach ($next as $k => $v) {
                 $rs = array_merge($rs, self::GetChildrenIds($v, true));
             }
         }
@@ -218,18 +220,13 @@ class OrgCls
         $rs = array();
         if ($self)
             $rs[] = $id;
-        if ($id > 0)
-        {
-            do
-            {
+        if ($id > 0) {
+            do {
                 $fid = $id;
                 $id = $this->FID($id);
-                if ($id > 0)
-                {
+                if ($id > 0) {
                     $rs [] = $id;
-                }
-                else
-                {
+                } else {
                     if ($root)
                         $rs [] = $fid;
                 }
@@ -242,8 +239,7 @@ class OrgCls
     public function GetIdsByGid($gid)
     {
         $rs = array();
-        foreach (self::$list as $k => $v)
-        {
+        foreach (self::$list as $k => $v) {
             if ($v ['gid'] == $gid)
                 $rs [] = $k;
         }

@@ -164,6 +164,8 @@ class SystemMod extends BaseMod
     {
         $id = $this->Req('id', 0, 'int');
 
+        if (OrgCls::Instance()->ExistOrg(GroupCls::Instance()->GetChildrenIds($id, true))) Json::ReturnError("当前组织存在部门，不能删除");
+
         try {
             GroupCls::Delete($id);
         } catch (Exception $e) {
@@ -348,6 +350,8 @@ class SystemMod extends BaseMod
     public function OnOrgDelete()
     {
         $id = $this->Req('id', 0, 'int');
+
+        if (UserCls::Instance()->ExistUser(OrgCls::Instance()->GetChildrenIds($id, true))) Json::ReturnError("当前部门存在用户，不能删除");
 
         try {
             OrgCls::Delete($id);

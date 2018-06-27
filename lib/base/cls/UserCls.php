@@ -260,6 +260,19 @@ class UserCls
         return false;
     }
 
+    public function ExistUser($oids)
+    {
+        if (empty($oids) || !is_array($oids)) return false;
+
+        foreach (self::$list as $k => $v) {
+            foreach ($oids as $m => $n) {
+                if ($v["oid"] == $n && $v["del"] == false && $v["act"] == true) return true;
+            }
+        }
+
+        return false;
+    }
+
     public function LikeIds($key, $field)
     {
         $rs = array();
