@@ -307,6 +307,31 @@ class ProjectMod extends BaseMod
         $this->FootPrint();
     }
 
+    public function OnProjectFlow1Save()
+    {
+        $no = $this->Req('no', '', 'str');
+        $signer = $this->Req('signer', '', 'str');
+        $content = $this->Req('content', '', 'str');
+        $date = $this->Req('date', '', 'str');
+        $keywords = $this->Req('keywords', '', 'str');
+        $attachments = $this->Req('attachments', '', 'str');
+
+        $pid = $this->Mid();
+
+        if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
+        if (empty($no)) Json::ReturnError('请输入文件编号');
+        if (empty($signer)) Json::ReturnError('请输入签发单位');
+        if (empty($content)) Json::ReturnError('请输入申报内容');
+        if (empty($date)) Json::ReturnError('请输入申报日期');
+
+        if (empty($keywords)) $keywords = '无';
+
+        $id = Flow1Cls::Add($pid, $no, $signer, $content, $date, $keywords, $attachments);
+        ProjectCls::SetNode($pid, ProjectNodeCls::APPLY, $id, ProjectStateCls::BEGIN);
+
+        Json::ReturnSuccess();
+    }
+
     public function OnProjectFlow1()
     {
         $no = $this->Req('no', '', 'str');

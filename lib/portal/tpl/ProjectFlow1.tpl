@@ -4,6 +4,10 @@
             $.post('?m=Project&a=OnProjectFlow1', {id:$('#id').val(),no:$('#no').val(),signer:$('#signer').val(),content:$('#content').val(),date:$('#date').val(),keywords:$('#keywords').val()}, function (ret){if(ret.code==1)layer.msg('提交成功', 1, function(){location.reload();});else layer.msg(ret.msg, 1);}, 'json');
         });
 
+        $('#save').click(function(){
+            $.post('?m=Project&a=OnProjectFlow1Save', {id:$('#id').val(),no:$('#no').val(),signer:$('#signer').val(),content:$('#content').val(),date:$('#date').val(),keywords:$('#keywords').val()}, function (ret){if(ret.code==1)layer.msg('保存成功', 1, function(){location.reload();});else layer.msg(ret.msg, 1);}, 'json');
+        });
+
         $('.upfile').change(function(){
             var pid = $('#pid').val();
             var tid = 1;
@@ -36,7 +40,7 @@
     });
 </script>
 <div class="toolbar">
-    <div class="tool clear"><span class="cap">质量监督申报 - [<?php echo $state; ?>]</span><a class="tooladd back" href="javascript:;">返回</a><?php if($edit) echo '<a class="tooladd" id="add" href="javascript:;">提交</a>'; ?><a class="tooladd" href="javascript:" onclick="Printer('?m=Project&a=ProjectFlow1Print&id=<?php echo $rs['id']; ?>');">打印</a></div>
+    <div class="tool clear"><span class="cap">质量监督申报 - [<?php echo $state; ?>]</span><a class="tooladd back" href="javascript:;">返回</a><?php if($edit) echo '<a class="tooladd" id="add" href="javascript:;">提交</a><a class="tooladd" id="save" href="javascript:;">保存</a>'; ?><a class="tooladd" href="javascript:" onclick="Printer('?m=Project&a=ProjectFlow1Print&id=<?php echo $rs['id']; ?>');">打印</a></div>
 </div>
 <div class="panel paneltool">
     <div class="pagea4">
