@@ -91,6 +91,15 @@ abstract class BaseMod implements IMod
 
     private function Menu()
     {
+        $work_quality[] = array("Work&a=Quality", "全部工程", R::PROJECT_QUALITY);
+        for ($i = Date::Year(); $i >= YEAR_START; $i--) {
+            $work_quality[] = array("Work&a=Quality&year={$i}", "工程 ({$i})", R::PROJECT_QUALITY);
+        }
+        $work_security[] = array("Work&a=Security", "全部工程", R::PROJECT_SECURITY);
+        for ($i = Date::Year(); $i >= YEAR_START; $i--) {
+            $work_security[] = array("Work&a=Security&year={$i}", "工程 ({$i})", R::PROJECT_SECURITY);
+        }
+
         $quality[] = array("ProjectList", "全部工程", R::PROJECT_QUALITY);
         for ($i = Date::Year(); $i >= YEAR_START; $i--) {
             $quality[] = array("ProjectList&year={$i}", "工程 ({$i})", R::PROJECT_QUALITY);
@@ -101,9 +110,12 @@ abstract class BaseMod implements IMod
         }
 
         $mod = $this->Req('m', '', 'str');
-        $menus = array(//
-            //首页
-            array('Main', '首页', R::MENU_CENTER, null),//
+        $menus = array(
+            // 首页
+            array('Main', '首页', R::MENU_CENTER, null),
+            array('Work&a=Quality', '新质量管理', R::MENU_QUALITY, $work_quality),
+            array('Work&a=Security', '新安全管理', R::MENU_SECURITY, $work_security),
+
             //CRM销售部分（日程、活动、任务、商机）
             array('Quality', '质量管理', R::MENU_QUALITY, $quality),//
             array('Security', '安全管理', R::MENU_SECURITY, $security),//

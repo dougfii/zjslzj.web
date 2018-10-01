@@ -2,7 +2,7 @@
 
 class Loader
 {
-    protected static $dirs = array('core/', 'core/db/', 'core/ext/', 'base/', 'base/cls/', 'base/biz/', 'portal/', 'portal/mod/', 'third/PHPMailer/');
+    protected static $dirs = array('core/', 'core/db/', 'core/ext/', 'base/', 'base/cls/', 'base/biz/', 'base/clz/', 'portal/', 'portal/mod/', 'third/PHPMailer/');
 
     public static function load($cls)
     {

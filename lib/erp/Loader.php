@@ -2,7 +2,7 @@
 
 class Loader
 {
-    protected static $dirs = array('core/', 'core/db/', 'base/', 'base/biz/', 'base/cls/', 'base/sms/', 'erp/', 'erp/mod/', 'interface/', 'third/ExcelReader/', 'third/PHPExcel/', 'third/PHPMailer/');
+    protected static $dirs = array('core/', 'core/db/', 'base/', 'base/biz/', 'base/cls/', 'base/clz/', 'base/sms/', 'erp/', 'erp/mod/', 'interface/', 'third/ExcelReader/', 'third/PHPExcel/', 'third/PHPMailer/');
 
     public static function load($cls)
     {

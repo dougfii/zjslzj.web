@@ -241,7 +241,7 @@ abstract class BaseMod implements IMod
     private function MemberMenu()
     {
         $menu = '';
-        $side = '<div class="side"><ul><li><a href="?m=Project&a=Main">消息通知</a></li><li><a href="?m=Project&a=Progress">工程进度</a></li></ul></div>';
+        $side = '<div class="side"><ul><li><a href="?m=Project&a=Main">消息通知</a></li><li><a href="?m=Work&a=Nodes">新工程进度</a></li><li><a href="?m=Project&a=Progress">工程进度</a></li></ul></div>';
         return array($menu, $side);
     }
 
