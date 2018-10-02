@@ -45,13 +45,43 @@ class WorkClz
     public function getNodes($id)
     {
         $this->loadItem($id);
-        return array_key_exists($id, self::$caches) ? self::$caches [$id]['nodes'] : '';
+        return Json::Decode(array_key_exists($id, self::$caches) ? self::$caches [$id]['nodes'] : '');
+    }
+
+    public function getNodeNo($work_id, $node_id)
+    {
+        $nodes = $this->getNodes($work_id);
+        return !empty($nodes) ? array_key_exists($node_id, $nodes) ? $nodes[$node_id]['no'] : '' : '';
+    }
+
+    public function getNodeName($work_id, $node_id)
+    {
+        $nodes = $this->getNodes($work_id);
+        return !empty($nodes) ? array_key_exists($node_id, $nodes) ? $nodes[$node_id]['name'] : '' : '';
+    }
+
+    public function getNodeStatus($work_id, $node_id)
+    {
+        $nodes = $this->getNodes($work_id);
+        return !empty($nodes) ? array_key_exists($node_id, $nodes) ? $nodes[$node_id]['status'] : '' : '';
+    }
+
+    public function getNodeDirection($work_id, $node_id)
+    {
+        $nodes = $this->getNodes($work_id);
+        return !empty($nodes) ? array_key_exists($node_id, $nodes) ? $nodes[$node_id]['direction'] : false : false;
     }
 
     public function getTypeId($id)
     {
         $this->loadItem($id);
         return array_key_exists($id, self::$caches) ? self::$caches [$id]['type_id'] : 0;
+    }
+
+    public function getType($id)
+    {
+        $this->loadItem($id);
+        return array_key_exists($id, self::$caches) ? self::$caches [$id]['type'] : '';
     }
 
     public static function results($where, $order, $page, $size)
@@ -91,10 +121,8 @@ class WorkClz
 
         if ($rs && count($rs) > 0) {
             for ($i = 0; $i < count($rs); $i++) {
-//                $rs[$i]['project'] = ProjectCls::Instance()->Name($rs[$i]['pid']);
-//                $rs[$i]['user'] = UserCls::Instance()->Name($rs[$i]['uid']);
-
                 $rs[$i]['org'] = GroupCls::Instance()->Name($rs[$i]['org_id']);
+                $rs[$i]['type'] = $rs[$i]['type_id'] == WorkClz::TypeQuality ? WorkClz::TypeQualityName : WorkClz::TypeSecurityName;
             }
             return $rs;
         }
@@ -176,29 +204,6 @@ class WorkClz
 //				", array($pass, $id));
 //    }
 //
-//    public static function SetInfo($id, $name, $company)
-//    {
-//        DB::db()->Query("
-//				UPDATE " . self::TABLE . "
-//				SET name=?, company=?
-//				WHERE id=?
-//				", array($name, $company, $id));
-//    }
-//
-
-//
-//    public static function SetNode($id, $node, $nodeid, $stateid)
-//    {
-//        DB::db()->Query("
-//				UPDATE " . self::TABLE . "
-//				SET n{$node}=?, s{$node}=?
-//				WHERE id=?
-//				", array($nodeid, $stateid, $id));
-//    }
-//
-
-
-//
 //    public static function Forget($name, $email)
 //    {
 //        $rs = DB::db()->Fetch("
@@ -207,48 +212,6 @@ class WorkClz
 //				WHERE LOWER(name)=LOWER(?) AND LOWER(email)=LOWER(?) AND del=false
 //				LIMIT 1
 //				", array($name, $email));
-//        return $rs;
-//    }
-//
-//    //主管单位名称
-//    public static function GetGroupCompany($mid)
-//    {
-//        return GroupCls::Instance()->Company(self::Instance()->Gid($mid));
-//    }
-
-//    public static function SetReply($id, $uid, $replyid, $act = 0)
-//    {
-//        DB::db()->Query("
-//                UPDATE " . self::TABLE . "
-//                SET uid=?, replyid=?, replytime=CURRENT_TIMESTAMP, act=?
-//                WHERE id=?
-//                ", array($uid, $replyid, $act, $id));
-//    }
-//
-//    public static function SetAct($id)
-//    {
-//        DB::db()->Query("
-//				UPDATE " . self::TABLE . "
-//				SET act=NOT act
-//				WHERE id=?
-//				", array($id));
-//    }
-//
-//
-//    public static function ExistProjectId($pid)
-//    {
-//        return self::Count("WHERE del=false AND pid={$pid}");
-//    }
-//
-//    public static function GetLastItem($pid)
-//    {
-//        $rs = self::Items("WHERE del=false AND pid={$pid}", 'ORDER BY id DESC', 0, 1);
-//        return ($rs && count($rs) > 0 && !$rs[0]['act']) ? $rs[0] : array();
-//    }
-//
-//    public static function GetApprovedItems($pid)
-//    {
-//        $rs = self::Items("WHERE del=false AND pid={$pid} AND act=true", 'ORDER BY id DESC', 0, 0);
 //        return $rs;
 //    }
 }

@@ -30,6 +30,7 @@ CREATE TABLE t_work
 	PRIMARY KEY (id)
 );
 
+
 -- -----------------------------------------------------
 -- Table t_item					项目条目
 -- -----------------------------------------------------
@@ -44,6 +45,7 @@ CREATE TABLE t_item
 	work_id						INTEGER					NOT NULL DEFAULT 0 ,	-- 项目ID
 	node_id						INTEGER					NOT NULL DEFAULT 0 ,	-- 节点ID
 	
+	no							TEXT					NOT NULL DEFAULT '' ,	-- 编号
 	templates					TEXT					NOT NULL DEFAULT '' ,	-- 模板
 	datas						TEXT					NOT NULL DEFAULT '' ,	-- 数据JSON
 	attachments					TEXT					NOT NULL DEFAULT '' ,	-- 附件列表JSON
@@ -63,6 +65,7 @@ CREATE TABLE t_item
 	PRIMARY KEY (id)
 );
 
+
 -- -----------------------------------------------------
 -- Table t_reply				条目回复
 -- -----------------------------------------------------
@@ -79,6 +82,7 @@ CREATE TABLE t_reply
 	item_id						INTEGER					NOT NULL DEFAULT 0 ,	-- 条目ID
 	
 	pass						BOOLEAN					NOT NULL DEFAULT FALSE ,-- 批复状态
+	no							TEXT					NOT NULL DEFAULT '' ,	-- 编号
 	templates					TEXT					NOT NULL DEFAULT '' ,	-- 模板
 	datas						TEXT					NOT NULL DEFAULT '' ,	-- 数据JSON
 	attachments					TEXT					NOT NULL DEFAULT '' ,	-- 附件列表JSON

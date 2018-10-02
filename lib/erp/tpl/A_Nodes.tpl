@@ -1,5 +1,5 @@
 <div class="toolbar">
-    <div class="tool clear"><span class="cap"><?php echo "${work_type}： ${work_name} 工程"; ?></span></div>
+    <div class="tool clear"><span class="cap"><?php echo "{$work_type}： {$work_name} 工程"; ?></span><a class="tooladd back" href="javascript:;">返回</a></div>
 </div>
 <div class="panel paneltool">
 <?php
@@ -13,7 +13,7 @@ if($work_act && !empty($work_nodes))
     {
         if($v['act'])
         {
-            echo '<div class="item">' . str_repeat('　', $v['level'] - 1) . $v['no'] . '　';
+            echo '<div class="item">' . str_repeat('　', $v['level'] - 1) . $v['no'] . '、 ';
             if($v['type'] == 2) echo '<a href="?m=Work&a=Items&work_id=' . $work_id . '&node_id=' . $k . '">';
             echo $v['name'];
             if($v['type'] == 2) echo '</a>';

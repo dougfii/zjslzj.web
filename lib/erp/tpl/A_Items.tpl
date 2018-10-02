@@ -1,49 +1,37 @@
-<script>
-    $(function(){
-        $('#deny').click(function(){
-            $.post('?m=Project&a=OnProjectFlow1Deny', {pid:$('#pid').val(),fid:$('#fid').val(),content:$('#content').val()}, function (ret){if(ret.code==1)layer.msg('批复完成', 1, function(){location.reload();});else layer.msg(ret.msg, 1);}, 'json');
-        });
-    });
-</script>
 <div class="toolbar">
-    <div class="tool clear"><span class="cap">质量监督申报 - [<?php echo $state; ?>]</span><a class="tooladd back" href="javascript:;">返回</a><a class="tooladd" href="javascript:" onclick="Printer('?m=Project&a=ProjectFlow1Print&id=<?php echo $rs['id']; ?>');">打印</a></div>
+    <div class="tool clear"><span class="cap"><?php echo "{$work_type}： {$work_name} 工程　--　{$node_no}、{$node_name}　{$node_status}"; ?></span><a class="tooladd back" href="javascript:;">返回</a><?php if(!$node_direction) echo '<a class="tooladd" href="?m=Project&a=ProjectFlow1">新建</a>'; ?></div>
 </div>
 <div class="panel paneltool">
-    <?php
-    if(!empty($rs)):
-    ?>
-    <?php if($approve): ?>
-    <div class="pagea4">
-        <div class="pagedialog">
-            <div class="pagedialog-caption">批复意见</div>
-            <div class=""><textarea id="content" class="pagedialog-textarea" rows="2"></textarea></div>
-            <div class="pagedialog-buttons"><a href="?m=Project&a=ProjectReply1&fid=<?php echo $rs['id'] ?>" class="btn">同意</a><a href="javascript:;" class="btn" id="deny">驳回</a></div>
-        </div>
-    </div>
-    <br/>
-    <?php endif; ?>
-    <div class="pagea4">
-        <div class="pagea4info">
+<?php
 
-            <div class="pa4-caption1"><?php echo $company; ?>工程建设处文件</div>
-            <div class="clear"><span><?php echo $rs['no']; ?></span><span class="right">签发:<?php echo $rs['signer']; ?></span></div>
-            <div class="pa4-redline"></div>
-            <div class="pa4-title1">关于申请<?php echo $name; ?>质量监督的申请</div>
-            <div class="pa4-company"><?php echo COMPANY_NAME; ?>:</div>
-            <div class="pa4-content"><?php echo $rs['content']; ?></div>
-            <?php echo $atts; ?>
-            <div class="pa4-sign1 clear"><span class="pa4-signer1"><?php echo $company; ?>工程建设处<br/><?php echo $rs['date']; ?></span></div>
-            <!--
-            <div class="pa4-attachment1">关键词:</div>
-            <div class=""><?php echo $rs['keywords']; ?></div>
-            -->
-        </div>
-        <input type="hidden" id="pid" value="<?php echo $rs['pid']; ?>" />
-        <input type="hidden" id="fid" value="<?php echo $rs['id']; ?>" />
-    </div>
-    <?php
-    else:
-        echo HTML::AlertInfo('文档尚未创建');
-    endif;
-    ?>
+if(!empty($rs_processing) || !empty($rs_success))
+{
+    if(!empty($rs_processing))
+    {
+       echo '<div>审批中</div>';
+        echo '<table class="tl"><tr><th>编号</th><th>发表时间</th><th>状态</th></tr>';
+        foreach($rs_processing as $k => $v)
+        {
+            echo '<tr><a href="?m=Project&a=ProjectFlow1">' . $rl['no'] . '</a></td><td class="ftim">' . $rl['time'] . '</td><td class="fsta">' . $state . '</td></tr>';
+        }
+        echo '</table><br/>';
+    }
+
+    if(!empty($rs_success))
+    {
+        echo '<div>审批通过</div>';
+        echo '<table class="tl"><tr><th>编号</th><th>申报时间</th><th>批复者</th><th>批复时间</th><th>批复</th></tr>';
+        foreach($rs_success as $k => $v)
+        {
+            echo '<tr><td><a href="?m=Project&a=ProjectFlow1&id=' . $v['id'] . '">' . $v['no'] . '</a></td><td class="ftim">' . $v['time'] . '</td><td class="fusr">' . $v['user'] . '</td><td class="ftim">' . $v['replytime'] . '</td><td class="fsta"><a href="?m=Project&a=ProjectReply1View&fid=' . $v['id'] . '">查看</a></td></tr>';
+        }
+        echo '</table><br/>';
+    }
+}
+else
+{
+    echo HTML::AlertInfo();
+}
+
+?>
 </div>

@@ -29,6 +29,22 @@ class ItemClz
     {
     }
 
+    public static function getStatusName($status_id)
+    {
+        switch ($status_id) {
+            case self::StatusNew:
+                return self::StatusNewName;
+            case self::StatusProcessing:
+                return self::StatusProcessingName;
+            case self::StatusBacked:
+                return self::StatusBackedName;
+            case self::StatusSuccess:
+                return self::StatusSuccessName;
+            default:
+                return self::StatusUnknownName;
+        }
+    }
+
     private function loadItem($id)
     {
         if (!array_key_exists($id, self::$caches)) {
@@ -43,28 +59,53 @@ class ItemClz
         return array_key_exists($id, self::$caches) ? self::$caches [$id] : array();
     }
 
+    public function getStatusId($id)
+    {
+        $this->loadItem($id);
+        return array_key_exists($id, self::$caches) ? self::$caches [$id] ['status_id'] : 0;
+    }
+
+    public function getStatus($id)
+    {
+        $this->loadItem($id);
+        return array_key_exists($id, self::$caches) ? self::$caches [$id] ['status'] : '';
+    }
+
     public function getAct($id)
     {
         $this->loadItem($id);
         return array_key_exists($id, self::$caches) ? self::$caches [$id] ['act'] : false;
     }
 
-    // 未完成（用户列表用，包含 新建、审核中、审退）
-    public static function resultsUnfinished($where, $order)
+    public function getDatas($id)
     {
-        $where .= ' AND (status_id=' . self::StatusNew . ' OR status_id=' . self::StatusProcessing . ' OR status_id=' . self::StatusBacked . ')';
+        $this->loadItem($id);
+        return Json::Decode(array_key_exists($id, self::$caches) ? self::$caches [$id]['datas'] : '');
+    }
+
+    // 新建
+    public static function resultsNew($where, $order = '')
+    {
+        $where .= ' AND status_id=' . self::StatusNew;
         return self::results($where, $order, 0, 0);
     }
 
-    // 未完成（管理列表用，包含 审核中）
-    public static function resultsProcessing($where, $order)
+    // 审核中
+    public static function resultsProcessing($where, $order = '')
     {
         $where .= ' AND status_id=' . self::StatusProcessing;
         return self::results($where, $order, 0, 0);
     }
 
-    // 审核成功（通用）
-    public static function resultsSuccess($where, $order)
+    // 审退
+    public static function resultsBacked($where, $order = '')
+    {
+        $where .= ' AND status_id=' . self::StatusBacked;
+        return self::results($where, $order, 0, 0);
+    }
+
+    // 审核成功
+    public static function resultsSuccess($where, $order = '')
     {
         $where .= ' AND status_id=' . self::StatusSuccess;
         return self::results($where, $order, 0, 0);
@@ -106,15 +147,39 @@ class ItemClz
 				");
 
         if ($rs && count($rs) > 0) {
-//            for ($i = 0; $i < count($rs); $i++) {
-////                $rs[$i]['project'] = ProjectCls::Instance()->Name($rs[$i]['pid']);
-////                $rs[$i]['user'] = UserCls::Instance()->Name($rs[$i]['uid']);
-//
-//                $rs[$i]['org'] = GroupCls::Instance()->Name($rs[$i]['org_id']);
-//            }
+            for ($i = 0; $i < count($rs); $i++) {
+                $rs[$i]['org'] = GroupCls::Instance()->Name($rs[$i]['org_id']);
+                $rs[$i]['type'] = $rs[$i]['type_id'] == WorkClz::TypeQuality ? WorkClz::TypeQualityName : WorkClz::TypeSecurityName;
+                $rs[$i]['status'] = self::getStatusName($rs[$i]['status_id']);
+            }
             return $rs;
         }
 
         return array();
+    }
+
+    public static function add($org_id, $type_id, $work_id, $node_id, $no, $templates, $datas, $attachments, $status_id)
+    {
+        $rs = DB::db()->Fetch("
+                INSERT INTO " . self::$table . "(org_id, type_id, work_id, node_id, no, templates, datas, attachments, status_id)
+				VALUES(?,?,?,?,?,?,?,?,?)
+				RETURNING id
+				", array($org_id, $type_id, $work_id, $node_id, $no, $templates, $datas, $attachments, $status_id));
+
+        return $rs ['id'];
+    }
+
+    public static function edit($id, $org_id, $type_id, $work_id, $node_id, $no, $templates, $datas, $attachments, $status_id)
+    {
+        DB::db()->Query("
+            UPDATE " . self::$table . "
+            SET org_id=?, type_id=?, work_id=?, node_id=?, no=?, templates=?, datas=?, attachments=?, status_id=?, last=CURRENT_TIMESTAMP
+            WHERE id=?
+            ", array($org_id, $type_id, $work_id, $node_id, $no, $templates, $datas, $attachments, $status_id, $id));
+    }
+
+    public static function delete($id)
+    {
+        DB::db()->Query("UPDATE " . self::$table . " SET del=true WHERE id=?", array($id));
     }
 }

@@ -120,17 +120,18 @@ class WorkMod extends BaseMod
     {
         $work_id = $this->Req('work_id', 0, 'int');
 
-        $rs = WorkClz::Instance()->getItem($work_id);
+        $rs_work = WorkClz::Instance()->getItem($work_id);
 
         $this->Header();
 
         $view = View::Factory('A_Nodes');
 
         $view->work_id = $work_id;
-        $view->work_name = !empty($rs) ? $rs['name'] : '';
-        $view->work_act = !empty($rs) ? $rs['act'] : '';
-        $view->work_nodes = !empty($rs) ? Json::Decode($rs['nodes']) : array();
-        $view->work_type = !empty($rs) ? $rs['type_id'] == WorkClz::TypeQuality ? WorkClz::TypeQualityName : WorkClz::TypeSecurityName : '';
+        $view->work_name = !empty($rs_work) ? $rs_work['name'] : '';
+        $view->work_company = !empty($rs_work) ? $rs_work['company'] : '';
+        $view->work_act = !empty($rs_work) ? $rs_work['act'] : '';
+        $view->work_type = !empty($rs_work) ? $rs_work['type'] : '';
+        $view->work_nodes = !empty($rs_work) ? WorkClz::Instance()->getNodes($work_id) : array();
 
         echo $view->Render();
 
@@ -142,26 +143,37 @@ class WorkMod extends BaseMod
         $work_id = $this->Req('work_id', 0, 'int');
         $node_id = $this->Req('node_id', 0, 'int');
 
+        $rs_work = WorkClz::Instance()->getItem($work_id);
+
+        $where = " AND work_id={$work_id} AND node_id={$node_id}";
+//        list($count_new, $rs_new) = ItemClz::resultsNew($where);
+        list($count_processing, $rs_processing) = ItemClz::resultsProcessing($where);
+//        list($count_backed, $rs_backed) = ItemClz::resultsBacked($where);
+        list($count_success, $rs_success) = ItemClz::resultsSuccess($where);
+
         $this->Header();
 
         $view = View::Factory('A_Items');
 
-        $new = true;
-        $rr = array();
-        $rl = Flow1Cls::GetLastItem($pid);
-        if (!empty($rl) && count($rl) > 0) {
-            $new = ProjectStateCls::IsNew(ProjectCls::Instance()->StateId($pid, ProjectNodeCls::APPLY));
-            if ($rl['replyid'] > 0) $rr = Reply1Cls::GetLastItem($pid, $rl['replyid']);
-        }
-        $rs = Flow1Cls::GetApprovedItems($pid);
+        $view->work_id = $work_id;
+        $view->node_id = $node_id;
+        $view->work_name = !empty($rs_work) ? $rs_work['name'] : '';
+        $view->work_company = !empty($rs_work) ? $rs_work['company'] : '';
+        $view->work_act = !empty($rs_work) ? $rs_work['act'] : '';
+        $view->work_type = !empty($rs_work) ? $rs_work['type'] : '';
+        $view->node_no = !empty($rs_work) ? WorkClz::Instance()->getNodeNo($work_id, $node_id) : '';
+        $view->node_name = !empty($rs_work) ? WorkClz::Instance()->getNodeName($work_id, $node_id) : '';
+        $view->node_status = !empty($rs_work) ? WorkClz::Instance()->getNodeStatus($work_id, $node_id) : '';
+        $view->node_direction = !empty($rs_work) ? WorkClz::Instance()->getNodeDirection($work_id, $node_id) : false;
 
-        $view->rl = $rl;
-        $view->rr = $rr;
-        $view->rs = $rs;
-        $view->new = $new;
-        $view->state = ProjectCls::Instance()->State($pid, ProjectNodeCls::APPLY);
-
-        $view->pid = $pid;
+//        $view->count_new = $count_new;
+//        $view->rs_new = $rs_new;
+        $view->count_processing = $count_processing;
+        $view->rs_processing = $rs_processing;
+//        $view->count_backed = $count_backed;
+//        $view->rs_backed = $rs_backed;
+        $view->count_success = $count_success;
+        $view->rs_success = $rs_success;
 
         echo $view->Render();
 
