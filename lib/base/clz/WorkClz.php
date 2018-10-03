@@ -42,6 +42,12 @@ class WorkClz
         return array_key_exists($id, self::$caches) ? self::$caches [$id] ['act'] : false;
     }
 
+    public function getName($id)
+    {
+        $this->loadItem($id);
+        return array_key_exists($id, self::$caches) ? self::$caches [$id]['name'] : '';
+    }
+
     public function getNodes($id)
     {
         $this->loadItem($id);
@@ -99,11 +105,7 @@ class WorkClz
 
     public static function count($where = '')
     {
-        $rs = DB::db()->Fetch("
-				SELECT COUNT(id) AS count
-				FROM " . self::$table . "
-				{$where}
-				", array());
+        $rs = DB::db()->Fetch("SELECT COUNT(id) AS count FROM " . self::$table . " {$where}", array());
 
         return $rs && count($rs) > 0 && $rs ['count'] > 0 ? $rs ['count'] : 0;
     }
@@ -111,13 +113,7 @@ class WorkClz
     public static function items($where, $order, $start, $size)
     {
         $limit = DB::db()->Limit($start, $size);
-        $rs = DB::db()->FetchAll("
-				SELECT *
-				FROM " . self::$table . "
-				{$where}
-				{$order}
-				{$limit}
-				");
+        $rs = DB::db()->FetchAll("SELECT * FROM " . self::$table . " {$where} {$order} {$limit}");
 
         if ($rs && count($rs) > 0) {
             for ($i = 0; $i < count($rs); $i++) {
@@ -166,29 +162,17 @@ class WorkClz
 
     public static function setLast($id)
     {
-        DB::db()->Query("
-				UPDATE " . self::$table . "
-				SET last=CURRENT_TIMESTAMP
-				WHERE id=?
-				", array($id));
+        DB::db()->Query("UPDATE " . self::$table . " SET last=CURRENT_TIMESTAMP WHERE id=?", array($id));
     }
 
     public static function setAct($id)
     {
-        DB::db()->Query("
-				UPDATE " . self::$table . "
-				SET act=NOT act
-				WHERE id=?
-				", array($id));
+        DB::db()->Query("UPDATE " . self::$table . " SET act=NOT act WHERE id=?", array($id));
     }
 
     public static function setNodes($id, $nodes)
     {
-        DB::db()->Query("
-				UPDATE " . self::$table . "
-				SET nodes=?
-				WHERE id=?
-				", array($nodes, $id));
+        DB::db()->Query("UPDATE " . self::$table . " SET nodes=? WHERE id=?", array($nodes, $id));
     }
 //    public static function EditPassword($id, $pass)
 //    {

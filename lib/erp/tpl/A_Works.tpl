@@ -8,12 +8,12 @@
 		$('.aid').click(function(){
 			var id=$(this).attr('aid');
 			var name=$(this).attr('aname');
-			layer.confirm('您确认需要'+name+'项目吗?', function(i){layer.close(i);$.post('?m=Work&a=OnWorkAct', {id:id}, function(ret){if(ret.code==1)layer.msg('立项状态切换成功', 2, function(){location.reload();});else layer.msg(ret.msg, 2, -1);}, 'json');});
+			layer.confirm('您确认需要'+name+'项目吗?', function(i){layer.close(i);$.post('?m=Work&a=OnWorkAct', {id:id}, function(ret){if(ret.code==1)layer.msg('立项状态切换成功', 2, function(){Refresh();});else layer.msg(ret.msg, 2, -1);}, 'json');});
 		});
 
 		$('.del').click(function(){
 			var id=$(this).attr('did');
-			layer.confirm('您确认需要删除吗?\n此操作不可恢复!', function(i){layer.close(i);$.post('?m=Work&a=OnWorkDelete', {id:id}, function(ret){if(ret.code==1)layer.msg('删除成功', 2, function(){location.reload();});else layer.msg(ret.msg, 2, -1);}, 'json');});
+			layer.confirm('您确认需要删除吗?\n此操作不可恢复!', function(i){layer.close(i);$.post('?m=Work&a=OnWorkDelete', {id:id}, function(ret){if(ret.code==1)layer.msg('删除成功', 2, function(){Refresh();});else layer.msg(ret.msg, 2, -1);}, 'json');});
 		});
 
 		$('#fok').click(function(){

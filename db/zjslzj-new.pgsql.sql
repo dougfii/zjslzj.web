@@ -98,7 +98,28 @@ CREATE TABLE t_reply
 );
 
 
+-- -----------------------------------------------------
+-- Table t_notify				消息表
+-- -----------------------------------------------------
+DROP SEQUENCE IF EXISTS seq_notify CASCADE;
+CREATE SEQUENCE seq_notify;
+DROP TABLE IF EXISTS t_notify CASCADE;
+CREATE TABLE t_notify
+(
+	id							INTEGER UNIQUE DEFAULT NEXTVAL('seq_notify') NOT NULL ,
+	type_id						INTEGER					NOT NULL DEFAULT 0 ,	-- 1:管理员发送 2:项目用户发送
+	uid							INTEGER					NOT NULL DEFAULT 0 ,
+	content						TEXT					NOT NULL DEFAULT '' ,
+	url							TEXT					NOT NULL DEFAULT '' ,
+	read						BOOLEAN					NOT NULL DEFAULT FALSE ,
 
+  	last						TIMESTAMP(0)			DEFAULT NULL ,
+	time						TIMESTAMP(0)			NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+	act							BOOLEAN					NOT NULL DEFAULT TRUE ,
+	del							BOOLEAN					NOT NULL DEFAULT FALSE ,
+	
+	PRIMARY KEY (id)
+);
 
 
 

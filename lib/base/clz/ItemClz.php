@@ -126,11 +126,7 @@ class ItemClz
 
     public static function count($where = '')
     {
-        $rs = DB::db()->Fetch("
-				SELECT COUNT(id) AS count
-				FROM " . self::$table . "
-				{$where}
-				", array());
+        $rs = DB::db()->Fetch("SELECT COUNT(id) AS count FROM " . self::$table . " {$where}", array());
 
         return $rs && count($rs) > 0 && $rs ['count'] > 0 ? $rs ['count'] : 0;
     }
@@ -138,13 +134,7 @@ class ItemClz
     public static function items($where, $order, $start, $size)
     {
         $limit = DB::db()->Limit($start, $size);
-        $rs = DB::db()->FetchAll("
-				SELECT *
-				FROM " . self::$table . "
-				{$where}
-				{$order}
-				{$limit}
-				");
+        $rs = DB::db()->FetchAll("SELECT * FROM " . self::$table . " {$where} {$order} {$limit}");
 
         if ($rs && count($rs) > 0) {
             for ($i = 0; $i < count($rs); $i++) {

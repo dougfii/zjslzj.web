@@ -8,13 +8,13 @@ if(!empty($rs_processing) || !empty($rs_success))
 {
     if(!empty($rs_processing))
     {
-       echo '<div>审批中</div>';
-        echo '<table class="tl"><tr><th>编号</th><th>发表时间</th><th>状态</th></tr>';
-        foreach($rs_processing as $k => $v)
-        {
-            echo '<tr><a href="?m=Project&a=ProjectFlow1">' . $rl['no'] . '</a></td><td class="ftim">' . $rl['time'] . '</td><td class="fsta">' . $state . '</td></tr>';
-        }
-        echo '</table><br/>';
+        echo '<div>审批中</div>';
+         echo '<table class="tl"><tr><th>编号</th><th>发表时间</th><th>状态</th></tr>';
+         foreach($rs_processing as $k => $v)
+         {
+             echo '<tr><td><a href="?m=Work&a=Item&work_id=' . $v['work_id'] . '&node_id=' . $v['node_id'] . '&item_id=' . $v['id'] . '">' . $v['no'] . ' - ' . $v['time'] . '</a></td><td class="ftime">' . $v['time'] . '</td><td class="fsta">' . $v['status'] . '</td></tr>';
+         }
+         echo '</table><br/>';
     }
 
     if(!empty($rs_success))
@@ -23,7 +23,7 @@ if(!empty($rs_processing) || !empty($rs_success))
         echo '<table class="tl"><tr><th>编号</th><th>申报时间</th><th>批复者</th><th>批复时间</th><th>批复</th></tr>';
         foreach($rs_success as $k => $v)
         {
-            echo '<tr><td><a href="?m=Project&a=ProjectFlow1&id=' . $v['id'] . '">' . $v['no'] . '</a></td><td class="ftim">' . $v['time'] . '</td><td class="fusr">' . $v['user'] . '</td><td class="ftim">' . $v['replytime'] . '</td><td class="fsta"><a href="?m=Project&a=ProjectReply1View&fid=' . $v['id'] . '">查看</a></td></tr>';
+            echo '<tr><td><a href="?m=Project&a=ProjectFlow1&id=' . $v['id'] . '">' . $v['no'] . '</a></td><td class="ftim">' . $v['time'] . '</td><td class="fusr">' . $v['user'] . '</td><td class="ftime">' . $v['replytime'] . '</td><td class="fsta"><a href="?m=Project&a=ProjectReply1View&fid=' . $v['id'] . '">查看</a></td></tr>';
         }
         echo '</table><br/>';
     }

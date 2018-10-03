@@ -9,12 +9,12 @@ class WorkMod extends BaseMod
 
     public function Quality()
     {
-        $this->Works(WorkClz::TypeQuality, '质量管理');
+        $this->Works(WorkClz::TypeQuality, WorkClz::TypeQualityName);
     }
 
     public function Security()
     {
-        $this->Works(WorkClz::TypeSecurity, '安全管理');
+        $this->Works(WorkClz::TypeSecurity, WorkClz::TypeSecurityName);
     }
 
     private function Works($type_id, $caption)
@@ -76,6 +76,7 @@ class WorkMod extends BaseMod
     public function OnWorkDelete()
     {
         $id = $this->Req('id', 0, 'int');
+
         if ($id <= 0) Json::ReturnError(ALERT_ERROR);
 
         WorkClz::delete($id);
@@ -86,12 +87,14 @@ class WorkMod extends BaseMod
     public function OnWorkAct()
     {
         $id = $this->Req('id', 0, 'int');
+
         if ($id <= 0) Json::ReturnError(ALERT_ERROR);
 
         WorkClz::setAct($id);
 
+        $name = WorkClz::Instance()->getName($id);
         $act = WorkClz::Instance()->getAct($id);
-        $nodes = Json::Decode(WorkClz::Instance()->getNodes($id));
+        $nodes = WorkClz::Instance()->getNodes($id);
         $type_id = WorkClz::Instance()->getTypeId($id);
 
         if ($act) {
@@ -108,9 +111,11 @@ class WorkMod extends BaseMod
 
             WorkClz::setNodes($id, Json::Encode($nodes));
 
-            MsgCls::Add(1, MsgDirectCls::FROM_USER, $this->Uid(), $id, '管理员', ProjectCls::Instance()->Name($id), ProjectNodeCls::INIT, $id, '项目被管理员开放');
+            NotifyClz::sendToMember($id, "开放 {$name}", "?m=Work&a=Nodes");
+            NotifyClz::sendToAdmin("开放 {$name}", "?m=Work&a=Nodes&work_id={$id}");
         } else {
-            MsgCls::Add(1, MsgDirectCls::FROM_USER, $this->Uid(), $id, '管理员', ProjectCls::Instance()->Name($id), ProjectNodeCls::INIT, $id, '项目被管理员关闭');
+            NotifyClz::sendToMember($id, "关闭 {$name}", "?m=Work&a=Nodes");
+            NotifyClz::sendToAdmin("关闭 {$name}", "?m=Work&a=Nodes&work_id={$id}");
         }
 
         Json::ReturnSuccess();
@@ -179,6 +184,100 @@ class WorkMod extends BaseMod
 
         $this->Footer();
     }
-}
 
-?>
+    public function Item()
+    {
+        $work_id = $this->Req('work_id', 0, 'int');
+        $node_id = $this->Req('node_id', 0, 'int');
+        $item_id = $this->Req('item_id', 0, 'int');
+
+        $edit = false;
+        $rs_work = WorkClz::Instance()->getItem($work_id);
+        $rs_item = ItemClz::Instance()->getItem($item_id);
+
+        if ($item_id > 0) {
+            $status_id = ItemClz::Instance()->getStatusId($item_id);
+            $edit = !($status_id == ItemClz::StatusProcessing || $status_id == ItemClz::StatusSuccess);
+        } else {
+            $edit = true;
+        }
+
+        $this->Header();
+
+        $view = View::Factory('A_Item_' . $node_id);
+
+        $view->edit = $edit;
+        $view->work_id = $work_id;
+        $view->node_id = $node_id;
+        $view->item_id = $item_id;
+        $view->work_name = !empty($rs_work) ? $rs_work['name'] : '';
+        $view->work_company = !empty($rs_work) ? $rs_work['company'] : '';
+        $view->work_org = !empty($rs_work) ? $rs_work['org'] : '';
+        $view->work_act = !empty($rs_work) ? $rs_work['act'] : '';
+        $view->work_type = !empty($rs_work) ? $rs_work['type'] : '';
+        $view->node_no = !empty($rs_work) ? WorkClz::Instance()->getNodeNo($work_id, $node_id) : '';
+        $view->node_name = !empty($rs_work) ? WorkClz::Instance()->getNodeName($work_id, $node_id) : '';
+        $view->node_status = !empty($rs_work) ? WorkClz::Instance()->getNodeStatus($work_id, $node_id) : '';
+        $view->node_direction = !empty($rs_work) ? WorkClz::Instance()->getNodeDirection($work_id, $node_id) : false;
+
+        $view->item_status = !empty($rs_item) ? $rs_item['status'] : '';
+        $view->datas = !empty($rs_item) ? ItemClz::Instance()->getDatas($item_id) : array();
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+
+    public function Reply()
+    {
+        $work_id = $this->Req('work_id', 0, 'int');
+        $node_id = $this->Req('node_id', 0, 'int');
+        $item_id = $this->Req('item_id', 0, 'int');
+        $reply_id = $this->Req('reply_id', 0, 'int');
+
+        $pass = $this->Req('pass', '', 'str');
+
+        $edit = $pass == 'success' || $pass = 'backed';
+        $tpl = 'General';
+        if ($pass == 'success') {
+            $pass = 'Success';
+        } else {
+            $pass = 'Backed';
+        }
+
+        $rs_work = WorkClz::Instance()->getItem($work_id);
+        $rs_item = ItemClz::Instance()->getItem($item_id);
+
+        if ($item_id > 0) {
+            $status_id = ItemClz::Instance()->getStatusId($item_id);
+            $edit = !($status_id == ItemClz::StatusProcessing || $status_id == ItemClz::StatusSuccess);
+        } else {
+            $edit = true;
+        }
+
+        $this->Header();
+
+        $view = View::Factory('A_Reply_' . $pass . '_' . $tpl);
+
+        $view->edit = $edit;
+        $view->work_id = $work_id;
+        $view->node_id = $node_id;
+        $view->item_id = $item_id;
+        $view->work_name = !empty($rs_work) ? $rs_work['name'] : '';
+        $view->work_company = !empty($rs_work) ? $rs_work['company'] : '';
+        $view->work_org = !empty($rs_work) ? $rs_work['org'] : '';
+        $view->work_act = !empty($rs_work) ? $rs_work['act'] : '';
+        $view->work_type = !empty($rs_work) ? $rs_work['type'] : '';
+        $view->node_no = !empty($rs_work) ? WorkClz::Instance()->getNodeNo($work_id, $node_id) : '';
+        $view->node_name = !empty($rs_work) ? WorkClz::Instance()->getNodeName($work_id, $node_id) : '';
+        $view->node_status = !empty($rs_work) ? WorkClz::Instance()->getNodeStatus($work_id, $node_id) : '';
+        $view->node_direction = !empty($rs_work) ? WorkClz::Instance()->getNodeDirection($work_id, $node_id) : false;
+
+        $view->item_status = !empty($rs_item) ? $rs_item['status'] : '';
+        $view->datas = !empty($rs_item) ? ItemClz::Instance()->getDatas($item_id) : array();
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
+}

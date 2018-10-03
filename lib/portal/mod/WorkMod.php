@@ -4,86 +4,6 @@ class WorkMod extends BaseMod
 {
     const MAX_DATAS_NUM = 50;
 
-    public function index()
-    {
-        if (!isset ($_SESSION ['mtimes'])) {
-            $_SESSION ['mtimes'] = time();
-            $_SESSION ['mcomes'] = 8;
-        }
-
-        $view = View::Factory('Login');
-
-        $view->org_id = HTML::CtlSelKVList(GroupBiz::Items()['data'], 'org_id', '');
-
-        echo $view->Render();
-    }
-
-    public function Login()
-    {
-        $username = $this->Req('username', '', 'str');
-        $password = $this->Req('password', '', 'str');
-
-        if (!isset ($_SESSION ['mcomes']) || !$_SESSION ['mtimes']) Json::ReturnError(ALERT_ERROR);
-        if ($_SESSION ['mcomes'] < 0 && time() - $_SESSION ['mtimes'] < 3600) Json::ReturnError('登录次数过多,账号暂时被禁用');
-        if (empty($username) || !Util::IsPassword($password)) {
-            $_SESSION ['mcomes'] -= 1;
-            $_SESSION ['mtimes'] = time();
-            Json::ReturnError('工程名称或登录密码错误');
-        }
-
-        $rs = WorkClz::login($username, $password);
-        if (empty($rs)) Json::ReturnError('工程名称或登录密码错误');
-
-        WorkClz::setLast($rs['id']);
-        LogLoginCls::Add(1, $rs['id'], Inet::GetIP());
-
-
-        $_SESSION ['mid'] = $rs['id'];
-        $_SESSION ['mname'] = $rs['username'];
-
-        Json::ReturnSuccess('?m=Work&a=Main');
-    }
-
-    public function Join()
-    {
-        $org_id = $this->Req('org_id', 0, 'int');
-        $type_id = $this->Req('type_id', 0, 'int');
-        $username = $this->Req('username', '', 'str');
-        $company = $this->Req('company', '', 'str');
-        $password = $this->Req('password', '', 'str');
-        $repassword = $this->Req('repassword', '', 'str');
-        $contacts = $this->Req('contacts', '', 'str');
-        $phone = $this->Req('phone', '', 'str');
-        $email = $this->Req('email', '', 'str');
-
-        if ($type_id != WorkClz::TypeQuality && $type_id != WorkClz::TypeSecurity) Json::ReturnError('请选择质监类型');
-        if ($org_id <= 0) Json::ReturnError('请选择所属区域');
-        if (empty($username)) Json::ReturnError('请输入工程名称');
-        if (!Util::IsMaxLen($username, 200)) Json::ReturnError('工程名称过长');
-        if (empty($company)) Json::ReturnError('请输入申请单位');
-        if (!Util::IsMaxLen($company, 200)) Json::ReturnError('申请单位过长');
-        if (!Util::IsPassword($password)) Json::ReturnError('请设置有效的登录密码');
-        if ($password != $repassword) Json::ReturnError('登录密码与重复密码不一致');
-        if (empty($contacts)) Json::ReturnError('请输入联系人');
-        if (!Util::IsMaxLen($contacts, 200)) Json::ReturnError('联系人过长');
-        if (!Util::IsMobile($phone) && !Util::IsPhone($phone)) Json::ReturnError('请输入正确的联系人手机或电话号码');
-        if (!empty($email) && !Util::IsEmail($email)) Json::ReturnError('请输入正确的联系人电子邮箱');
-        if (WorkClz::existUsername($type_id, $username)) Json::ReturnError('工程名称已经存在');
-
-        $id = WorkClz::add($username, $password, $org_id, $type_id, $username, $company, $contacts, $phone, $email, Json::Encode($type_id == WorkClz::TypeQuality ? NodeClz::getQualityNodes() : NodeClz::getSecurityNodes()));
-
-        $_SESSION ['mid'] = $id;
-        $_SESSION ['mname'] = $username;
-
-        try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $id, 1, $username, '管理员', ProjectNodeCls::INIT, $id, '新注册');
-        } catch (Exception $e) {
-            Json::ReturnError($e->getMessage());
-        }
-
-        Json::ReturnSuccess('?m=Work&a=Main');
-    }
-
     public function Logout()
     {
         session_unset();
@@ -92,14 +12,12 @@ class WorkMod extends BaseMod
 
     public function Password()
     {
-        $this->MemberAuth();
-
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::factory('Password');
         echo $view->render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnPassword()
@@ -113,7 +31,7 @@ class WorkMod extends BaseMod
         if ($npass != $rpass) Json::ReturnError('重复密码应与新设密码相同');
 
         try {
-            ProjectCls::EditPassword($this->Mid(), $npass);
+            ProjectCls::EditPassword($this->Uid(), $npass);
         } catch (Exception $e) {
             Json::ReturnError(ALERT_ERROR);
         }
@@ -121,21 +39,30 @@ class WorkMod extends BaseMod
         Json::ReturnSuccess();
     }
 
-    public function Main()
+    public function index()
     {
-        $rs = MsgCls::GetProjectUnread($this->Mid());
+        $this->Home();
+    }
 
-        $this->MemberAuth();
+    public function Home()
+    {
+        $this->Notify();
+    }
 
-        $this->MemberHeader();
+    public function Notify()
+    {
+        list($count, $rs) = NotifyClz::resultsMemberAll($this->Uid());
 
-        $view = View::Factory('Main');
+        $this->Header();
 
+        $view = View::Factory('A_Notify');
+
+        $view->count = $count;
         $view->rs = $rs;
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnRead()
@@ -155,12 +82,12 @@ class WorkMod extends BaseMod
 
     public function Nodes()
     {
-        $work_id = $this->Mid();
+        $work_id = $this->Uid();
 
         $rs_work = WorkClz::Instance()->getItem($work_id);
 
-        $this->MemberAuth();
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('A_Nodes');
 
@@ -174,12 +101,12 @@ class WorkMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function Items()
     {
-        $work_id = $this->Mid();
+        $work_id = $this->Uid();
         $node_id = $this->Req('node_id', 0, 'int');
 
         $rs_work = WorkClz::Instance()->getItem($work_id);
@@ -190,8 +117,8 @@ class WorkMod extends BaseMod
         list($count_backed, $rs_backed) = ItemClz::resultsBacked($where);
         list($count_success, $rs_success) = ItemClz::resultsSuccess($where);
 
-        $this->MemberAuth();
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('A_Items');
 
@@ -218,18 +145,17 @@ class WorkMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function Item()
     {
-        $work_id = $this->Mid();
+        $work_id = $this->Uid();
         $node_id = $this->Req('node_id', 0, 'int');
         $item_id = $this->Req('item_id', 0, 'int');
 
-        $rs_work = WorkClz::Instance()->getItem($work_id);
-
         $edit = false;
+        $rs_work = WorkClz::Instance()->getItem($work_id);
         $rs_item = ItemClz::Instance()->getItem($item_id);
 
         if ($item_id > 0) {
@@ -239,13 +165,14 @@ class WorkMod extends BaseMod
             $edit = true;
         }
 
-        $this->MemberAuth();
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('A_Item_' . $node_id);
 
+        $view->edit = $edit;
         $view->work_id = $work_id;
         $view->node_id = $node_id;
+        $view->item_id = $item_id;
         $view->work_name = !empty($rs_work) ? $rs_work['name'] : '';
         $view->work_company = !empty($rs_work) ? $rs_work['company'] : '';
         $view->work_org = !empty($rs_work) ? $rs_work['org'] : '';
@@ -256,19 +183,17 @@ class WorkMod extends BaseMod
         $view->node_status = !empty($rs_work) ? WorkClz::Instance()->getNodeStatus($work_id, $node_id) : '';
         $view->node_direction = !empty($rs_work) ? WorkClz::Instance()->getNodeDirection($work_id, $node_id) : false;
 
-        $view->edit = $edit;
-        $view->item_id = $item_id;
         $view->item_status = !empty($rs_item) ? $rs_item['status'] : '';
         $view->datas = !empty($rs_item) ? ItemClz::Instance()->getDatas($item_id) : array();
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnItem()
     {
-        $work_id = $this->Mid();
+        $work_id = $this->Uid();
         $node_id = $this->Req('node_id', 0, 'int');
         $item_id = $this->Req('item_id', 0, 'int');
 

@@ -10,7 +10,7 @@ class IndexMod implements IMod
             $_SESSION ['admincome'] = 8;
         }
 
-        $view = View::Factory('Index');
+        $view = View::Factory('A_Index');
         echo $view->Render();
     }
 
@@ -32,10 +32,10 @@ class IndexMod implements IMod
         if ($rs['code'] != Data::SUCCESS)
             Json::ReturnError($rs['msg']);
 
-        $_SESSION ['uid'] = $rs['data']['id'];
-        $_SESSION ['name'] = $rs['data']['name'];
+        $_SESSION ['_uid'] = $rs['data']['id'];
+        $_SESSION ['_user'] = $rs['data']['name'];
 
-        Json::ReturnSuccess('?m=Main');
+        Json::ReturnSuccess('?m=Home');
     }
 
     public function Logout()

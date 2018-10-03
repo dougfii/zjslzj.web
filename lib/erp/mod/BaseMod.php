@@ -2,8 +2,8 @@
 
 abstract class BaseMod implements IMod
 {
-    private $_uid = null;
-    private $_username = '';
+    private $_uid = 0;
+    private $_user = '';
     private $_login = false;
     private $_page = 1;
 
@@ -16,166 +16,124 @@ abstract class BaseMod implements IMod
     {
         $this->_page = $this->Req('page', 1, 'int');
 
-        if (isset ($_SESSION ['uid']) && !empty ($_SESSION ['uid']) && isset ($_SESSION ['name']) && !empty ($_SESSION ['name'])) {
-            $this->_uid = $_SESSION ['uid'];
-            $this->_username = $_SESSION ['name'];
+        if (isset ($_SESSION ['_uid']) && !empty ($_SESSION ['_uid']) && isset ($_SESSION ['_user']) && !empty ($_SESSION ['_user'])) {
+            $this->_uid = $_SESSION ['_uid'];
+            $this->_user = $_SESSION ['_user'];
             $this->_login = true;
         } else {
-            $this->_uid = null;
-            $this->_username = '';
+            $this->_uid = 0;
+            $this->_user = '';
             $this->_login = false;
         }
 
-        if (!$this->IsLogin())
-            Url::RedirectUrl('/');
+        if (!$this->IsLogin()) Url::RedirectUrl('/');
     }
 
     protected function Head()
     {
-        $view = View::Factory('Head');
+        $view = View::Factory('A_Head');
         echo $view->Render();
     }
 
     protected function Foot()
     {
-        $v = View::Factory('Foot');
+        $v = View::Factory('A_Foot');
         echo $v->Render();
     }
 
     protected function Header()
     {
         $this->Head();
-
-        $view = View::Factory('Header');
-        $view->menu = $this->Menu()[0];
-        $view->side = $this->Menu()[1];
-        $view->username = $this->Username();
+        $view = View::Factory('A_Header');
+        $view->menu = $this->Menu();
+        $view->side = $this->Side();
+        $view->user = $this->User();
         echo $view->Render();
     }
 
     protected function Footer()
     {
-        $view = View::Factory('Footer');
+        $view = View::Factory('A_Footer');
         echo $view->Render();
-
         $this->Foot();
-    }
-
-    protected function HeadPop()
-    {
-        $this->Head();
-
-        $view = View::Factory('HeadPop');
-        echo $view->Render();
-    }
-
-    protected function FootPop()
-    {
-        $view = View::Factory('FootPop');
-        echo $view->Render();
-
-        $this->Foot();
-    }
-
-    protected function HeadPrint()
-    {
-        $view = View::Factory('HeadPrint');
-        echo $view->Render();
-    }
-
-    protected function FootPrint()
-    {
-        $view = View::Factory('FootPrint');
-        echo $view->Render();
     }
 
     private function Menu()
     {
-        $work_quality[] = array("Work&a=Quality", "全部工程", R::PROJECT_QUALITY);
-        for ($i = Date::Year(); $i >= YEAR_START; $i--) {
-            $work_quality[] = array("Work&a=Quality&year={$i}", "工程 ({$i})", R::PROJECT_QUALITY);
-        }
-        $work_security[] = array("Work&a=Security", "全部工程", R::PROJECT_SECURITY);
-        for ($i = Date::Year(); $i >= YEAR_START; $i--) {
-            $work_security[] = array("Work&a=Security&year={$i}", "工程 ({$i})", R::PROJECT_SECURITY);
-        }
-
-        $quality[] = array("ProjectList", "全部工程", R::PROJECT_QUALITY);
-        for ($i = Date::Year(); $i >= YEAR_START; $i--) {
-            $quality[] = array("ProjectList&year={$i}", "工程 ({$i})", R::PROJECT_QUALITY);
-        }
-        $security[] = array("ProjectList", "全部工程", R::PROJECT_SECURITY);
-        for ($i = Date::Year(); $i >= YEAR_START; $i--) {
-            $security[] = array("ProjectList&year={$i}", "工程 ({$i})", R::PROJECT_SECURITY);
-        }
-
-        $mod = $this->Req('m', '', 'str');
         $menus = array(
-            // 首页
-            array('Main', '首页', R::MENU_CENTER, null),
-            array('Work&a=Quality', '新质量管理', R::MENU_QUALITY, $work_quality),
-            array('Work&a=Security', '新安全管理', R::MENU_SECURITY, $work_security),
-
-            //CRM销售部分（日程、活动、任务、商机）
-            array('Quality', '质量管理', R::MENU_QUALITY, $quality),//
-            array('Security', '安全管理', R::MENU_SECURITY, $security),//
-            //销售
-            array('Article', '网站管理', R::MENU_WEBSITE, array(//
-                array('ArticleList', '文章列表', R::WEBSITE_ARTICLE_LIST),//
-                array('ArticleTypeList', '文章分类', R::WEBSITE_ARTICLE_TYPE),//
-                null,//
-                array('FeedbackList', '质量投诉', R::WEBSITE_ADVERTISER),//
-                null,//
-                array('ArticleAdvertiser', '页首切图', R::WEBSITE_ADVERTISER),//
-                array('ArticleLinker', '友情链接', R::WEBSITE_LINKER),//
-                array('ArticleCopyright', '页尾版权', R::WEBSITE_COPYRIGHT),//
-            )),//
-            //系统
-            array('System', '系统', R::MENU_SYSTEM, array(//
-                array('GroupList', '组织机构', R::SYSTEM_USER),//
-                array('RoleList', '角色管理', R::SYSTEM_USER),//
-                array('ApproveList', '审批流程', R::SYSTEM_USER),//
-                null,//
-                array('FacadeTypeList', '外观评测项目', R::SYSTEM_USER),//
-                array('CheckTypeList', '检验项目', R::SYSTEM_USER),//
-                null,//
-                array('LogLogin', '登录日志', R::SYSTEM_LOG),//
-                array('LogEvent', '事件日志', R::SYSTEM_LOG),//
-                array('CacheClean', '清理缓冲区', R::SYSTEM_LOG),//
-            )),//
+            array('?m=Home', '首页', R::MENU_CENTER),
+            array('?m=Work&a=Quality', '质量管理', R::MENU_QUALITY),
+            array('?m=Work&a=Security', '安全管理', R::MENU_SECURITY),
+            array('?m=Quality', '旧质量管理', R::MENU_QUALITY),
+            array('?m=Security', '旧安全管理', R::MENU_SECURITY),
+            array('?m=Article', '网站管理', R::MENU_WEBSITE),
+            array('?m=System', '系统管理', R::MENU_SYSTEM),
         );
 
-        $sides = null;
         $menu = '<span class="menu"><ul>';
         foreach ($menus as $v) {
-            if (P::Instance($this->Uid())->isCanView($v [2])) {
-                $menu .= '<li><a href="?m=' . $v [0] . '">' . $v [1] . '</a></li>';
-            }
-
-            if ($mod == $v[0])
-                $sides = isset ($v [3]) && !empty($v[3]) ? $v [3] : null;
+            if (P::Instance($this->Uid())->isCanView($v [2])) $menu .= '<li><a href="' . $v [0] . '">' . $v [1] . '</a></li>';
         }
         $menu .= '</ul></span>';
 
-        $side = '';
-        if (!empty($sides)) {
-            $side .= '<div class="side"><ul>';
-            foreach ($sides as $v) {
-                if (P::Instance($this->Uid())->isCanView($v [2])) {
-                    $side .= '<li><a href="?m=' . $mod . '&a=' . $v [0] . '">' . $v [1] . '</a></li>';
-                } else {
-                    $side .= '<li><a class="disable">' . $v [1] . '</a></li>';
-                }
-            }
-            $side .= '</ul></div>';
-        }
-
-        return array($menu, $side);
+        return $menu;
     }
 
-    protected function Username()
+    private function Side()
     {
-        return $this->_username;
+        $mod = strtolower($this->Req('m', '', 'str'));
+        $act = strtolower($this->Req('a', '', 'str'));
+
+        $sides = array();
+
+        if ($mod == strtolower('Home')) {
+            $sides[] = array('?m=Home', '首页', R::MENU_CENTER);
+        } elseif ($mod == strtolower('Work')) {
+            if ($act == strtolower('Quality')) {
+                $sides[] = array("?m=Work&a=Quality", "全部工程", R::PROJECT_QUALITY);
+                for ($i = Date::Year(); $i >= YEAR_START; $i--) {
+                    $sides[] = array("?m=Work&a=Quality&year={$i}", "工程 ({$i})", R::PROJECT_QUALITY);
+                }
+            } elseif ($act == strtolower('Security')) {
+                $sides[] = array("?m=Work&a=Security", "全部工程", R::PROJECT_SECURITY);
+                for ($i = Date::Year(); $i >= YEAR_START; $i--) {
+                    $sides[] = array("?m=Work&a=Security&year={$i}", "工程 ({$i})", R::PROJECT_SECURITY);
+                }
+            }
+        } elseif ($mod == strtolower('Article')) {
+            $sides = array(
+                array('?m=Article&a=ArticleList', '文章列表', R::WEBSITE_ARTICLE_LIST),
+                array('?m=Article&a=ArticleTypeList', '文章分类', R::WEBSITE_ARTICLE_TYPE),
+                array('?m=Article&a=FeedbackList', '质量投诉', R::WEBSITE_ADVERTISER),
+                array('?m=Article&a=ArticleAdvertiser', '页首切图', R::WEBSITE_ADVERTISER),
+                array('?m=Article&a=ArticleLinker', '友情链接', R::WEBSITE_LINKER),
+                array('?m=Article&a=ArticleCopyright', '页尾版权', R::WEBSITE_COPYRIGHT),
+            );
+        } elseif ($mod == strtolower('System')) {
+            $sides = array(
+                array('?m=System&a=GroupList', '组织机构', R::SYSTEM_USER),
+                array('?m=System&a=RoleList', '角色管理', R::SYSTEM_USER),
+                array('?m=System&a=ApproveList', '审批流程', R::SYSTEM_USER),
+                array('?m=System&a=FacadeTypeList', '外观评测项目', R::SYSTEM_USER),
+                array('?m=System&a=CheckTypeList', '检验项目', R::SYSTEM_USER),
+                array('?m=System&a=LogLogin', '登录日志', R::SYSTEM_LOG),
+                array('?m=System&a=LogEvent', '事件日志', R::SYSTEM_LOG),
+                array('?m=System&a=CacheClean', '清理缓冲区', R::SYSTEM_LOG),
+            );
+        }
+
+        $side = '<div class="side"><ul>';
+        foreach ($sides as $v) {
+            if (P::Instance($this->Uid())->isCanView($v [2])) $side .= '<li><a href="' . $v [0] . '">' . $v [1] . '</a></li>';
+        }
+        $side .= '</ul></div>';
+
+        return $side;
+    }
+
+    protected function User()
+    {
+        return $this->_user;
     }
 
     protected function Uid()
@@ -185,7 +143,7 @@ abstract class BaseMod implements IMod
 
     protected function IsLogin()
     {
-        return $this->_login;
+        return $this->_login && $this->_uid > 0;
     }
 
     protected function IsAdmin()
@@ -205,12 +163,10 @@ abstract class BaseMod implements IMod
 
     protected function Order()
     {
-        $ok = Url::Req('ok', '', 'str');
-        $ov = Url::Req('ov', 0, 'int');
+        $ok = $this->Req('ok', '', 'str');
+        $ov = $this->Req('ov', 0, 'int');
 
-        if (empty ($ok))
-            return 'ORDER BY id DESC';
-        return 'ORDER BY ' . $ok . (empty ($ov) ? ' DESC' : ' ASC');
+        return empty ($ok) ? 'ORDER BY id DESC' : 'ORDER BY ' . $ok . (empty ($ov) ? ' DESC' : ' ASC');
     }
 }
 

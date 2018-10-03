@@ -234,3 +234,16 @@ table{ border-collapse:collapse; width:100%; }
 }
 .tabi{display:none;}
 .tabp .act{display:block;}
+
+
+
+/* new a4 display & print style*/
+.a4-area{width:796px;border:#c6c6c6 solid 1px;background:#fff;}
+.a4-block{margin:40px;}
+.a4-red-caption{text-align:center;font-size:30px;margin-bottom:20px;color:#f00;}
+.a4-red-no{padding-bottom:10px;}
+.a4-red-line{height:3px;background:#f00;margin-bottom:5px;}
+.a4-red-title{text-align:center;font-size:22px;margin-top:15px;margin-bottom:20px;padding-left:3%;padding-right:3%;}
+.a4-red-org{padding-bottom:10px;}
+.a4-red-txt{line-height:200%;}
+.a4-red-sign{padding-top:100px;padding-bottom:100px;line-height:200%;}

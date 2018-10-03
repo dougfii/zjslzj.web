@@ -1,10 +1,85 @@
 <?php
 
-class IndexMod extends BaseMod
+class IndexMod implements IMod
 {
+    private $_page = 1;
+
+    public function __construct()
+    {
+        $this->Init();
+    }
+
+    protected function Init()
+    {
+        $this->_page = $this->Req('page', 1, 'int');
+    }
+
+    private function Head()
+    {
+        $view = View::Factory('A_WebHead');
+        echo $view->Render();
+    }
+
+    private function Foot()
+    {
+        $v = View::Factory('A_WebFoot');
+        echo $v->Render();
+    }
+
+    private function Header()
+    {
+        $this->Head();
+        $view = View::Factory('A_WebHeader');
+        $view->nav = $this->Nav();
+        $view->advertiser = AdvertiserArchiveBiz::Get()['msg'];
+        echo $view->Render();
+    }
+
+    private function Footer()
+    {
+        $view = View::Factory('A_WebFooter');
+        $view->footer = CopyrightArchiveBiz::Get()['msg'];
+        echo $view->Render();
+        $this->Foot();
+    }
+
+    protected function Page()
+    {
+        return $this->_page;
+    }
+
+    protected function Req($name, $def = null, $type = null)
+    {
+        return Url::Req($name, $def, $type);
+    }
+
+    protected function Order()
+    {
+        $ok = $this->Req('ok', '', 'str');
+        $ov = $this->Req('ov', 0, 'int');
+
+        return empty ($ok) ? 'ORDER BY id DESC' : 'ORDER BY ' . $ok . (empty ($ov) ? ' DESC' : ' ASC');
+    }
+
+    private function Nav()
+    {
+        $rs = ArticleTypeCls::GetNextIds(0, false, true, true);
+        $s = '<ul>';
+        $s .= '<li><a href="/">首页</a></li>';
+        if (!empty($rs)) {
+            foreach ($rs as $k => $v) {
+                $s .= '<li><a href="?a=articles&id=' . $v . '">' . ArticleTypeCls::Instance()->Name($v) . '</a></li>';
+            }
+        }
+        //$s .= '<li><a href="/?a=feedback">质量投诉</a></li>';
+        $s .= '<li><a href="/?a=contacts">联系我们</a></li>';
+        $s .= '</ul>';
+        return $s;
+    }
+
     public function index()
     {
-        $this->Header(APP_NAME);
+        $this->Header();
 
         $view = View::Factory('Index');
 
@@ -30,7 +105,7 @@ class IndexMod extends BaseMod
         if (!empty($rs)) $title = $rs['title'];
         else $title = APP_NAME;
 
-        $this->Header($title);
+        $this->Header();
 
         $view = View::Factory('Article');
 
@@ -56,7 +131,7 @@ class IndexMod extends BaseMod
 
         $title = ArticleTypeBiz::Name($id)['msg'];
 
-        $this->Header($title);
+        $this->Header();
 
         $view = View::Factory('Articles');
 
@@ -91,10 +166,8 @@ class IndexMod extends BaseMod
         $id = 2;
 
         $rs = ArticleBiz::Item($id)['data'];
-        if (!empty($rs)) $title = $rs['title'];
-        else $title = APP_NAME;
 
-        $this->Header($title);
+        $this->Header();
 
         $view = View::Factory('Contacts');
 
@@ -125,7 +198,7 @@ class IndexMod extends BaseMod
         $rs = FeedbackCls::Items($where, $order, $start, $size);
         $paged = HTML::PageGroup($count, $this->Page(), $url, $size);
 
-        $this->Header('质量投诉');
+        $this->Header();
 
         $view = View::Factory('Feedback');
 
@@ -205,7 +278,7 @@ class IndexMod extends BaseMod
         $code = UUID::Make();
         $valid = UUID::Make();
 
-        $href = "http://www.xzslzj.cn/?a=retrieve&pid={$pid}&code={$code}&valid={$valid}";
+        $href = "?a=retrieve&pid={$pid}&code={$code}&valid={$valid}";
 
         if (!MailHelpCls::sendForget($email, '找回密码', $href)) Json::ReturnError('邮件发送错误');
 
@@ -244,5 +317,84 @@ class IndexMod extends BaseMod
 
         ProjectCls::SetPassword($pid, $pass);
         Json::ReturnSuccess();
+    }
+
+    // Member part
+    public function Login()
+    {
+        if (!isset ($_SESSION ['mtimes'])) {
+            $_SESSION ['mtimes'] = time();
+            $_SESSION ['mcomes'] = 8;
+        }
+
+        $view = View::Factory('A_Login');
+
+        $view->org_id = HTML::CtlSelKVList(GroupBiz::Items()['data'], 'org_id', '');
+
+        echo $view->Render();
+    }
+
+    public function OnLogin()
+    {
+        $username = $this->Req('username', '', 'str');
+        $password = $this->Req('password', '', 'str');
+
+        if (!isset ($_SESSION ['mcomes']) || !$_SESSION ['mtimes']) Json::ReturnError(ALERT_ERROR);
+        if ($_SESSION ['mcomes'] < 0 && time() - $_SESSION ['mtimes'] < 3600) Json::ReturnError('登录次数过多,账号暂时被禁用');
+        if (empty($username) || !Util::IsPassword($password)) {
+            $_SESSION ['mcomes'] -= 1;
+            $_SESSION ['mtimes'] = time();
+            Json::ReturnError('工程名称或登录密码错误');
+        }
+
+        $rs = WorkClz::login($username, $password);
+        if (empty($rs)) Json::ReturnError('工程名称或登录密码错误');
+
+        WorkClz::setLast($rs['id']);
+        LogLoginCls::Add(1, $rs['id'], Inet::GetIP());
+
+
+        $_SESSION ['_uid'] = $rs['id'];
+        $_SESSION ['_user'] = $rs['username'];
+
+        Json::ReturnSuccess('?m=Work');
+    }
+
+    public function OnJoin()
+    {
+        $org_id = $this->Req('org_id', 0, 'int');
+        $type_id = $this->Req('type_id', 0, 'int');
+        $username = $this->Req('username', '', 'str');
+        $company = $this->Req('company', '', 'str');
+        $password = $this->Req('password', '', 'str');
+        $repassword = $this->Req('repassword', '', 'str');
+        $contacts = $this->Req('contacts', '', 'str');
+        $phone = $this->Req('phone', '', 'str');
+        $email = $this->Req('email', '', 'str');
+
+        if ($type_id != WorkClz::TypeQuality && $type_id != WorkClz::TypeSecurity) Json::ReturnError('请选择质监类型');
+        if ($org_id <= 0) Json::ReturnError('请选择所属区域');
+        if (empty($username)) Json::ReturnError('请输入工程名称');
+        if (!Util::IsMaxLen($username, 200)) Json::ReturnError('工程名称过长');
+        if (empty($company)) Json::ReturnError('请输入申请单位');
+        if (!Util::IsMaxLen($company, 200)) Json::ReturnError('申请单位过长');
+        if (!Util::IsPassword($password)) Json::ReturnError('请设置有效的登录密码');
+        if ($password != $repassword) Json::ReturnError('登录密码与重复密码不一致');
+        if (empty($contacts)) Json::ReturnError('请输入联系人');
+        if (!Util::IsMaxLen($contacts, 200)) Json::ReturnError('联系人过长');
+        if (!Util::IsMobile($phone) && !Util::IsPhone($phone)) Json::ReturnError('请输入正确的联系人手机或电话号码');
+        if (!empty($email) && !Util::IsEmail($email)) Json::ReturnError('请输入正确的联系人电子邮箱');
+        //if (WorkClz::existUsername($type_id, $username)) Json::ReturnError('工程名称已经存在');
+
+        $id = WorkClz::add($username, $password, $org_id, $type_id, $username, $company, $contacts, $phone, $email, Json::Encode($type_id == WorkClz::TypeQuality ? NodeClz::getQualityNodes() : NodeClz::getSecurityNodes()));
+
+        $_SESSION ['_uid'] = $id;
+        $_SESSION ['_user'] = $username;
+
+
+        NotifyClz::sendToMember($id, "欢迎 {$username} 新注册", "?m=Work&a=Nodes");
+        NotifyClz::sendToAdmin("欢迎 {$username} 新注册", "?m=Work&a=Nodes&work_id={$id}");
+
+        Json::ReturnSuccess('?m=Work');
     }
 }
