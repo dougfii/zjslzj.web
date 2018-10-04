@@ -11,7 +11,7 @@
             <div class="a4-red-org"><?php echo From::Text(false, '', $work_org); ?>：</div>
             <div class="a4-red-txt">
                 <?php
-                $txt = !empty($datas['f3']) ? $datas['f3'] : '　　' . $work_company . '工程初步设计及概算已经镇江市发展和改革委员会以《' . $work_company . '工程初步设计的批复》（镇发改审发[XXXX]XX号）批准。工程主要建设内容为：xxxxxxxxxxxxxxxxxxxxx。根据初步设计文件批复和基本建设程序要求，工程招标、法人委托检测及设计、监理、施工等单位合同签订工作已完成，各项准备工作已就绪，具备工程开工条件，现申请对该工程进行质量监督。 当否，请批示。';
+                $txt = !empty($datas['f3']) ? $datas['f3'] : '　　XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 当否，请批示。';
                 echo From::TextArea($edit, 'f3', $txt, 'pa4-textarea1', 30);
                 ?>
             </div>
@@ -48,11 +48,9 @@
             $.post('?m=Work&a=OnItem&event=commit', SetDatas(), function (ret){if(ret.code==1)layer.msg('提交成功', 1, function(){GoBack();});else layer.msg(ret.msg, 1);}, 'json');
         });
 
-
-
         $('.upfile').change(function(){
             var pid = $('#pid').val();
-            var tid = 1;
+            var tid = 2;
             var no = $(this).attr('fid');
             var name = $(this).attr('fname');
             upload(pid, tid, no, name);

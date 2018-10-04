@@ -23,6 +23,11 @@ class From
         return $edit ? '<input type="text" id="' . $id . '" class="' . $class . '" value="' . $value . '" onclick="laydate();" readonly />' : $value;
     }
 
+    public static function Checkbox($edit, $id, $checked, $name)
+    {
+        return '<input type="checkbox" id="' . $id . '" ' . ($checked ? 'checked' : '') . ' ' . ($edit ? '' : 'disabled="disabled"') . ' /> ' . $name;
+    }
+
     public static function Hidden($id, $value)
     {
         return '<input type="hidden" id="' . $id . '" value="' . $value . '" />';

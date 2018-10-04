@@ -7,7 +7,7 @@
             <div class="a4-red-caption"><?php echo From::Text(false, '', $work_company); ?>工程建设处文件</div>
             <div class="a4-red-no"><span>文件编号：<?php echo From::Text($edit, 'f1', $datas['f1'], 'pae4-text1'); ?></span><span class="right">签发：<?php echo From::Text($edit, 'f2', $datas['f2'], 'pae4-text1'); ?></span></div>
             <div class="a4-red-line"></div>
-            <div class="a4-red-title">关于申请<?php echo From::Text(false, '', $work_name); ?>质量监督的申请</div>
+            <div class="a4-red-title">关于<?php echo From::Text(false, '', $work_name); ?><?php echo $node_name; ?>的申请</div>
             <div class="a4-red-org"><?php echo From::Text(false, '', $work_org); ?>：</div>
             <div class="a4-red-txt">
                 <?php

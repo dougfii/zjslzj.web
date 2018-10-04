@@ -11,8 +11,8 @@ class ItemClz
     const StatusUnknownName = '未知';
     const StatusNewName = '新文档';
     const StatusProcessingName = '审核中';
-    const StatusBackedName = '审退';
-    const StatusSuccessName = '审过';
+    const StatusBackedName = '审核驳回';
+    const StatusSuccessName = '审核通过';
 
     private static $table = 't_item';
     private static $caches = array();
@@ -141,6 +141,7 @@ class ItemClz
                 $rs[$i]['org'] = GroupCls::Instance()->Name($rs[$i]['org_id']);
                 $rs[$i]['type'] = $rs[$i]['type_id'] == WorkClz::TypeQuality ? WorkClz::TypeQualityName : WorkClz::TypeSecurityName;
                 $rs[$i]['status'] = self::getStatusName($rs[$i]['status_id']);
+                $rs[$i]['replier'] = UserCls::Instance()->Name($rs[$i]['replier_id']);
             }
             return $rs;
         }
@@ -171,5 +172,14 @@ class ItemClz
     public static function delete($id)
     {
         DB::db()->Query("UPDATE " . self::$table . " SET del=true WHERE id=?", array($id));
+    }
+
+    public static function reply($id, $reply_id, $reply_pass, $reply_status_id, $replier_id, $work_status_id)
+    {
+        DB::db()->Query("
+            UPDATE " . self::$table . "
+            SET reply_id=?, reply_pass=?, reply_status_id=?, replier_id=?, reply_time=CURRENT_TIMESTAMP, status_id=?
+            WHERE id=?
+            ", array($reply_id, $reply_pass, $reply_status_id, $replier_id, $work_status_id, $id));
     }
 }

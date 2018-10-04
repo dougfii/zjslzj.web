@@ -2,6 +2,8 @@
 
 class WorkMod extends BaseMod
 {
+    const MAX_DATAS_NUM = 100;
+
     public function index()
     {
         $this->Quality();
@@ -153,7 +155,7 @@ class WorkMod extends BaseMod
         $where = " AND work_id={$work_id} AND node_id={$node_id}";
 //        list($count_new, $rs_new) = ItemClz::resultsNew($where);
         list($count_processing, $rs_processing) = ItemClz::resultsProcessing($where);
-//        list($count_backed, $rs_backed) = ItemClz::resultsBacked($where);
+        list($count_backed, $rs_backed) = ItemClz::resultsBacked($where);
         list($count_success, $rs_success) = ItemClz::resultsSuccess($where);
 
         $this->Header();
@@ -175,8 +177,8 @@ class WorkMod extends BaseMod
 //        $view->rs_new = $rs_new;
         $view->count_processing = $count_processing;
         $view->rs_processing = $rs_processing;
-//        $view->count_backed = $count_backed;
-//        $view->rs_backed = $rs_backed;
+        $view->count_backed = $count_backed;
+        $view->rs_backed = $rs_backed;
         $view->count_success = $count_success;
         $view->rs_success = $rs_success;
 
@@ -195,12 +197,15 @@ class WorkMod extends BaseMod
         $rs_work = WorkClz::Instance()->getItem($work_id);
         $rs_item = ItemClz::Instance()->getItem($item_id);
 
-        if ($item_id > 0) {
-            $status_id = ItemClz::Instance()->getStatusId($item_id);
-            $edit = !($status_id == ItemClz::StatusProcessing || $status_id == ItemClz::StatusSuccess);
-        } else {
-            $edit = true;
+        if ($node_id == 1001000000 || $node_id == 1002000000) {
+            $edit = false;
         }
+//        if ($item_id > 0) {
+//            $status_id = ItemClz::Instance()->getStatusId($item_id);
+//            $edit = !($status_id == ItemClz::StatusProcessing || $status_id == ItemClz::StatusSuccess);
+//        } else {
+//            $edit = true;
+//        }
 
         $this->Header();
 
@@ -237,22 +242,20 @@ class WorkMod extends BaseMod
 
         $pass = $this->Req('pass', '', 'str');
 
-        $edit = $pass == 'success' || $pass = 'backed';
+        $rs_work = WorkClz::Instance()->getItem($work_id);
+        $rs_item = ItemClz::Instance()->getItem($item_id);
+        $rs_reply = ReplyClz::Instance()->getItem($reply_id);
+
+        $edit = $pass == 'success' || $pass == 'backed';
+        if ($reply_id > 0 && !empty($rs_reply)) {
+            $pass = $rs_reply['pass'] ? 'success' : 'backed';
+        }
         $tpl = 'General';
         if ($pass == 'success') {
             $pass = 'Success';
+            if ($node_id == 1001000000 || $node_id == 1002000000) $tpl = $node_id;
         } else {
             $pass = 'Backed';
-        }
-
-        $rs_work = WorkClz::Instance()->getItem($work_id);
-        $rs_item = ItemClz::Instance()->getItem($item_id);
-
-        if ($item_id > 0) {
-            $status_id = ItemClz::Instance()->getStatusId($item_id);
-            $edit = !($status_id == ItemClz::StatusProcessing || $status_id == ItemClz::StatusSuccess);
-        } else {
-            $edit = true;
         }
 
         $this->Header();
@@ -263,6 +266,7 @@ class WorkMod extends BaseMod
         $view->work_id = $work_id;
         $view->node_id = $node_id;
         $view->item_id = $item_id;
+        $view->replay_id = $reply_id;
         $view->work_name = !empty($rs_work) ? $rs_work['name'] : '';
         $view->work_company = !empty($rs_work) ? $rs_work['company'] : '';
         $view->work_org = !empty($rs_work) ? $rs_work['org'] : '';
@@ -274,10 +278,101 @@ class WorkMod extends BaseMod
         $view->node_direction = !empty($rs_work) ? WorkClz::Instance()->getNodeDirection($work_id, $node_id) : false;
 
         $view->item_status = !empty($rs_item) ? $rs_item['status'] : '';
-        $view->datas = !empty($rs_item) ? ItemClz::Instance()->getDatas($item_id) : array();
+        $view->datas = !empty($rs_item) && !$edit ? ItemClz::Instance()->getDatas($item_id) : array();
 
         echo $view->Render();
 
         $this->Footer();
+    }
+
+    public function OnReply()
+    {
+        $work_id = $this->Req('work_id', 0, 'int');
+        $node_id = $this->Req('node_id', 0, 'int');
+        $item_id = $this->Req('item_id', 0, 'int');
+        $reply_id = $this->Req('reply_id', 0, 'int');
+
+        $pass = $this->Req('pass', '', 'str');
+
+        $rs_work = WorkClz::Instance()->getItem($work_id);
+        $rs_item = ItemClz::Instance()->getItem($item_id);
+
+        if ($work_id <= 0 || $node_id <= 0 || $item_id <= 0 || empty($rs_work) || empty($rs_item) || !($pass == 'backed' || $pass = 'success')) Json::ReturnError(ALERT_ERROR);
+
+        $datas = array();
+        for ($i = 1; $i <= self::MAX_DATAS_NUM; $i++) {
+            $datas['f' . $i] = $this->Req('f' . $i, '', 'str');
+        }
+
+        if ($pass == 'backed') {
+            $reply_id = ReplyClz::add($rs_work['org_id'], $rs_work['type_id'], $work_id, $node_id, $item_id, 0, $rs_item['no'] . ' - ' . $rs_item['time'], '', Json::Encode($datas), '', ItemClz::StatusBacked, $this->Uid());
+            ItemClz::reply($item_id, $reply_id, 0, ItemClz::StatusBacked, $this->Uid(), ItemClz::StatusBacked);
+            WorkClz::setNodeStatus($work_id, $node_id, ItemClz::StatusBackedName);
+
+            NotifyClz::sendToMember($work_id, "{$rs_work['name']} - " . WorkClz::Instance()->getNodeName($work_id, $node_id) . " 审核被驳回", "?m=Work&a=Items&work_id={$work_id}&node_id={$node_id}");
+            NotifyClz::sendToAdmin("{$rs_work['name']} - " . WorkClz::Instance()->getNodeName($work_id, $node_id) . " 审核驳回", "?m=Work&a=Items&work_id={$work_id}&node_id={$node_id}");
+
+            Json::ReturnSuccess();
+        } elseif ($pass == 'success') {
+            $reply_id = ReplyClz::add($rs_work['org_id'], $rs_work['type_id'], $work_id, $node_id, $item_id, 1, $rs_item['no'] . ' - ' . $rs_item['time'], '', Json::Encode($datas), '', ItemClz::StatusSuccess, $this->Uid());
+            ItemClz::reply($item_id, $reply_id, 1, ItemClz::StatusSuccess, $this->Uid(), ItemClz::StatusSuccess);
+            WorkClz::setNodeStatus($work_id, $node_id, ItemClz::StatusSuccessName);
+
+            NotifyClz::sendToMember($work_id, "{$rs_work['name']} - " . WorkClz::Instance()->getNodeName($work_id, $node_id) . " 审核通过", "?m=Work&a=Items&work_id={$work_id}&node_id={$node_id}");
+            NotifyClz::sendToAdmin("{$rs_work['name']} - " . WorkClz::Instance()->getNodeName($work_id, $node_id) . " 审核通过", "?m=Work&a=Items&work_id={$work_id}&node_id={$node_id}");
+
+            if ($node_id == 1001000000) {
+                WorkClz::setNodeAct($work_id, 1002000000, true);
+            } elseif ($node_id == 1002000000) {
+                $node_id_acts = array(
+                    //
+                    1003000000 => $datas['f5'],
+                    1003001000 => $datas['f5'],
+                    1003002000 => $datas['f5'],
+                    1003003000 => $datas['f5'],
+                    1003004000 => $datas['f5'],
+                    1003005000 => $datas['f5'],
+                    1003006000 => $datas['f5'],
+                    1003007000 => $datas['f5'],
+                    //
+                    1004000000 => $datas['f6'],
+                    //
+                    1005000000 => $datas['f7'],
+                    1005001000 => $datas['f7'],
+                    1005002000 => $datas['f7'],
+                    //
+                    1006000000 => $datas['f8'],
+                    1006001000 => $datas['f8'],
+                    1006002000 => $datas['f8'],
+                    1006003000 => $datas['f8'],
+                    1006004000 => $datas['f8'],
+                    //
+                    1007000000 => $datas['f9'],
+                    1007001000 => $datas['f9'],
+                    1007002000 => $datas['f9'],
+                    1007003000 => $datas['f9'],
+                    1007004000 => $datas['f9'],
+                    //
+                    1008000000 => $datas['f10'],
+                    //
+                    1009000000 => $datas['f11'],
+                    1009001000 => $datas['f11'],
+                    1009002000 => $datas['f11'],
+                    1009003000 => $datas['f11'],
+                    1009004000 => $datas['f11'],
+                    1009005000 => $datas['f11'],
+                    1009005001 => $datas['f11'],
+                    1009005002 => $datas['f11'],
+                    1009005003 => $datas['f11'],
+                    1009005004 => $datas['f11'],
+                    1009005005 => $datas['f11'],
+                );
+                WorkClz::setNodeActs($work_id, $node_id_acts);
+            }
+
+            Json::ReturnSuccess();
+        }
+
+        Json::ReturnError(ALERT_ERROR);
     }
 }

@@ -53,7 +53,7 @@ CREATE TABLE t_item
 	
 	reply_id					INTEGER					NOT NULL DEFAULT 0 ,	-- 回复ID
 	reply_pass					BOOLEAN					NOT NULL DEFAULT FALSE ,-- 批复状态
-	reply_status_id				INTEGER					NOT NULL DEFAULT 0 ,	-- 状态
+	reply_status_id				INTEGER					NOT NULL DEFAULT 0 ,	-- 状态（备用）
 	replier_id					INTEGER					NOT NULL DEFAULT 0 ,	-- 操作者
 	reply_time					TIMESTAMP(0)			DEFAULT NULL ,
 	
@@ -86,7 +86,7 @@ CREATE TABLE t_reply
 	templates					TEXT					NOT NULL DEFAULT '' ,	-- 模板
 	datas						TEXT					NOT NULL DEFAULT '' ,	-- 数据JSON
 	attachments					TEXT					NOT NULL DEFAULT '' ,	-- 附件列表JSON
-	status_id					INTEGER					NOT NULL DEFAULT 0 ,	-- 状态
+	status_id					INTEGER					NOT NULL DEFAULT 0 ,	-- 状态（备用）
 	replier_id					INTEGER					NOT NULL DEFAULT 0 ,	-- 操作者
 	
 	last						TIMESTAMP(0)			DEFAULT NULL ,

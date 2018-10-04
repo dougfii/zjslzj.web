@@ -2,7 +2,7 @@
 
 class WorkMod extends BaseMod
 {
-    const MAX_DATAS_NUM = 50;
+    const MAX_DATAS_NUM = 100;
 
     public function Logout()
     {
@@ -213,12 +213,64 @@ class WorkMod extends BaseMod
             $item_id = ItemClz::add($rs_work['org_id'], $rs_work['type_id'], $work_id, $node_id, $datas['f1'], '', Json::Encode($datas), '', $status_id);
         }
 
-        // node open ???
-        if ($node_id == 1001000000) {
-            // TODO: 节点改变 递推
+        if ($status_id == ItemClz::StatusProcessing) {
+            WorkClz::setNodeStatus($work_id, $node_id, ItemClz::StatusProcessingName);
+
+            NotifyClz::sendToAdmin("{$rs_work['name']} - " . WorkClz::Instance()->getNodeName($work_id, $node_id) . " 需要审核", "?m=Work&a=Items&work_id={$work_id}&node_id={$node_id}");
         }
 
         Json::ReturnSuccess($item_id);
     }
 
+    public function Reply()
+    {
+        $work_id = $this->Uid();
+        $node_id = $this->Req('node_id', 0, 'int');
+        $item_id = $this->Req('item_id', 0, 'int');
+        $reply_id = $this->Req('reply_id', 0, 'int');
+
+        $pass = $this->Req('pass', '', 'str');
+
+        $rs_work = WorkClz::Instance()->getItem($work_id);
+        $rs_item = ItemClz::Instance()->getItem($item_id);
+        $rs_reply = ReplyClz::Instance()->getItem($reply_id);
+
+        $edit = $pass == 'success' || $pass == 'backed';
+        if ($reply_id > 0 && !empty($rs_reply)) {
+            $pass = $rs_reply['pass'] ? 'success' : 'backed';
+        }
+        $tpl = 'General';
+        if ($pass == 'success') {
+            $pass = 'Success';
+            if ($node_id == 1001000000) $tpl = $node_id;
+        } else {
+            $pass = 'Backed';
+        }
+
+        $this->Header();
+
+        $view = View::Factory('A_Reply_' . $pass . '_' . $tpl);
+
+        $view->edit = $edit;
+        $view->work_id = $work_id;
+        $view->node_id = $node_id;
+        $view->item_id = $item_id;
+        $view->replay_id = $reply_id;
+        $view->work_name = !empty($rs_work) ? $rs_work['name'] : '';
+        $view->work_company = !empty($rs_work) ? $rs_work['company'] : '';
+        $view->work_org = !empty($rs_work) ? $rs_work['org'] : '';
+        $view->work_act = !empty($rs_work) ? $rs_work['act'] : '';
+        $view->work_type = !empty($rs_work) ? $rs_work['type'] : '';
+        $view->node_no = !empty($rs_work) ? WorkClz::Instance()->getNodeNo($work_id, $node_id) : '';
+        $view->node_name = !empty($rs_work) ? WorkClz::Instance()->getNodeName($work_id, $node_id) : '';
+        $view->node_status = !empty($rs_work) ? WorkClz::Instance()->getNodeStatus($work_id, $node_id) : '';
+        $view->node_direction = !empty($rs_work) ? WorkClz::Instance()->getNodeDirection($work_id, $node_id) : false;
+
+        $view->item_status = !empty($rs_item) ? $rs_item['status'] : '';
+        $view->datas = !empty($rs_item) && !$edit ? ItemClz::Instance()->getDatas($item_id) : array();
+
+        echo $view->Render();
+
+        $this->Footer();
+    }
 }

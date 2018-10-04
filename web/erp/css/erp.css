@@ -247,3 +247,10 @@ table{ border-collapse:collapse; width:100%; }
 .a4-red-org{padding-bottom:10px;}
 .a4-red-txt{line-height:200%;}
 .a4-red-sign{padding-top:100px;padding-bottom:100px;line-height:200%;}
+
+.a4-success-caption,.a4-backed-caption{border-bottom:#c6c6c6 solid 1px;padding:10px;background:#f8f8f8;}
+.a4-success-content,.a4-backed-content{padding:10px;}
+.a4-success-buttons,.a4-backed-buttons{border-top:#c6c6c6 solid 1px;padding:10px;text-align:center;}
+.a4-success-buttons .btn{display:inline-block;color:#fff;background:#b9d98a;padding:8px 15px;text-decoration:none;border-radius:5px;}
+.a4-backed-buttons .btn{display:inline-block;color:#fff;background:#e68f8d;padding:8px 15px;text-decoration:none;border-radius:5px;}
+.a4-success-options{border-bottom:#c6c6c6 solid 1px;padding:10px;}

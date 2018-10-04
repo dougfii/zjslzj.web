@@ -165,6 +165,11 @@ class WorkClz
         DB::db()->Query("UPDATE " . self::$table . " SET last=CURRENT_TIMESTAMP WHERE id=?", array($id));
     }
 
+    public static function setStatusId($id, $status_id)
+    {
+        DB::db()->Query("UPDATE " . self::$table . " SET status_id=? WHERE id=?", array($status_id, $id));
+    }
+
     public static function setAct($id)
     {
         DB::db()->Query("UPDATE " . self::$table . " SET act=NOT act WHERE id=?", array($id));
@@ -173,6 +178,37 @@ class WorkClz
     public static function setNodes($id, $nodes)
     {
         DB::db()->Query("UPDATE " . self::$table . " SET nodes=? WHERE id=?", array($nodes, $id));
+    }
+
+    public static function setNodeStatus($work_id, $node_id, $status)
+    {
+        $nodes = self::Instance()->getNodes($work_id);
+        if (!empty($nodes) && array_key_exists($node_id, $nodes)) {
+            $nodes[$node_id]['status'] = $status;
+            self::setNodes($work_id, Json::Encode($nodes));
+        }
+    }
+
+    public static function setNodeAct($work_id, $node_id, $act)
+    {
+        $nodes = self::Instance()->getNodes($work_id);
+        if (!empty($nodes) && array_key_exists($node_id, $nodes)) {
+            $nodes[$node_id]['act'] = $act;
+            self::setNodes($work_id, Json::Encode($nodes));
+        }
+    }
+
+    public static function setNodeActs($work_id, $node_id_acts)
+    {
+        $nodes = self::Instance()->getNodes($work_id);
+        if (!empty($nodes)) {
+            foreach ($node_id_acts as $k => $v) {
+                if (array_key_exists($k, $nodes)) {
+                    $nodes[$k]['act'] = $v;
+                }
+            }
+            self::setNodes($work_id, Json::Encode($nodes));
+        }
     }
 //    public static function EditPassword($id, $pass)
 //    {

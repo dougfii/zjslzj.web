@@ -20,10 +20,10 @@ if(!empty($rs_new) || !empty($rs_processing) || !empty($rs_backed) || !empty($rs
     if(!empty($rs_backed))
     {
          echo '<div>审退</div>';
-         echo '<table class="tl"><tr><th>最后审退批复</th><th>批复者</th><th>批复时间</th></tr>';
+         echo '<table class="tl"><tr><th>编号</th><th>发表时间</th><th>批复者</th><th>批复时间</th><th>状态</th></tr>';
          foreach($rs_backed as $k => $v)
          {
-             echo '<tr><td>' . $rr['content'] . '</td><td class="fusr">' . $rr['user'] . '</td><td class="ftime">' . $rr['time'] . '</td></tr>';
+            echo '<tr><td><a href="?m=Work&a=Item&work_id=' . $v['work_id'] . '&node_id=' . $v['node_id'] . '&item_id=' . $v['id'] . '">' . $v['no'] . ' - ' . $v['time'] . '</a></td><td class="ftime">' . $v['time'] . '</td><td class="fusr">' . $v['replier'] . '</td><td class="ftime">' . $v['reply_time'] . '</td><td class="fsta"><a href="?m=Work&a=Reply&work_id=' . $v['work_id'] . '&node_id=' . $v['node_id'] . '&item_id=' . $v['id'] . '&reply_id=' . $v['reply_id'] . '">' . $v['status'] . '</a></td></tr>';
          }
          echo '</table><br/>';
     }
@@ -42,10 +42,10 @@ if(!empty($rs_new) || !empty($rs_processing) || !empty($rs_backed) || !empty($rs
     if(!empty($rs_success))
     {
         echo '<div>审批通过</div>';
-        echo '<table class="tl"><tr><th>编号</th><th>申报时间</th><th>批复者</th><th>批复时间</th><th>批复</th></tr>';
+        echo '<table class="tl"><tr><th>编号</th><th>发表时间</th><th>批复者</th><th>批复时间</th><th>状态</th></tr>';
         foreach($rs_success as $k => $v)
         {
-            echo '<tr><td><a href="?m=Project&a=ProjectFlow1&id=' . $v['id'] . '">' . $v['no'] . '</a></td><td class="ftim">' . $v['time'] . '</td><td class="fusr">' . $v['user'] . '</td><td class="ftime">' . $v['replytime'] . '</td><td class="fsta"><a href="?m=Project&a=ProjectReply1View&fid=' . $v['id'] . '">查看</a></td></tr>';
+            echo '<tr><td><a href="?m=Work&a=Item&work_id=' . $v['work_id'] . '&node_id=' . $v['node_id'] . '&item_id=' . $v['id'] . '">' . $v['no'] . ' - ' . $v['time'] . '</a></td><td class="ftime">' . $v['time'] . '</td><td class="fusr">' . $v['replier'] . '</td><td class="ftime">' . $v['reply_time'] . '</td><td class="fsta"><a href="?m=Work&a=Reply&work_id=' . $v['work_id'] . '&node_id=' . $v['node_id'] . '&item_id=' . $v['id'] . '&reply_id=' . $v['reply_id'] . '">' . $v['status'] . '</a></td></tr>';
         }
         echo '</table><br/>';
     }

@@ -11,7 +11,7 @@ if($work_act && !empty($work_nodes))
 {
      foreach($work_nodes as $k => $v)
      {
-         if($v['act'])
+         if($v['act'] == 'true')
          {
              echo '<div class="item">' . str_repeat('　', $v['level'] - 1) . $v['no'] . '、 ';
              if($v['type'] == 2) echo '<a href="?m=Work&a=Items&work_id=' . $work_id . '&node_id=' . $k . '">';
