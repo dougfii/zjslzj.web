@@ -165,6 +165,11 @@ class WorkMod extends BaseMod
             $edit = true;
         }
 
+        $table_structs = array();
+        if ($node_id == 1003001000 || $node_id == 1003004000 || $node_id == 1006002000) {
+            $table_structs = FacadeTypeCls::Structs();
+        }
+
         $this->Header();
 
         $view = View::Factory('A_Item_' . $node_id);
@@ -186,6 +191,8 @@ class WorkMod extends BaseMod
         $view->item_status = !empty($rs_item) ? $rs_item['status'] : '';
         $view->datas = !empty($rs_item) ? ItemClz::Instance()->getDatas($item_id) : array();
 
+        $view->table_structs = $table_structs;
+
         echo $view->Render();
 
         $this->Footer();
@@ -205,6 +212,9 @@ class WorkMod extends BaseMod
         $datas = array();
         for ($i = 1; $i <= self::MAX_DATAS_NUM; $i++) {
             $datas['f' . $i] = $this->Req('f' . $i, '', 'str');
+        }
+        for ($i = 1; $i <= self::MAX_DATAS_NUM; $i++) {
+            $datas['fa' . $i] = $this->Req('fa' . $i, array(), 'array');
         }
 
         if ($item_id > 0) {
@@ -267,7 +277,7 @@ class WorkMod extends BaseMod
         $view->node_direction = !empty($rs_work) ? WorkClz::Instance()->getNodeDirection($work_id, $node_id) : false;
 
         $view->item_status = !empty($rs_item) ? $rs_item['status'] : '';
-        $view->datas = !empty($rs_item) && !$edit ? ItemClz::Instance()->getDatas($item_id) : array();
+        $view->datas = !empty($rs_reply) && !$edit ? ReplyClz::Instance()->getDatas($reply_id) : array();
 
         echo $view->Render();
 

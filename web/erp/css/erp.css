@@ -238,6 +238,11 @@ table{ border-collapse:collapse; width:100%; }
 
 
 /* new a4 display & print style*/
+.text-left{text-align:left;}
+.text-right{text-align:right;}
+.text-center{text-align:center;}
+.item-no{width:40px;text-align:center;}
+
 .a4-area{width:796px;border:#c6c6c6 solid 1px;background:#fff;}
 .a4-block{margin:40px;}
 .a4-red-caption{text-align:center;font-size:30px;margin-bottom:20px;color:#f00;}
@@ -249,8 +254,17 @@ table{ border-collapse:collapse; width:100%; }
 .a4-red-sign{padding-top:100px;padding-bottom:100px;line-height:200%;}
 
 .a4-success-caption,.a4-backed-caption{border-bottom:#c6c6c6 solid 1px;padding:10px;background:#f8f8f8;}
+.a4-success-title,.a4-backed-title{text-align:center;padding:10px;}
 .a4-success-content,.a4-backed-content{padding:10px;}
 .a4-success-buttons,.a4-backed-buttons{border-top:#c6c6c6 solid 1px;padding:10px;text-align:center;}
 .a4-success-buttons .btn{display:inline-block;color:#fff;background:#b9d98a;padding:8px 15px;text-decoration:none;border-radius:5px;}
 .a4-backed-buttons .btn{display:inline-block;color:#fff;background:#e68f8d;padding:8px 15px;text-decoration:none;border-radius:5px;}
 .a4-success-options{border-bottom:#c6c6c6 solid 1px;padding:10px;}
+
+.a4-tbl-caption{text-align:center;font-size:22px;margin-top:15px;margin-bottom:20px;padding-left:3%;padding-right:3%;}
+.a4-tbl-no{text-align:right;padding-bottom:10px;}
+.a4-tbl-full,.a4-tbl-top,.a4-tbl-middle,.a4-tbl-bottom{border:#000 solid 1px;font-size:12px;}
+.a4-tbl-middle{border-top:0;border-bottom:0;}
+.a4-tbl-full th,.a4-tbl-top th,.a4-tbl-middle th,.a4-tbl-bottom th,.a4-tbl-full tr,.a4-tbl-top tr,.a4-tbl-middle tr,.a4-tbl-bottom tr,.a4-tbl-full td,.a4-tbl-top td,.a4-tbl-middle td,.a4-tbl-bottom td{border:#000 solid 1px;}
+.a4-tbl-full td,.a4-tbl-top td,.a4-tbl-middle td,.a4-tbl-bottom td{padding: 5px 2px;}
+.a4-tbl-full .k,.a4-tbl-top .k,.a4-tbl-middle .k,.a4-tbl-bottom .k{text-align:center;}

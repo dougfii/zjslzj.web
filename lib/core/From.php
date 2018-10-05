@@ -8,19 +8,19 @@
 
 class From
 {
-    public static function Text($edit, $id, $value, $class = '', $readonly = false)
+    public static function Text($edit, $id, $value, $class = '', $size = '', $readonly = false)
     {
-        return $edit ? '<input type="text" id="' . $id . '" class="' . $class . '" value="' . $value . '" ' . ($readonly ? 'readonly' : '') . ' />' : $value;
+        return $edit ? '<input type="text" id="' . $id . '" class="' . $class . '" value="' . $value . '" ' . ($readonly ? 'readonly' : '') . ' ' . (!empty($size) ? 'size="' . $size . '"' : '') . ' />' : $value;
+    }
+
+    public static function Date($edit, $id, $value, $class = '', $size = '')
+    {
+        return $edit ? '<input type="text" id="' . $id . '" class="' . $class . '" value="' . $value . '" onclick="laydate();" readonly ' . (!empty($size) ? 'size="' . $size . '"' : '') . ' />' : $value;
     }
 
     public static function TextArea($edit, $id, $value, $class = '', $rows = null, $cols = null, $readonly = false)
     {
         return $edit ? '<textarea id="' . $id . '" class="' . $class . '" ' . (!is_null($rows) ? 'rows="' . $rows . '"' : '') . ' ' . (!is_null($cols) ? 'cols="' . $cols . '"' : '') . ' ' . ($readonly ? 'readonly' : '') . '>' . $value . '</textarea>' : $value;
-    }
-
-    public static function Date($edit, $id, $value, $class = '')
-    {
-        return $edit ? '<input type="text" id="' . $id . '" class="' . $class . '" value="' . $value . '" onclick="laydate();" readonly />' : $value;
     }
 
     public static function Checkbox($edit, $id, $checked, $name)

@@ -29,7 +29,7 @@ class NodeClz
         '1003003000' => array('level' => 2, 'no' => '3.3', 'name' => '分部工程质量评定', 'status' => '', 'type' => 2, 'url' => '', 'sort' => 1, 'act' => false, 'direction' => true),
         '1003004000' => array('level' => 2, 'no' => '3.4', 'name' => '单元工程质量评定表', 'status' => '', 'type' => 2, 'url' => '', 'sort' => 1, 'act' => false, 'direction' => true),
         '1003005000' => array('level' => 2, 'no' => '3.5', 'name' => '单位工程检验评价', 'status' => '', 'type' => 2, 'url' => '', 'sort' => 1, 'act' => false, 'direction' => true),
-        '1003006000' => array('level' => 2, 'no' => '3.5', 'name' => '工程项目质量评定', 'status' => '', 'type' => 2, 'url' => '', 'sort' => 1, 'act' => false, 'direction' => true),
+        '1003006000' => array('level' => 2, 'no' => '3.6', 'name' => '工程项目质量评定', 'status' => '', 'type' => 2, 'url' => '', 'sort' => 1, 'act' => false, 'direction' => true),
         '1003007000' => array('level' => 2, 'no' => '3.7', 'name' => '工序单元工程质量评表', 'status' => '', 'type' => 2, 'url' => '', 'sort' => 1, 'act' => false, 'direction' => true),
         //-----
 

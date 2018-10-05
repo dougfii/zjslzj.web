@@ -66,6 +66,20 @@ function TreeBox(o) {
     });
 }
 
+function makearray(obj){
+    var a = new Array();
+    $.each($(obj), function(i, n){
+        a.push($(this).val());
+    });
+    return a;
+};
+
+function serials(obj){
+    $.each($(obj), function(i, n){
+        $(this).html(i+1);
+    });
+}
+
 $(function () {
     $('#openfind').click(function () {
         $('.find').toggle('fast');

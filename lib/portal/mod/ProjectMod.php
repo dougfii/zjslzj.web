@@ -4,16 +4,7 @@ class ProjectMod extends BaseMod
 {
     public function index()
     {
-        if (!isset ($_SESSION ['mtimes'])) {
-            $_SESSION ['mtimes'] = time();
-            $_SESSION ['mcomes'] = 8;
-        }
-
-        $view = View::Factory('ProjectLogin');
-
-        $view->gid = HTML::CtlSelKVList(GroupBiz::Items()['data'], 'gid', '');
-
-        echo $view->Render();
+        $this->Progress();
     }
 
     public function Login()
@@ -91,14 +82,14 @@ class ProjectMod extends BaseMod
 
     public function Password()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::factory('Password');
         echo $view->render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnPassword()
@@ -107,26 +98,25 @@ class ProjectMod extends BaseMod
         $npass = $this->Req('npass', '', 'str');
         $rpass = $this->Req('rpass', '', 'str');
 
-        if (!Util::isPassword($opass)) return Json::ReturnError('原始密码错误');
-        if (!Util::isPassword($npass)) return Json::ReturnError('新设密码错误');
-        if ($npass != $rpass) return Json::ReturnError('重复密码应与新设密码相同');
+        if (!Util::isPassword($opass)) Json::ReturnError('原始密码错误');
+        if (!Util::isPassword($npass)) Json::ReturnError('新设密码错误');
+        if ($npass != $rpass) Json::ReturnError('重复密码应与新设密码相同');
 
         try {
-            ProjectCls::EditPassword($this->Mid(), $npass);
+            ProjectCls::EditPassword($this->Uid(), $npass);
         } catch (Exception $e) {
-            return Json::ReturnError(ALERT_ERROR);
+            Json::ReturnError(ALERT_ERROR);
         }
 
-        return Json::ReturnSuccess();
+        Json::ReturnSuccess();
     }
 
     public function Main()
     {
-        $rs = MsgCls::GetProjectUnread($this->Mid());
+        $rs = MsgCls::GetProjectUnread($this->Uid());
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('Main');
 
@@ -134,37 +124,37 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnRead()
     {
         $id = $this->Req('id', 0, 'int');
 
-        if ($id <= 0) return Json::ReturnError(ALERT_ERROR);
+        if ($id <= 0) Json::ReturnError(ALERT_ERROR);
 
         try {
             MsgCls::SetRead($id);
         } catch (Exception $e) {
-            return Json::ReturnError($e->getMessage());
+            Json::ReturnError($e->getMessage());
         }
 
-        return Json::ReturnSuccess();
+        Json::ReturnSuccess();
     }
 
     public function Progress()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('Progress');
 
-        $view->rs = ProjectCls::Instance()->Item($this->Mid());
+        $view->rs = ProjectCls::Instance()->Item($this->Uid());
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow0List()
@@ -174,29 +164,29 @@ class ProjectMod extends BaseMod
 
     public function ProjectFlow0()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
 
         $view = View::Factory('ProjectFlow0');
 
-        $view->rs = ProjectCls::Instance()->Item($this->Mid());
+        $view->rs = ProjectCls::Instance()->Item($this->Uid());
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow1List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow1List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -215,20 +205,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow1()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow1');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
 
         $name = ProjectCls::Instance()->Name($pid);
@@ -275,7 +264,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow1Print()
@@ -316,7 +305,7 @@ class ProjectMod extends BaseMod
         $keywords = $this->Req('keywords', '', 'str');
         $attachments = $this->Req('attachments', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
         if (empty($no)) Json::ReturnError('请输入文件编号');
@@ -341,7 +330,7 @@ class ProjectMod extends BaseMod
         $keywords = $this->Req('keywords', '', 'str');
         $attachments = $this->Req('attachments', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
         if (empty($no)) Json::ReturnError('请输入文件编号');
@@ -355,7 +344,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::APPLY, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::APPLY, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::APPLY));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::APPLY, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::APPLY));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -366,13 +355,13 @@ class ProjectMod extends BaseMod
     //TODO:作废
     public function Flow1Reply1()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('Flow1Reply1');
 
-        $mid = $this->Mid();
+        $mid = $this->Uid();
         $gc = MemberBiz::GetGroupCompany($mid);
         $nodeid = ProjectNodeCls::APPLY;
 
@@ -390,7 +379,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectReply1View()
@@ -404,9 +393,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply1Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply1View');
 
@@ -419,18 +407,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow2List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow2List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -449,20 +437,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow2()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow2');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
 
         $name = ProjectCls::Instance()->Name($pid);
@@ -508,7 +495,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow2()
@@ -520,7 +507,7 @@ class ProjectMod extends BaseMod
         $keywords = $this->Req('keywords', '', 'str');
         $attachments = $this->Req('attachments', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
         if (empty($no)) Json::ReturnError('请输入文件编号');
@@ -532,7 +519,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::DIVIDE, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::DIVIDE, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::DIVIDE));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::DIVIDE, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::DIVIDE));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -543,13 +530,13 @@ class ProjectMod extends BaseMod
     //TODO: 作废
     public function Flow2Reply1()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('Flow2Reply1');
 
-        $mid = $this->Mid();
+        $mid = $this->Uid();
         $gc = MemberBiz::GetGroupCompany($mid);
         $nodeid = ProjectNodeCls::DIVIDE;
 
@@ -567,7 +554,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectReply2View()
@@ -581,9 +568,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply2Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply2View');
 
@@ -594,18 +580,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow31List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow31List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -624,20 +610,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow31()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow31');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -764,7 +749,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow31()
@@ -841,7 +826,7 @@ class ProjectMod extends BaseMod
 //            $totals[$i] = array($totals1[$i], $totals2[$i], $totals3[$i], $totals4[$i], $totals5[$i]);
 //        }
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
         if (empty($name)) Json::ReturnError('请输入单位工程名称');
@@ -898,7 +883,7 @@ class ProjectMod extends BaseMod
         if (isset($_SESSION['facade_table'])) unset($_SESSION['facade_table']);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CONFIRM_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CONFIRM_1));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CONFIRM_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CONFIRM_1));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -917,9 +902,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply31Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply31View');
 
@@ -930,18 +914,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow32List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow32List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -962,20 +946,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow32()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow32');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -990,18 +973,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow33List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow33List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -1022,20 +1005,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow33()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow33');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -1050,18 +1032,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow34List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow34List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -1082,20 +1064,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow34()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow34');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -1222,18 +1203,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow35List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow35List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -1254,20 +1235,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow35()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow35');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -1282,18 +1262,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow36List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow36List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -1314,20 +1294,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow36()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow36');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -1342,18 +1321,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow37List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow37List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -1374,20 +1353,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow37()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow37');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -1514,17 +1492,17 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 //    public function ProjectFlow37List()
 //    {
-//        $this->MemberAuth();
 //
-//        $this->MemberHeader();
+//
+//        $this->Header();
 //
 //        $view = View::Factory('ProjectFlow37List');
 //
-//        $pid = $this->Mid();
+//        $pid = $this->Uid();
 //
 //        $new = true;
 //        $rr = array();
@@ -1543,20 +1521,20 @@ class ProjectMod extends BaseMod
 //
 //        echo $view->Render();
 //
-//        $this->MemberFooter();
+//        $this->Footer();
 //    }
 //
 //    public function ProjectFlow37()
 //    {
 //        $id = $this->Req('id', 0, 'int');
 //
-//        $this->MemberAuth();
 //
-//        $this->MemberHeader();
+//
+//        $this->Header();
 //
 //        $view = View::Factory('ProjectFlow37');
 //
-//        $pid = $this->Mid();
+//        $pid = $this->Uid();
 //        $gc = ProjectCls::GetGroupCompany($pid);
 //
 //        $name = ProjectCls::Instance()->Name($pid);
@@ -1607,7 +1585,7 @@ class ProjectMod extends BaseMod
 //
 //        echo $view->Render();
 //
-//        $this->MemberFooter();
+//        $this->Footer();
 //    }
 //
 //    public function OnProjectFlow37()
@@ -1620,7 +1598,7 @@ class ProjectMod extends BaseMod
 //        $t5 = $this->Req('t5', '', 'str');
 //        $t6 = $this->Req('t6', '', 'str');
 //
-//        $pid = $this->Mid();
+//        $pid = $this->Uid();
 //
 //        if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
 //
@@ -1628,7 +1606,7 @@ class ProjectMod extends BaseMod
 //        ProjectCls::SetNode($pid, ProjectNodeCls::CONFIRM_7, $id, ProjectStateCls::APPROVE);
 //
 //        try {
-//            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CONFIRM_7, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CONFIRM_7));
+//            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CONFIRM_7, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CONFIRM_7));
 //        } catch (Exception $e) {
 //            Json::ReturnError($e->getMessage());
 //        }
@@ -1647,9 +1625,9 @@ class ProjectMod extends BaseMod
 //
 //        $rs = Reply37Cls::GetLastItem($pid, $fid);
 //
-//        $this->MemberAuth();
 //
-//        $this->MemberHeader();
+//
+//        $this->Header();
 //
 //        $view = View::Factory('ProjectReply37View');
 //
@@ -1660,18 +1638,18 @@ class ProjectMod extends BaseMod
 //
 //        echo $view->Render();
 //
-//        $this->MemberFooter();
+//        $this->Footer();
 //    }
 
     public function ProjectFlow4List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow4List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
 //        $rl = Flow4Cls::GetLastItem($pid);
@@ -1687,20 +1665,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow4()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow4');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
 
         $name = ProjectCls::Instance()->Name($pid);
@@ -1722,20 +1699,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectReply4()
     {
         $fid = $this->Req('fid', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply4');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
 
         $name = ProjectCls::Instance()->Name($pid);
@@ -1752,7 +1728,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectReply4()
@@ -1764,7 +1740,7 @@ class ProjectMod extends BaseMod
         $content = $this->Req('content', '', 'str');
         $comp = $this->Req('comp', '', 'str');
         $date = $this->Req('date', '', 'str');
-        $uid = $this->Mid();
+        $uid = $this->Uid();
 
         $pid = Flow4Cls::Instance()->Pid($fid);
 
@@ -1782,7 +1758,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SUGGEST, $fid, ProjectStateCls::ALLOW);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SUGGEST, $replyid, '回复' . ProjectNodeCls::Name(ProjectNodeCls::SUGGEST));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SUGGEST, $replyid, '回复' . ProjectNodeCls::Name(ProjectNodeCls::SUGGEST));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -1801,9 +1777,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply4Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply4View');
 
@@ -1814,18 +1789,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow51List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow51List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -1844,20 +1819,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow51()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow51');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -1939,7 +1913,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow51()
@@ -1982,7 +1956,7 @@ class ProjectMod extends BaseMod
         if (empty($total0)) Json::ReturnError('请输入单元工程优良个数');
         if (empty($total1)) Json::ReturnError('请输入单元工程优良率');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
         if (empty($comp)) Json::ReturnError('请输入单位工程名称');
@@ -2011,7 +1985,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::MATERIAL_1, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::MATERIAL_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::MATERIAL_1));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::MATERIAL_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::MATERIAL_1));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -2030,9 +2004,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply51Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply51View');
 
@@ -2043,18 +2016,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow52List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow52List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -2073,20 +2046,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow52()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow52');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -2164,7 +2136,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow52()
@@ -2217,7 +2189,7 @@ class ProjectMod extends BaseMod
             $items[$i] = array($items1[$i], $items2[$i], $items3[$i], $items4[$i], $items5[$i], $items6[$i], $items7[$i], $items8[$i]);
         }
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
         if (empty($comp)) Json::ReturnError('请输入单位工程名称');
@@ -2246,7 +2218,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::MATERIAL_2, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::MATERIAL_2, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::MATERIAL_2));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::MATERIAL_2, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::MATERIAL_2));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -2265,9 +2237,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply52Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply52View');
 
@@ -2278,18 +2249,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow61List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow61List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -2308,20 +2279,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow61()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow61');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -2399,7 +2369,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow61()
@@ -2452,7 +2422,7 @@ class ProjectMod extends BaseMod
             $items[$i] = array($items1[$i], $items2[$i], $items3[$i], $items4[$i], $items5[$i], $items6[$i], $items7[$i], $items8[$i]);
         }
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
         if (empty($comp)) Json::ReturnError('请输入单位工程名称');
@@ -2481,7 +2451,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::CHECK_1, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CHECK_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CHECK_1));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CHECK_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CHECK_1));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -2500,9 +2470,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply61Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply61View');
 
@@ -2513,18 +2482,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow62List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow62List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -2546,7 +2515,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow62()
@@ -2554,13 +2523,12 @@ class ProjectMod extends BaseMod
         $id = $this->Req('id', 0, 'int');
         $iid = $this->Req('iid', 0, 'int'); //import 3 id
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow62');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -2724,7 +2692,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow62()
@@ -2800,7 +2768,7 @@ class ProjectMod extends BaseMod
             $totals[$i] = array($totals1[$i], $totals2[$i], $totals3[$i], $totals4[$i], $totals5[$i]);
         }
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
         if (empty($attachments)) Json::ReturnError('请输入单位工程名称');
@@ -2857,7 +2825,7 @@ class ProjectMod extends BaseMod
         if (isset($_SESSION['facade_table'])) unset($_SESSION['facade_table']);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CHECK_2, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CHECK_2));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CHECK_2, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CHECK_2));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -2876,9 +2844,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply62Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply62View');
 
@@ -2889,18 +2856,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow63List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow63List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -2919,20 +2886,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow63()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow63');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -3020,7 +2986,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow63()
@@ -3072,7 +3038,7 @@ class ProjectMod extends BaseMod
         if (empty($total4)) Json::ReturnError('请输入外观质量得分');
         if (empty($total5)) Json::ReturnError('请输入单位工程质量等级');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
         if (empty($name)) Json::ReturnError('请输入单位工程名称');
@@ -3101,7 +3067,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::CHECK_3, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CHECK_3, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CHECK_3));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CHECK_3, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CHECK_3));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -3120,9 +3086,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply63Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply63View');
 
@@ -3133,18 +3098,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow64List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow64List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -3163,20 +3128,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow64()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow64');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -3263,7 +3227,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow64()
@@ -3313,7 +3277,7 @@ class ProjectMod extends BaseMod
         if (empty($total3)) Json::ReturnError('请输入主要单位工程优良率');
         if (empty($total4)) Json::ReturnError('请输入工程项目质量等级');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
         if (empty($name)) Json::ReturnError('请输入工程项目名称');
@@ -3342,7 +3306,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::CHECK_4, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CHECK_4, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CHECK_4));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::CHECK_4, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::CHECK_4));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -3361,9 +3325,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply64Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply64View');
 
@@ -3374,18 +3337,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow71List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow71List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -3404,20 +3367,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow71()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow71');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
 
         $name = ProjectCls::Instance()->Name($pid);
@@ -3463,7 +3425,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow71()
@@ -3475,7 +3437,7 @@ class ProjectMod extends BaseMod
         $keywords = $this->Req('keywords', '', 'str');
         $attachments = $this->Req('attachments', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
         if (empty($no)) Json::ReturnError('请输入文件编号');
@@ -3487,7 +3449,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::RECORD_1, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_1));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_1));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -3506,9 +3468,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply71Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply71View');
 
@@ -3519,18 +3480,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow72List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow72List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -3549,20 +3510,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow72()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow72');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -3679,7 +3639,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow72()
@@ -3714,7 +3674,7 @@ class ProjectMod extends BaseMod
         $v5n = $this->Req('v5n', '', 'str');
         $v5d = $this->Req('v5d', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
         if (empty($attachments)) Json::ReturnError('请输入单位工程名称');
@@ -3755,7 +3715,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::RECORD_2, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_2, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_2));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_2, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_2));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -3774,9 +3734,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply72Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply72View');
 
@@ -3787,18 +3746,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow73List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow73List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -3817,20 +3776,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow73()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow73');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -3947,7 +3905,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow73()
@@ -3982,7 +3940,7 @@ class ProjectMod extends BaseMod
         $v5n = $this->Req('v5n', '', 'str');
         $v5d = $this->Req('v5d', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
         if (empty($attachments)) Json::ReturnError('请输入单位工程名称');
@@ -4017,7 +3975,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::RECORD_3, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_3, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_3));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_3, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_3));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -4036,9 +3994,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply73Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply73View');
 
@@ -4049,18 +4006,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow74List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow74List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -4079,20 +4036,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow74()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow74');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
 
         $name = ProjectCls::Instance()->Name($pid);
@@ -4138,7 +4094,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow74()
@@ -4150,7 +4106,7 @@ class ProjectMod extends BaseMod
         $keywords = $this->Req('keywords', '', 'str');
         $attachments = $this->Req('attachments', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
 //        if (empty($no)) Json::ReturnError('请输入文件编号');
@@ -4162,7 +4118,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::RECORD_4, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_4, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_4));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_4, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_4));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -4181,9 +4137,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply74Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply74View');
 
@@ -4194,18 +4149,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow75List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow75List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -4224,20 +4179,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow75()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow75');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
 
         $name = ProjectCls::Instance()->Name($pid);
@@ -4283,7 +4237,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow75()
@@ -4295,7 +4249,7 @@ class ProjectMod extends BaseMod
         $keywords = $this->Req('keywords', '', 'str');
         $attachments = $this->Req('attachments', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
 //        if (empty($no)) Json::ReturnError('请输入文件编号');
@@ -4307,7 +4261,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::RECORD_5, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_5, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_5));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_5, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_5));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -4326,9 +4280,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply75Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply75View');
 
@@ -4339,18 +4292,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow76List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow76List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -4369,20 +4322,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow76()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow76');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
 
         $name = ProjectCls::Instance()->Name($pid);
@@ -4428,7 +4380,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow76()
@@ -4440,7 +4392,7 @@ class ProjectMod extends BaseMod
         $keywords = $this->Req('keywords', '', 'str');
         $attachments = $this->Req('attachments', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
 //        if (empty($no)) Json::ReturnError('请输入文件编号');
@@ -4452,7 +4404,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::RECORD_6, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_6, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_6));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_6, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_6));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -4471,9 +4423,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply76Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply76View');
 
@@ -4484,18 +4435,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow77List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow77List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -4514,20 +4465,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow77()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow77');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
 
         $name = ProjectCls::Instance()->Name($pid);
@@ -4573,7 +4523,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow77()
@@ -4585,7 +4535,7 @@ class ProjectMod extends BaseMod
         $keywords = $this->Req('keywords', '', 'str');
         $attachments = $this->Req('attachments', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
 //        if (empty($no)) Json::ReturnError('请输入文件编号');
@@ -4597,7 +4547,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::RECORD_7, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_7, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_7));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::RECORD_7, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::RECORD_7));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -4616,9 +4566,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply77Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply77View');
 
@@ -4629,18 +4578,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow8List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow8List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -4659,20 +4608,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow8()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow8');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -4720,7 +4668,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow8()
@@ -4747,7 +4695,7 @@ class ProjectMod extends BaseMod
             $items[$i] = array($items1[$i], $items2[$i], $items3[$i]);
         }
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
 
@@ -4762,7 +4710,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::PROGRESS, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::PROGRESS, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::PROGRESS));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::PROGRESS, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::PROGRESS));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -4781,9 +4729,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply8Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply8View');
 
@@ -4794,18 +4741,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow91List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow91List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -4824,20 +4771,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow91()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow91');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -4885,7 +4831,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow91()
@@ -4912,7 +4858,7 @@ class ProjectMod extends BaseMod
             $items[$i] = array($items1[$i], $items2[$i], $items3[$i]);
         }
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
 
@@ -4927,7 +4873,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::ACCEPT_1, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_1));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_1));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -4946,9 +4892,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply91Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply91View');
 
@@ -4959,18 +4904,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow921List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow921List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -4989,20 +4934,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow921()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow921');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -5098,7 +5042,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow921()
@@ -5126,7 +5070,7 @@ class ProjectMod extends BaseMod
         $c7 = $this->Req('c7', '', 'str');
         $c8 = $this->Req('c8', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
         if (empty($tno)) Json::ReturnError('请输入文件编号');
@@ -5156,7 +5100,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::ACCEPT_21, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_21, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_21));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_21, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_21));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -5175,9 +5119,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply921Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply921View');
 
@@ -5188,18 +5131,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow922List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow922List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -5218,20 +5161,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow922()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow922');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -5327,7 +5269,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow922()
@@ -5355,7 +5297,7 @@ class ProjectMod extends BaseMod
         $c7 = $this->Req('c7', '', 'str');
         $c8 = $this->Req('c8', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
         if (empty($tno)) Json::ReturnError('请输入文件编号');
@@ -5385,7 +5327,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::ACCEPT_22, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_22, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_22));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_22, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_22));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -5404,9 +5346,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply922Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply922View');
 
@@ -5417,18 +5358,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow923List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow923List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -5447,20 +5388,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow923()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow923');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -5556,7 +5496,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow923()
@@ -5584,7 +5524,7 @@ class ProjectMod extends BaseMod
         $c7 = $this->Req('c7', '', 'str');
         $c8 = $this->Req('c8', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
         if (empty($tno)) Json::ReturnError('请输入文件编号');
@@ -5614,7 +5554,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::ACCEPT_23, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_23, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_23));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_23, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_23));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -5633,9 +5573,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply923Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply923View');
 
@@ -5646,18 +5585,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow924List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow924List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -5676,20 +5615,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow924()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow924');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -5785,7 +5723,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow924()
@@ -5813,7 +5751,7 @@ class ProjectMod extends BaseMod
         $c7 = $this->Req('c7', '', 'str');
         $c8 = $this->Req('c8', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
         if (empty($tno)) Json::ReturnError('请输入文件编号');
@@ -5843,7 +5781,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::ACCEPT_24, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_24, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_24));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_24, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_24));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -5862,9 +5800,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply924Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply924View');
 
@@ -5875,18 +5812,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow925List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow925List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -5905,20 +5842,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow925()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow925');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
         $name = ProjectCls::Instance()->Name($pid);
         $company = ProjectCls::Instance()->Company($pid);
@@ -6014,7 +5950,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow925()
@@ -6042,7 +5978,7 @@ class ProjectMod extends BaseMod
         $c7 = $this->Req('c7', '', 'str');
         $c8 = $this->Req('c8', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
         if (empty($tno)) Json::ReturnError('请输入文件编号');
@@ -6072,7 +6008,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::ACCEPT_25, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_25, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_25));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::ACCEPT_25, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::ACCEPT_25));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -6091,9 +6027,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply925Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply925View');
 
@@ -6104,18 +6039,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow9999List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow9999List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rl = Flow9999Cls::GetLastItem($pid);
@@ -6131,20 +6066,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow9999()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow9999');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
 
         $name = ProjectCls::Instance()->Name($pid);
@@ -6166,20 +6100,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectReply9999()
     {
         $fid = $this->Req('fid', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply9999');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
 
         $name = ProjectCls::Instance()->Name($pid);
@@ -6196,7 +6129,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectReply9999()
@@ -6208,7 +6141,7 @@ class ProjectMod extends BaseMod
         $content = $this->Req('content', '', 'str');
         $comp = $this->Req('comp', '', 'str');
         $date = $this->Req('date', '', 'str');
-        $uid = $this->Mid();
+        $uid = $this->Uid();
 
         $pid = Flow9999Cls::Instance()->Pid($fid);
 
@@ -6226,7 +6159,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::INSPECT, $fid, ProjectStateCls::ALLOW);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::INSPECT, $replyid, '回复' . ProjectNodeCls::Name(ProjectNodeCls::INSPECT));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::INSPECT, $replyid, '回复' . ProjectNodeCls::Name(ProjectNodeCls::INSPECT));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -6245,9 +6178,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply9999Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply9999View');
 
@@ -6258,18 +6190,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow10001List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow10001List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -6288,20 +6220,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow10001()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow10001');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
 
         $name = ProjectCls::Instance()->Name($pid);
@@ -6451,7 +6382,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow10001()
@@ -6494,7 +6425,7 @@ class ProjectMod extends BaseMod
         $t35 = $this->Req('t35', '', 'str');
         $t36 = $this->Req('t36', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
 
@@ -6502,7 +6433,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_1, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_1));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_1, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_1));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -6521,9 +6452,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply10001Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply10001View');
 
@@ -6537,18 +6467,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow10002List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow10002List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -6567,20 +6497,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow10002()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow10002');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
 
         $name = ProjectCls::Instance()->Name($pid);
@@ -6730,7 +6659,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow10002()
@@ -6760,7 +6689,7 @@ class ProjectMod extends BaseMod
         $t22 = $this->Req('t22', '', 'str');
         $t23 = $this->Req('t23', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
 
@@ -6768,7 +6697,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_2, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_2, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_2));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_2, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_2));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -6787,9 +6716,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply10002Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply10002View');
 
@@ -6800,18 +6728,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow10003List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow10003List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -6830,20 +6758,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow10003()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow10003');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
 
         $name = ProjectCls::Instance()->Name($pid);
@@ -6879,14 +6806,14 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow10003()
     {
         $name = $this->Req('name', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $items0 = $this->Req('items0', array(), 'array');
         $items1 = $this->Req('items1', array(), 'array');
@@ -6926,7 +6853,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_3, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_3, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_3));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_3, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_3));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -6945,9 +6872,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply10003Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply10003View');
 
@@ -6958,18 +6884,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow10004List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow10004List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -6988,20 +6914,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow10004()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow10004');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
 
         $name = ProjectCls::Instance()->Name($pid);
@@ -7094,7 +7019,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow10004()
@@ -7121,7 +7046,7 @@ class ProjectMod extends BaseMod
         $t19 = $this->Req('t19', '', 'str');
         $t20 = $this->Req('t20', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
 
@@ -7129,7 +7054,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_4, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_4, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_4));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_4, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_4));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -7148,9 +7073,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply10004Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply10004View');
 
@@ -7161,18 +7085,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow10005List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow10005List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -7191,17 +7115,16 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow10005()
     {
         $id = $this->Req('id', 0, 'int');
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow10005');
 
@@ -7232,7 +7155,7 @@ class ProjectMod extends BaseMod
             ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_5, $rs["id"], ProjectStateCls::ALLOW);
         }
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow10005()
@@ -7249,7 +7172,7 @@ class ProjectMod extends BaseMod
         $t9 = $this->Req('t9', '', 'str');
         $t10 = $this->Req('t10', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
 
@@ -7257,7 +7180,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_5, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_5, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_5));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_5, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_5));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -7276,9 +7199,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply10005Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply10005View');
 
@@ -7289,18 +7211,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow10006List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow10006List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -7319,20 +7241,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow10006()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow10006');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
 
         $name = ProjectCls::Instance()->Name($pid);
@@ -7395,7 +7316,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow10006()
@@ -7425,7 +7346,7 @@ class ProjectMod extends BaseMod
         $t22 = $this->Req('t22', '', 'str');
         $t23 = $this->Req('t23', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
 
@@ -7433,7 +7354,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_6, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_6, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_6));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_6, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_6));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -7452,9 +7373,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply10006Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply10006View');
 
@@ -7465,18 +7385,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow10007List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow10007List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -7495,20 +7415,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow10007()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow10007');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
 
         $name = ProjectCls::Instance()->Name($pid);
@@ -7571,7 +7490,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow10007()
@@ -7609,7 +7528,7 @@ class ProjectMod extends BaseMod
 
         $items = Json::Encode($items);
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
 
@@ -7617,7 +7536,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_7, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_7, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_7));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_7, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_7));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -7636,9 +7555,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply10007Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply10007View');
 
@@ -7649,18 +7567,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow10008List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow10008List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -7679,17 +7597,16 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow10008()
     {
         $id = $this->Req('id', 0, 'int');
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow10008');
 
@@ -7720,7 +7637,7 @@ class ProjectMod extends BaseMod
             ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_8, $rs["id"], ProjectStateCls::ALLOW);
         }
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow10008()
@@ -7758,7 +7675,7 @@ class ProjectMod extends BaseMod
 
         $items = Json::Encode($items);
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
 
@@ -7766,7 +7683,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_8, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_8, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_8));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_8, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_8));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -7785,9 +7702,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply10008Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply10008View');
 
@@ -7798,18 +7714,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow10009List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow10009List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -7828,20 +7744,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow10009()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow10009');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
 
         $name = ProjectCls::Instance()->Name($pid);
@@ -7904,7 +7819,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow10009()
@@ -7921,7 +7836,7 @@ class ProjectMod extends BaseMod
         $t9 = $this->Req('t9', '', 'str');
         $t10 = $this->Req('t10', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
 
@@ -7929,7 +7844,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_9, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_9, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_9));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_9, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_9));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -7948,9 +7863,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply10009Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply10009View');
 
@@ -7961,18 +7875,18 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow10010List()
     {
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+
+        $this->Header();
 
         $view = View::Factory('ProjectFlow10010List');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         $new = true;
         $rr = array();
@@ -7991,20 +7905,19 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function ProjectFlow10010()
     {
         $id = $this->Req('id', 0, 'int');
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectFlow10010');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
         $gc = ProjectCls::GetGroupCompany($pid);
 
         $name = ProjectCls::Instance()->Name($pid);
@@ -8055,7 +7968,7 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function OnProjectFlow10010()
@@ -8068,7 +7981,7 @@ class ProjectMod extends BaseMod
         $t5 = $this->Req('t5', '', 'str');
         $t6 = $this->Req('t6', '', 'str');
 
-        $pid = $this->Mid();
+        $pid = $this->Uid();
 
         if ($pid <= 0) Json::ReturnError(ALERT_ERROR);
 
@@ -8076,7 +7989,7 @@ class ProjectMod extends BaseMod
         ProjectCls::SetNode($pid, ProjectNodeCls::SECURITY_10, $id, ProjectStateCls::APPROVE);
 
         try {
-            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Mid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_10, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_10));
+            MsgCls::Add(1, MsgDirectCls::FROM_QUALITY, $this->Uid(), 1, ProjectCls::Instance()->Name($pid), '管理员', ProjectNodeCls::SECURITY_10, $id, '新建' . ProjectNodeCls::Name(ProjectNodeCls::SECURITY_10));
         } catch (Exception $e) {
             Json::ReturnError($e->getMessage());
         }
@@ -8095,9 +8008,8 @@ class ProjectMod extends BaseMod
 
         $rs = Reply10010Cls::GetLastItem($pid, $fid);
 
-        $this->MemberAuth();
 
-        $this->MemberHeader();
+        $this->Header();
 
         $view = View::Factory('ProjectReply10010View');
 
@@ -8108,12 +8020,12 @@ class ProjectMod extends BaseMod
 
         echo $view->Render();
 
-        $this->MemberFooter();
+        $this->Footer();
     }
 
     public function PopFacadeItemsEdit()
     {
-        $this->MemberAuth();
+
 
         $this->MemberHead();
 
@@ -8397,7 +8309,7 @@ class ProjectMod extends BaseMod
 
     public function PopCheckItemsEdit()
     {
-        $this->MemberAuth();
+
 
         $this->MemberHead();
 

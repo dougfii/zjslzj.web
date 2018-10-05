@@ -201,4 +201,38 @@ class FacadeTypeCls
 
         return $rs;
     }
+
+
+    public static function Structs()
+    {
+        $rs = array();
+
+        $r1 = self::GetNextIds(0);
+        if (!empty($r1)) {
+            foreach ($r1 as $v1) {
+                $v1name = self::Instance()->Name($v1);
+                $r2 = self::GetNextIds($v1);
+                if (!empty($r2)) {
+                    foreach ($r2 as $v2) {
+                        $v2name = self::Instance()->Name($v2);
+                        $r3 = self::GetNextIds($v2);
+                        if (!empty($r3)) {
+                            foreach ($r3 as $v3) {
+                                $v3name = self::Instance()->Name($v3);
+                                $rs[] = array($v1name, $v2name, $v3name, $v3);
+                            }
+                        } else {
+                            $rs[] = array($v1name, $v2name, '', null);
+                        }
+                    }
+                } else {
+                    $rs[] = array($v1name, '', '', null);
+                }
+            }
+        } else {
+            $rs[] = array('', '', '', null);
+        }
+
+        return $rs;
+    }
 }
