@@ -245,6 +245,9 @@ table{ border-collapse:collapse; width:100%; }
 
 .a4-area{width:796px;border:#c6c6c6 solid 1px;background:#fff;}
 .a4-block{margin:40px;}
+.a4-tab-block{padding:10px;}
+.a4-readme{border:#000 solid 1px;font-size:12px;line-height:150%;padding:10px;}
+
 .a4-red-caption{text-align:center;font-size:30px;margin-bottom:20px;color:#f00;}
 .a4-red-no{padding-bottom:10px;}
 .a4-red-line{height:3px;background:#f00;margin-bottom:5px;}
@@ -268,3 +271,7 @@ table{ border-collapse:collapse; width:100%; }
 .a4-tbl-full th,.a4-tbl-top th,.a4-tbl-middle th,.a4-tbl-bottom th,.a4-tbl-full tr,.a4-tbl-top tr,.a4-tbl-middle tr,.a4-tbl-bottom tr,.a4-tbl-full td,.a4-tbl-top td,.a4-tbl-middle td,.a4-tbl-bottom td{border:#000 solid 1px;}
 .a4-tbl-full td,.a4-tbl-top td,.a4-tbl-middle td,.a4-tbl-bottom td{padding: 5px 2px;}
 .a4-tbl-full .k,.a4-tbl-top .k,.a4-tbl-middle .k,.a4-tbl-bottom .k{text-align:center;}
+
+
+
+

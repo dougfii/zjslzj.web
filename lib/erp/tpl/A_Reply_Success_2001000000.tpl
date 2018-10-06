@@ -4,30 +4,23 @@
 <div class="panel paneltool">
     <div class="a4-area">
         <div class="a4-success-caption">通过意见</div>
-        <div class="a4-success-options">
-            <?php echo From::Checkbox($edit, 'f5', $datas['f5'], '质量评定表'); ?>　　
-            <?php echo From::Checkbox($edit, 'f6', $datas['f6'], '质量监督检查意见表'); ?>　　
-            <?php echo From::Checkbox($edit, 'f7', $datas['f7'], '工程核备资料'); ?>　　
-            <?php echo From::Checkbox($edit, 'f8', $datas['f8'], '工程核定资料'); ?>　　
-            <br/>
-            <?php echo From::Checkbox($edit, 'f9', $datas['f9'], '工程备案资料'); ?>　　
-            <?php echo From::Checkbox($edit, 'f10', $datas['f10'], '工程进度结点申报'); ?>　　
-            <?php echo From::Checkbox($edit, 'f11', $datas['f11'], '工程验收'); ?>　　
-        </div>
         <div class="a4-success-content" id="print_area">
-            <div class="a4-red-caption"><?php echo From::Text(false, '', $work_org); ?></div>
-            <div class="a4-red-no center">镇水质监<?php echo From::Text($edit, 'f1', $datas['f1'], 'pae4-text1'); ?>号</div>
-            <div class="a4-red-line"></div>
-            <div class="a4-red-title">关于对<?php echo From::Text(false, '', $work_name); ?><?php echo $node_name; ?>的批复</div>
-            <div class="a4-red-org"><?php echo From::Text(false, '', $work_company); ?>：</div>
-            <div class="a4-red-txt">
-                <?php
-                $txt = !empty($datas['f3']) ? $datas['f3'] : '　　你单位《关于' . $work_name . '工程项目划分的申请》（XXXX［XXXX］XX号）文收悉。依据相关规范、规程及施工图等资料，经研究，提出确认意见如下：';
-                echo From::TextArea($edit, 'f3', $txt, 'pa4-textarea1', 30);
-                ?>
+            <div class="a4-red-title">水利工程建设安全监督通知书</div>
+            <div><?php echo From::Text(false, '', $work_company); ?>：</div>
+            <br/><br/>
+            <div>　　根据你单位的申请，按照《江苏省水利工程建设安全监督工作指导意见》对 <?php echo From::Text(false, '', $work_name); ?> 工程进行安全监督。本项目监督负责人为 <?php echo From::Text($edit, 'f1', $datas['f1'], 'pae4-text1'); ?>。</div>
+            <br/>
+            <div>　　现将该工程安全监督计划发给你们，请按监督计划配合安全监督工作顺利进行。</div>
+            <br/><br/>
+            <div>　　特此通知。</div>
+            <br/><br/><br/><br/><br/><br/><br/><br/>
+            <div class="text-right">
+                <?php echo From::Text(false, '', $work_org); ?>
+                <br/><br/><br/><br/>
+                申请日期：<?php echo From::Date($edit, 'f2', $datas['f2'], 'pae4-text1'); ?>
             </div>
+            <br/><br/><br/><br/>
             <?php echo $atts; ?>
-            <div class="a4-red-sign"><span class="right center"><?php echo From::Text(false, '', $work_org); ?>工程建设处<br/>日期：<?php echo From::Date($edit, 'f4', $datas['f4'], 'pae4-text1'); ?></span></div>
         </div>
         <?php if($edit) echo '<div class="a4-success-buttons"><a href="javascript:;" class="btn" id="success">审核通过</a></div>'; ?>
     </div>
@@ -50,13 +43,6 @@
                 "f2": $("#f2").val(),
                 "f3": $("#f3").val(),
                 "f4": $("#f4").val(),
-                "f5": $('#f5').is(':checked'),
-                "f6": $('#f6').is(':checked'),
-                "f7": $('#f7').is(':checked'),
-                "f8": $('#f8').is(':checked'),
-                "f9": $('#f9').is(':checked'),
-                "f10": $('#f10').is(':checked'),
-                "f11": $('#f11').is(':checked'),
             };
         }
 

@@ -6,52 +6,32 @@
         <div class="a4-block">
             <div class="a4-tbl-caption"><?php echo "{$node_name}"; ?></div>
             <table class="a4-tbl-full">
-                <tr><th>序号</th><th>节点内容</th><th>时间</th><th>备注</th></tr>
-                <tbody id="items">
-                <?php
-                if(!empty($datas['fa1']))
-                {
-                    for($i = 0; $i<count($datas['fa1']); $i++)
-                    {
-                ?>
-                <tr class="delitem">
-                    <td class="item-no"></td>
-                    <td class="c"><?php echo From::Text($edit, '', $datas['fa1'][$i], 'fa1', 60); ?></td>
-                    <td class="c"><?php echo From::Date($edit, '', $datas['fa2'][$i], 'fa2', 10); ?></td>
-                    <td class="c"><?php echo From::Text($edit, '', $datas['fa3'][$i], 'fa3', 10); ?></td>
-                </tr>
-                <?php
-                    }
-                }
-                ?>
-                </tbody>
+                <tr><td class="k">项目及标段名称</td><td class="v" colspan="3"><?php echo From::Text($edit, 'f1', $datas['f1'], ''); ?></td></tr>
+                <tr><td class="k">建设地点</td><td class="v"><?php echo From::Text($edit, 'f2', $datas['f2'], ''); ?></td><td class="k">完工日期</td><td class="v" colspan="2"><?php echo From::Text($edit, 'f3', $datas['f3'], ''); ?></td></tr>
+                <tr><td class="k">参建单位</td><td class="v" colspan="3"><?php echo From::Text($edit, 'f4', $datas['f4'], ''); ?></td></tr>
+                <tr><td class="k">主要工作内容</td><td class="v" colspan="3"><?php  echo From::TextArea($edit, 'f5', $datas['f5'], '', 10, 80); ?></td></tr>
+                <tr><td class="v" colspan="4">
+                        工程安全生产或安全行为自我总结：<br/>
+                        <?php  echo From::TextArea($edit, 'f6', $datas['f6'], '', 20, 95); ?>
+                        <br/><br/>
+                        <p class="text-right">中标单位（公章）：<?php echo From::Text($edit, 'f7', $datas['f7'], ''); ?><br/><br/>日期：<?php echo From::Date($edit, 'f8', $datas['f8'], ''); ?></p>
+                        <br/><br/><br/><br/>
+                        项目法人评估意见：<br/>
+                        <?php  echo From::TextArea($edit, 'f9', $datas['f9'], '', 20, 95); ?>
+                        <br/><br/>
+                        <p class="text-right">项目法人（公章）：<?php echo From::Text($edit, 'f10', $datas['f10'], ''); ?><br/><br/>日期：<?php echo From::Date($edit, 'f11', $datas['f11'], ''); ?></p>
+                        <br/><br/>
+                    </td></tr>
             </table>
-            <?php if($edit) echo '<div><input type="button" value="添加条目" id="additem" /> （双击序号删除条目）</div>'; ?>
             <?php echo $atts; ?>
         </div>
     </div>
-    <?php echo From::Hidden('f1', $node_name); ?>
     <?php echo From::Hidden('work_id', $work_id); ?>
     <?php echo From::Hidden('node_id', $node_id); ?>
     <?php echo From::Hidden('item_id', $item_id); ?>
 </div>
 <script>
     $(function(){
-        serials('.item-no');
-
-        $('#additem').click(function(){
-            $('#items').append('<tr class="delitem"><td class="item-no"></td><td><input type="text" class="fa1" size="60" /></td><td><input type="text" class="fa2" size="10" readonly onclick="laydate();" /></td><td><input type="text" class="fa3" size="10" /></td></tr>');
-            serials('.item-no');
-        });
-
-        $('#items').on('dblclick', '.delitem', function(){
-            var obj = $(this);
-            layer.confirm('您确认需要删除当前条目吗?', function (i){
-                layer.close(i);
-                obj.remove();
-            });
-            serials('.item-no');
-        });
 
         function SetDatas() {
 
@@ -79,13 +59,26 @@
                 "f17": $("#f17").val(),
                 "f18": $("#f18").val(),
                 "f19": $("#f19").val(),
-
-                "fa1[]" : makearray('.fa1'),
-                "fa2[]" : makearray('.fa2'),
-                "fa3[]" : makearray('.fa3'),
-                "fa4[]" : makearray('.fa4'),
-                "fa5[]" : makearray('.fa5'),
-                "fa6[]" : makearray('.fa6'),
+                "f20": $("#f20").val(),
+                "f21": $("#f21").val(),
+                "f22": $("#f22").val(),
+                "f23": $("#f23").val(),
+                "f24": $("#f24").val(),
+                "f25": $("#f25").val(),
+                "f26": $("#f26").val(),
+                "f27": $("#f27").val(),
+                "f28": $("#f28").val(),
+                "f29": $("#f29").val(),
+                "f30": $("#f30").val(),
+                "f31": $("#f31").val(),
+                "f32": $("#f32").val(),
+                "f33": $("#f33").val(),
+                "f34": $("#f34").val(),
+                "f35": $("#f35").val(),
+                "f36": $("#f36").val(),
+                "f37": $("#f37").val(),
+                "f38": $("#f38").val(),
+                "f39": $("#f39").val(),
             };
         }
 

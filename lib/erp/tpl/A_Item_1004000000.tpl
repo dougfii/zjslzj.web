@@ -6,31 +6,19 @@
         <div class="a4-block">
             <div class="a4-tbl-caption"><?php echo "{$node_name}"; ?></div>
             <table class="a4-tbl-full">
-                <tr><th>序号</th><th>节点内容</th><th>时间</th><th>备注</th></tr>
-                <tbody id="items">
-                <?php
-                if(!empty($datas['fa1']))
-                {
-                    for($i = 0; $i<count($datas['fa1']); $i++)
-                    {
-                ?>
-                <tr class="delitem">
-                    <td class="item-no"></td>
-                    <td class="c"><?php echo From::Text($edit, '', $datas['fa1'][$i], 'fa1', 60); ?></td>
-                    <td class="c"><?php echo From::Date($edit, '', $datas['fa2'][$i], 'fa2', 10); ?></td>
-                    <td class="c"><?php echo From::Text($edit, '', $datas['fa3'][$i], 'fa3', 10); ?></td>
+                <tr><td class="k">工程名称</td><td class="v"><?php echo From::Text($edit, 'f2', $datas['f2'], ''); ?></td><td class="k">检查表编号</td><td class="v"><?php echo From::Text($edit, 'f1', $datas['f1'], ''); ?></td></tr>
+                <tr><td>质量监督人员和证号</td><td><?php echo From::Text($edit, 'f3', $datas['f3'], ''); ?></td><td class="k">检查时间</td><td class="v"><?php echo From::Date($edit, 'f4', $datas['f4'], ''); ?></td></tr>
+                <tr><td>参建单位人员</td><td colspan="3"><?php echo From::Text($edit, 'f5', $datas['f5'], ''); ?></td></tr>
+                <tr><td>工程形象进度</td><td colspan="3"><?php echo From::Text($edit, 'f6', $datas['f6'], ''); ?></td></tr>
+                <tr><td colspan="4">监督检查意见：<br/><?php echo From::TextArea($edit, 'f7', $datas['f7'], '', 10, 95); ?></td></tr>
+                <tr>
+                    <td colspan="2" class="text-right"><br/><br/>被检查单位签收人：<?php echo From::Text($edit, 'f8', $datas['f8'], ''); ?><br/><br/>日期：<?php echo From::Date($edit, 'f9', $datas['f9'], ''); ?><br/><br/></td>
+                    <td colspan="2" class="text-right"><br/><br/>填写人：<?php echo From::Text($edit, 'f10', $datas['f10'], ''); ?><br/><br/>日期：<?php echo From::Date($edit, 'f11', $datas['f11'], ''); ?><br/><br/></td>
                 </tr>
-                <?php
-                    }
-                }
-                ?>
-                </tbody>
             </table>
-            <?php if($edit) echo '<div><input type="button" value="添加条目" id="additem" /> （双击序号删除条目）</div>'; ?>
             <?php echo $atts; ?>
         </div>
     </div>
-    <?php echo From::Hidden('f1', $node_name); ?>
     <?php echo From::Hidden('work_id', $work_id); ?>
     <?php echo From::Hidden('node_id', $node_id); ?>
     <?php echo From::Hidden('item_id', $item_id); ?>
@@ -40,7 +28,7 @@
         serials('.item-no');
 
         $('#additem').click(function(){
-            $('#items').append('<tr class="delitem"><td class="item-no"></td><td><input type="text" class="fa1" size="60" /></td><td><input type="text" class="fa2" size="10" readonly onclick="laydate();" /></td><td><input type="text" class="fa3" size="10" /></td></tr>');
+            $('#items').append('<tr class="delitem"><td class="item-no"></td><td><input type="text" class="fa1" size="60" /></td><td><input type="text" class="fa2" size="5" /></td><td><input type="text" class="fa3" size="5" /></td></td></tr>');
             serials('.item-no');
         });
 

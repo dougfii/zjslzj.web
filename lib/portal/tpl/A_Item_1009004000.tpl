@@ -6,7 +6,7 @@
         <div class="a4-block">
             <div class="a4-tbl-caption"><?php echo "{$node_name}"; ?></div>
             <table class="a4-tbl-full">
-                <tr><th>序号</th><th>节点内容</th><th>时间</th><th>备注</th></tr>
+                <tr><th>序号</th><th>验收内容</th><th>时间</th><th>备注</th></tr>
                 <tbody id="items">
                 <?php
                 if(!empty($datas['fa1']))

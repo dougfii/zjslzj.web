@@ -161,6 +161,12 @@ class WorkMod extends BaseMod
         if ($item_id > 0) {
             $status_id = ItemClz::Instance()->getStatusId($item_id);
             $edit = !($status_id == ItemClz::StatusProcessing || $status_id == ItemClz::StatusSuccess);
+
+            // 浏览时变为已读
+            if ($node_id == 1004000000 || $node_id == 1007004000 || $node_id == 2002000000) {
+                ItemClz::reply($item_id, 0, 1, ItemClz::StatusSuccess, 0, ItemClz::StatusSuccess);
+                WorkClz::setNodeStatus($work_id, $node_id, ItemClz::StatusSuccessName);
+            }
         } else {
             $edit = true;
         }
@@ -252,7 +258,7 @@ class WorkMod extends BaseMod
         $tpl = 'General';
         if ($pass == 'success') {
             $pass = 'Success';
-            if ($node_id == 1001000000) $tpl = $node_id;
+            if ($node_id == 1001000000 || $node_id == 1002000000 || $node_id == 1009005001 || $node_id == 1009005002 || $node_id == 1009005003 || $node_id == 1009005004 || $node_id == 1009005005 || $node_id == 2001000000 || $node_id == 2003000000 || $node_id == 2004000000) $tpl = $node_id;
         } else {
             $pass = 'Backed';
         }

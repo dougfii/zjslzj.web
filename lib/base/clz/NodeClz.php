@@ -33,7 +33,7 @@ class NodeClz
         '1003007000' => array('level' => 2, 'no' => '3.7', 'name' => '工序单元工程质量评表', 'status' => '', 'type' => 2, 'url' => '', 'sort' => 1, 'act' => false, 'direction' => true),
         //-----
 
-        '1004000000' => array('level' => 1, 'no' => '4', 'name' => '质量监督检查意见表', 'status' => '', 'type' => 2, 'url' => '', 'sort' => 1, 'act' => false, 'direction' => true),
+        '1004000000' => array('level' => 1, 'no' => '4', 'name' => '质量监督检查意见表', 'status' => '', 'type' => 2, 'url' => '', 'sort' => 1, 'act' => false, 'direction' => false),
 
         //-----
         '1005000000' => array('level' => 1, 'no' => '5', 'name' => '工程核备资料', 'status' => '', 'type' => 1, 'url' => '', 'sort' => 1, 'act' => false, 'direction' => true),
@@ -57,7 +57,7 @@ class NodeClz
         '1007001000' => array('level' => 2, 'no' => '7.1', 'name' => '项目划分调整', 'status' => '', 'type' => 2, 'url' => '', 'sort' => 1, 'act' => false, 'direction' => true),
         '1007002000' => array('level' => 2, 'no' => '7.2', 'name' => '地基验槽签证', 'status' => '', 'type' => 2, 'url' => '', 'sort' => 1, 'act' => false, 'direction' => true),
         '1007003000' => array('level' => 2, 'no' => '7.3', 'name' => '质量缺陷备案', 'status' => '', 'type' => 2, 'url' => '', 'sort' => 1, 'act' => false, 'direction' => true),
-        '1007004000' => array('level' => 2, 'no' => '7.4', 'name' => '工程质量事故处理结果', 'status' => '', 'type' => 2, 'url' => '', 'sort' => 1, 'act' => false, 'direction' => true),
+        '1007004000' => array('level' => 2, 'no' => '7.4', 'name' => '工程质量事故处理结果', 'status' => '', 'type' => 2, 'url' => '', 'sort' => 1, 'act' => false, 'direction' => false),
         //-----
 
         '1008000000' => array('level' => 1, 'no' => '8', 'name' => '工程进度结点申报', 'status' => '', 'type' => 2, 'url' => '', 'sort' => 1, 'act' => false, 'direction' => true),
@@ -85,7 +85,7 @@ class NodeClz
 
         '2001000000' => array('level' => 1, 'no' => '1', 'name' => '安全监督申请书', 'status' => '', 'type' => 2, 'url' => '', 'sort' => 1, 'act' => false, 'direction' => true),
 
-        '2002000000' => array('level' => 1, 'no' => '2', 'name' => '水利工程建设安全监督检查意见表', 'status' => '', 'type' => 2, 'url' => '', 'sort' => 1, 'act' => false, 'direction' => true),
+        '2002000000' => array('level' => 1, 'no' => '2', 'name' => '水利工程建设安全监督检查意见表', 'status' => '', 'type' => 2, 'url' => '', 'sort' => 1, 'act' => false, 'direction' => false),
 
         '2003000000' => array('level' => 1, 'no' => '3', 'name' => '水利工程建设参建单位安全评估表', 'status' => '', 'type' => 2, 'url' => '', 'sort' => 1, 'act' => false, 'direction' => true),
 

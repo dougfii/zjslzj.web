@@ -205,6 +205,14 @@ class WorkMod extends BaseMod
         if ($node_id == 1003001000 || $node_id == 1003004000 || $node_id == 1006002000) {
             $table_structs = FacadeTypeCls::Structs();
         }
+        if ($node_id == 1004000000 || $node_id == 1007004000 || $node_id == 2002000000) {
+            if ($item_id > 0) {
+                $status_id = ItemClz::Instance()->getStatusId($item_id);
+                $edit = !($status_id == ItemClz::StatusProcessing || $status_id == ItemClz::StatusSuccess);
+            } else {
+                $edit = true;
+            }
+        }
 
         $this->Header();
 
@@ -234,6 +242,40 @@ class WorkMod extends BaseMod
         $this->Footer();
     }
 
+    public function OnItem()
+    {
+        $work_id = $this->Req('work_id', 0, 'int');
+        $node_id = $this->Req('node_id', 0, 'int');
+        $item_id = $this->Req('item_id', 0, 'int');
+
+        $event = $this->Req('event', '', 'str');
+        $status_id = $event == 'commit' ? ItemClz::StatusProcessing : ItemClz::StatusNew;
+
+        $rs_work = WorkClz::Instance()->getItem($work_id);
+
+        $datas = array();
+        for ($i = 1; $i <= self::MAX_DATAS_NUM; $i++) {
+            $datas['f' . $i] = $this->Req('f' . $i, '', 'str');
+        }
+        for ($i = 1; $i <= self::MAX_DATAS_NUM; $i++) {
+            $datas['fa' . $i] = $this->Req('fa' . $i, array(), 'array');
+        }
+
+        if ($item_id > 0) {
+            ItemClz::edit($item_id, $rs_work['org_id'], $rs_work['type_id'], $work_id, $node_id, $datas['f1'], '', Json::Encode($datas), '', $status_id);
+        } else {
+            $item_id = ItemClz::add($rs_work['org_id'], $rs_work['type_id'], $work_id, $node_id, $datas['f1'], '', Json::Encode($datas), '', $status_id);
+        }
+
+        if ($status_id == ItemClz::StatusProcessing) {
+            WorkClz::setNodeStatus($work_id, $node_id, ItemClz::StatusProcessingName);
+
+            NotifyClz::sendToMember($work_id, "{$rs_work['name']} - " . WorkClz::Instance()->getNodeName($work_id, $node_id) . " 有新通知", "?m=Work&a=Items&work_id={$work_id}&node_id={$node_id}");
+        }
+
+        Json::ReturnSuccess($item_id);
+    }
+
     public function Reply()
     {
         $work_id = $this->Req('work_id', 0, 'int');
@@ -254,7 +296,7 @@ class WorkMod extends BaseMod
         $tpl = 'General';
         if ($pass == 'success') {
             $pass = 'Success';
-            if ($node_id == 1001000000 || $node_id == 1002000000) $tpl = $node_id;
+            if ($node_id == 1001000000 || $node_id == 1002000000 || $node_id == 1009005001 || $node_id == 1009005002 || $node_id == 1009005003 || $node_id == 1009005004 || $node_id == 1009005005 || $node_id == 2001000000 || $node_id == 2003000000 || $node_id == 2004000000) $tpl = $node_id;
         } else {
             $pass = 'Backed';
         }
@@ -303,6 +345,9 @@ class WorkMod extends BaseMod
         $datas = array();
         for ($i = 1; $i <= self::MAX_DATAS_NUM; $i++) {
             $datas['f' . $i] = $this->Req('f' . $i, '', 'str');
+        }
+        for ($i = 1; $i <= self::MAX_DATAS_NUM; $i++) {
+            $datas['fa' . $i] = $this->Req('fa' . $i, array(), 'array');
         }
 
         if ($pass == 'backed') {
