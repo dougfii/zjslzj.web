@@ -199,6 +199,8 @@ class WorkMod extends BaseMod
 
         $view->table_structs = $table_structs;
 
+        $view->atts = AttachmentsClz::Panel('item', $node_id, ItemClz::Instance()->getAttachments($item_id), $edit);
+
         echo $view->Render();
 
         $this->Footer();

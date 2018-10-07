@@ -15,8 +15,8 @@
                 echo From::TextArea($edit, 'f3', $txt, 'pa4-textarea1', 30);
                 ?>
             </div>
-            <?php echo $atts; ?>
             <div class="a4-red-sign"><span class="right center"><?php echo From::Text(false, '', $work_company); ?>工程建设处<br/>日期：<?php echo From::Date($edit, 'f4', $datas['f4'], 'pae4-text1'); ?></span></div>
+            <?php echo $atts; ?>
         </div>
     </div>
     <?php echo From::Hidden('work_id', $work_id); ?>

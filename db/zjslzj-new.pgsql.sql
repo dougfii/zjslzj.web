@@ -122,7 +122,29 @@ CREATE TABLE t_notify
 );
 
 
+-- -----------------------------------------------------
+-- Table t_attachments			附件
+-- -----------------------------------------------------
+DROP SEQUENCE IF EXISTS seq_attachments CASCADE;
+CREATE SEQUENCE seq_attachments;
+DROP TABLE IF EXISTS t_attachments CASCADE;
+CREATE TABLE t_attachments
+(
+	id							INTEGER UNIQUE DEFAULT NEXTVAL('seq_attachments') NOT NULL ,
+	up_id						INTEGER					NOT NULL DEFAULT 0 ,
+	up_name						TEXT					NOT NULL DEFAULT '' ,
+	filename					TEXT					NOT NULL DEFAULT '' ,
+	url							TEXT					NOT NULL DEFAULT '' ,
+	ext							TEXT					NOT NULL DEFAULT '' ,
+	size						INTEGER					NOT NULL DEFAULT 0 ,
 
+	last						TIMESTAMP(0)			DEFAULT NULL ,
+	time						TIMESTAMP(0)			NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+	act							BOOLEAN					NOT NULL DEFAULT TRUE ,
+	del							BOOLEAN					NOT NULL DEFAULT FALSE ,
+	
+	PRIMARY KEY (id)
+);
 
 
 

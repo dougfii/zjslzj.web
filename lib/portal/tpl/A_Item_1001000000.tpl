@@ -15,8 +15,8 @@
                 echo From::TextArea($edit, 'f3', $txt, 'pa4-textarea1', 30);
                 ?>
             </div>
-            <?php echo $atts; ?>
             <div class="a4-red-sign"><span class="right center"><?php echo From::Text(false, '', $work_company); ?>工程建设处<br/>日期：<?php echo From::Date($edit, 'f4', $datas['f4'], 'pae4-text1'); ?></span></div>
+            <?php echo $atts; ?>
         </div>
     </div>
     <?php echo From::Hidden('work_id', $work_id); ?>
@@ -49,26 +49,35 @@
         });
 
 
+        var work_attachments = new Array();
 
         $('.upfile').change(function(){
-            var pid = $('#pid').val();
-            var tid = 1;
-            var no = $(this).attr('fid');
-            var name = $(this).attr('fname');
-            upload(pid, tid, no, name);
+            var up_id = $(this).attr('up_id');
+            var up_name = $(this).attr('up_name');
+            UploadWork(1, up_id, up_name);
         });
 
-        function upload(pid, tid, no, name){
+        function UploadWork(up_mode, up_id, up_name){
             $.ajaxFileUpload({
-                url:'?m=Upload&a=UpFlowFixed&no='+no,
-                secureuri:false,
-                fileElementId:'upfile'+no,
-                dataType:'json',
+                url: '?m=Upload&a=UpWork&up_id=' + up_id,
+                secureuri: false,
+                fileElementId: 'upfile' + up_id,
+                dataType: 'json',
                 success: function(ret, status) {
-                    if(ret.state=='SUCCESS') {
-                        $.post('?m=Project&a=OnUpFlowFixed', {pid:pid,tid:tid,no:no,name:name,file:ret.name,url:ret.url,ext:ret.type,size:ret.size}, function (rt){
-                            if(rt.code==1)layer.msg('上传完成', 1, function(){
-                                $('#atta'+no).html('<a href="'+ret.url+'" target="_blank">'+name+'</a>');
+                    if(ret.state == 'SUCCESS') {
+                        up_name = (up_mode == 1 ? up_name : ret.originalName);
+                        $.post('?m=Attachment&a=Upload', {up_id:up_id, up_name:up_name, filename:ret.originalName, url:ret.url, ext:ret.type, size:ret.size}, function (rt){
+                            if(rt.code == 1)layer.msg('上传完成', 1, function(){
+                                if(up_mode == 1) {
+                                    work_attachments.push({mode:1, up_id:up_id, id:rt.msg});
+                                    $('#atta' + up_id).html('<a href="' + ret.url + '" target="_blank">' + up_name + '</a>');
+                                }
+                                else
+                                {
+                                    work_attachments.push({mode:2, up_id:0, id:rt.msg});
+                                    $('.atts ul').append('<li id="atta' + rt.msg + '"><a href="' + ret.url + '" target="_blank">' + ret.originalName + '</a>　　<a href="javascript:;" class="upd" did="' + rt.msg + '">删除</a></li>');
+                                    $('#attb').html('<span class="up">添加上传<input type="file" id="upfile" class="upfile" name="upfile" /></span>');
+                                }
                             });else layer.msg(rt.msg, 1);
                         }, 'json');
                     }

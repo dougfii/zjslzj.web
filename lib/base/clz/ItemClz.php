@@ -83,6 +83,12 @@ class ItemClz
         return Json::Decode(array_key_exists($id, self::$caches) ? self::$caches [$id]['datas'] : '');
     }
 
+    public function getAttachments($id)
+    {
+        $this->loadItem($id);
+        return Json::Decode(array_key_exists($id, self::$caches) ? self::$caches [$id]['attachments'] : '');
+    }
+
     // 新建
     public static function resultsNew($where, $order = '')
     {
