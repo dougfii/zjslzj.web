@@ -165,11 +165,6 @@
             $.post('?m=Work&a=OnReply&pass=success', SetDatas(), function (ret){if(ret.code==1)layer.msg('批复完成', 1, function(){GoBack();});else layer.msg(ret.msg, 1);}, 'json');
         });
 
-        $('.atts').on( 'click', '.upd', function(){
-            var id=$(this).attr('did');
-            layer.confirm('您确认需要删除吗?\n此操作不可恢复!', function(i){layer.close(i);$.post('?m=Project&a=OnUpFlowDelete', {id:id}, function(ret){if(ret.code==1)$('#atta'+id).remove();else layer.msg(ret.msg, 2, -1);}, 'json');});
-        });
-
         SetWorkAttachment('<?php echo $attstr; ?>');
 
         $('.upfile').change(function(){

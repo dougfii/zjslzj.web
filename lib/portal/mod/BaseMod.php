@@ -63,7 +63,6 @@ abstract class BaseMod implements IMod
         $sides = array(
             array('?m=Work&a=Notify', '消息通知'),
             array('?m=Work&a=Nodes', '项目管理'),
-            array('?m=Project', '旧项目管理'),
         );
 
         $side = '<div class="side"><ul>';

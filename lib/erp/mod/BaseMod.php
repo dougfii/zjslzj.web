@@ -64,8 +64,6 @@ abstract class BaseMod implements IMod
             array('?m=Home', '首页', R::MENU_CENTER),
             array('?m=Work&a=Quality', '质量管理', R::MENU_QUALITY),
             array('?m=Work&a=Security', '安全管理', R::MENU_SECURITY),
-            array('?m=Quality', '旧质量管理', R::MENU_QUALITY),
-            array('?m=Security', '旧安全管理', R::MENU_SECURITY),
             array('?m=Article', '网站管理', R::MENU_WEBSITE),
             array('?m=System', '系统管理', R::MENU_SYSTEM),
         );

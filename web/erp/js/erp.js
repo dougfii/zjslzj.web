@@ -262,4 +262,14 @@ $(function () {
         var id=$(this).attr('did');
         layer.confirm('您确认需要删除吗?\n此操作不可恢复!', function(i){layer.close(i);$.post('?m=Project&a=OnUpFlowDelete', {id:id}, function(ret){if(ret.code==1)Refresh();else layer.msg(ret.msg, 2, -1);}, 'json');});
     });
+
+    $('.atts').on( 'click', '.upd', function(){
+        let obj = $(this);
+        let id = obj.attr('did');
+        layer.confirm('您确认需要删除吗?\n此操作不可恢复!', function(i){
+            layer.close(i);
+            //work_attachments.splice(obj.parent('li').index());
+            obj.parent('li').remove();
+        });
+    });
 });

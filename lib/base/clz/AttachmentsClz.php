@@ -107,7 +107,7 @@ class AttachmentsClz
             $k = 0;
             if (!empty($attachments)) {
                 foreach ($attachments as $m => $n) {
-                    $atts[$k + 1]['id'] = $k + 1;
+                    $atts[$k + 1]['id'] = $k+1;
                     $atts[$k + 1]['name'] = $n['name'];
                     $atts[$k + 1]['url'] = $n['url'];
                     $atts[$k + 1]['ext'] = $n['ext'];
