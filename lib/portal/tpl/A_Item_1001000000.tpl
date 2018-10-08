@@ -25,21 +25,6 @@
 </div>
 <script>
     $(function(){
-
-        function SetDatas() {
-
-            return {
-                "work_id": $("#work_id").val(),
-                "node_id": $("#node_id").val(),
-                "item_id": $("#item_id").val(),
-
-                "f1": $("#f1").val(),
-                "f2": $("#f2").val(),
-                "f3": $("#f3").val(),
-                "f4": $("#f4").val(),
-            };
-        }
-
         $('#save').click(function(){
             $.post('?m=Work&a=OnItem&event=save', SetDatas(), function (ret){if(ret.code==1)layer.msg('保存成功', 1, function(){GoBack();});else layer.msg(ret.msg, 1);}, 'json');
         });
@@ -48,45 +33,12 @@
             $.post('?m=Work&a=OnItem&event=commit', SetDatas(), function (ret){if(ret.code==1)layer.msg('提交成功', 1, function(){GoBack();});else layer.msg(ret.msg, 1);}, 'json');
         });
 
-
-        var work_attachments = new Array();
+        SetWorkAttachment('<?php echo $attstr; ?>');
 
         $('.upfile').change(function(){
-            var up_id = $(this).attr('up_id');
-            var up_name = $(this).attr('up_name');
+            let up_id = $(this).attr('up_id');
+            let up_name = $(this).attr('up_name');
             UploadWork(1, up_id, up_name);
         });
-
-        function UploadWork(up_mode, up_id, up_name){
-            $.ajaxFileUpload({
-                url: '?m=Upload&a=UpWork&up_id=' + up_id,
-                secureuri: false,
-                fileElementId: 'upfile' + up_id,
-                dataType: 'json',
-                success: function(ret, status) {
-                    if(ret.state == 'SUCCESS') {
-                        up_name = (up_mode == 1 ? up_name : ret.originalName);
-                        $.post('?m=Attachment&a=Upload', {up_id:up_id, up_name:up_name, filename:ret.originalName, url:ret.url, ext:ret.type, size:ret.size}, function (rt){
-                            if(rt.code == 1)layer.msg('上传完成', 1, function(){
-                                if(up_mode == 1) {
-                                    work_attachments.push({mode:1, up_id:up_id, id:rt.msg});
-                                    $('#atta' + up_id).html('<a href="' + ret.url + '" target="_blank">' + up_name + '</a>');
-                                }
-                                else
-                                {
-                                    work_attachments.push({mode:2, up_id:0, id:rt.msg});
-                                    $('.atts ul').append('<li id="atta' + rt.msg + '"><a href="' + ret.url + '" target="_blank">' + ret.originalName + '</a>　　<a href="javascript:;" class="upd" did="' + rt.msg + '">删除</a></li>');
-                                    $('#attb').html('<span class="up">添加上传<input type="file" id="upfile" class="upfile" name="upfile" /></span>');
-                                }
-                            });else layer.msg(rt.msg, 1);
-                        }, 'json');
-                    }
-                    else layer.msg(ret.state, 2, -1);
-                },
-                error:function(ret, status, e){
-                    layer.msg('上传失败 ' + e, 2, -1);
-                }
-            });
-        };
     });
 </script>

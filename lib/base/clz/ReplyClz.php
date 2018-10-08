@@ -73,6 +73,12 @@ class ReplyClz
         return Json::Decode(array_key_exists($id, self::$caches) ? self::$caches [$id]['datas'] : '');
     }
 
+    public function getAttachments($id)
+    {
+        $this->loadItem($id);
+        return Json::Decode(array_key_exists($id, self::$caches) ? self::$caches [$id]['attachments'] : '');
+    }
+
     // 驳回
     public static function resultsBacked($where, $order = '')
     {

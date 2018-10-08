@@ -14,18 +14,6 @@
 </div>
 <script>
     $(function(){
-        function SetDatas() {
-
-            return {
-                "work_id": $("#work_id").val(),
-                "node_id": $("#node_id").val(),
-                "item_id": $("#item_id").val(),
-                "reply_id": $("#reply_id").val(),
-
-                "f1": $("#f1").val(),
-            };
-        }
-
         $('#backed').click(function(){
             $.post('?m=Work&a=OnReply&pass=backed', SetDatas(), function (ret){if(ret.code==1)layer.msg('批复完成', 1, function(){GoBack();});else layer.msg(ret.msg, 1);}, 'json');
         });

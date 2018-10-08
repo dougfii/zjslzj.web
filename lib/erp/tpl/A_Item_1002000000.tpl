@@ -15,8 +15,8 @@
                 echo From::TextArea($edit, 'f3', $txt, 'pa4-textarea1', 30);
                 ?>
             </div>
-            <?php echo $atts; ?>
             <div class="a4-red-sign"><span class="right center"><?php echo From::Text(false, '', $work_company); ?>工程建设处<br/>日期：<?php echo From::Date($edit, 'f4', $datas['f4'], 'pae4-text1'); ?></span></div>
+            <?php echo $atts; ?>
         </div>
     </div>
     <?php echo From::Hidden('work_id', $work_id); ?>
@@ -25,21 +25,6 @@
 </div>
 <script>
     $(function(){
-
-        function SetDatas() {
-
-            return {
-                "work_id": $("#work_id").val(),
-                "node_id": $("#node_id").val(),
-                "item_id": $("#item_id").val(),
-
-                "f1": $("#f1").val(),
-                "f2": $("#f2").val(),
-                "f3": $("#f3").val(),
-                "f4": $("#f4").val(),
-            };
-        }
-
         $('#save').click(function(){
             $.post('?m=Work&a=OnItem&event=save', SetDatas(), function (ret){if(ret.code==1)layer.msg('保存成功', 1, function(){GoBack();});else layer.msg(ret.msg, 1);}, 'json');
         });
@@ -48,34 +33,12 @@
             $.post('?m=Work&a=OnItem&event=commit', SetDatas(), function (ret){if(ret.code==1)layer.msg('提交成功', 1, function(){GoBack();});else layer.msg(ret.msg, 1);}, 'json');
         });
 
-        $('.upfile').change(function(){
-            var pid = $('#pid').val();
-            var tid = 2;
-            var no = $(this).attr('fid');
-            var name = $(this).attr('fname');
-            upload(pid, tid, no, name);
-        });
+        SetWorkAttachment('<?php echo $attstr; ?>');
 
-        function upload(pid, tid, no, name){
-            $.ajaxFileUpload({
-                url:'?m=Upload&a=UpFlowFixed&no='+no,
-                secureuri:false,
-                fileElementId:'upfile'+no,
-                dataType:'json',
-                success: function(ret, status) {
-                    if(ret.state=='SUCCESS') {
-                        $.post('?m=Project&a=OnUpFlowFixed', {pid:pid,tid:tid,no:no,name:name,file:ret.name,url:ret.url,ext:ret.type,size:ret.size}, function (rt){
-                            if(rt.code==1)layer.msg('上传完成', 1, function(){
-                                $('#atta'+no).html('<a href="'+ret.url+'" target="_blank">'+name+'</a>');
-                            });else layer.msg(rt.msg, 1);
-                        }, 'json');
-                    }
-                    else layer.msg(ret.state, 2, -1);
-                },
-                error:function(ret, status, e){
-                    layer.msg('上传失败 ' + e, 2, -1);
-                }
-            });
-        };
+        $('.upfile').change(function(){
+            let up_id = $(this).attr('up_id');
+            let up_name = $(this).attr('up_name');
+            UploadWork(1, up_id, up_name);
+        });
     });
 </script>

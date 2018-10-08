@@ -199,7 +199,8 @@ class WorkMod extends BaseMod
 
         $view->table_structs = $table_structs;
 
-        $view->atts = AttachmentsClz::Panel('item', $node_id, ItemClz::Instance()->getAttachments($item_id), $edit);
+        $view->atts = AttachmentsClz::Panel('item', $node_id, AttachmentsClz::StoreToStruct(ItemClz::Instance()->getAttachments($item_id)), $edit);
+        $view->attstr = AttachmentsClz::StoreToPage(ItemClz::Instance()->getAttachments($item_id));
 
         echo $view->Render();
 
@@ -211,6 +212,7 @@ class WorkMod extends BaseMod
         $work_id = $this->Uid();
         $node_id = $this->Req('node_id', 0, 'int');
         $item_id = $this->Req('item_id', 0, 'int');
+        $attachments = Util::ExplodeDouble($this->Req('attachments', '', 'str'), '|', ',');
 
         $event = $this->Req('event', '', 'str');
         $status_id = $event == 'commit' ? ItemClz::StatusProcessing : ItemClz::StatusNew;
@@ -226,9 +228,9 @@ class WorkMod extends BaseMod
         }
 
         if ($item_id > 0) {
-            ItemClz::edit($item_id, $rs_work['org_id'], $rs_work['type_id'], $work_id, $node_id, $datas['f1'], '', Json::Encode($datas), '', $status_id);
+            ItemClz::edit($item_id, $rs_work['org_id'], $rs_work['type_id'], $work_id, $node_id, $datas['f1'], '', Json::Encode($datas), Json::Encode($attachments), $status_id);
         } else {
-            $item_id = ItemClz::add($rs_work['org_id'], $rs_work['type_id'], $work_id, $node_id, $datas['f1'], '', Json::Encode($datas), '', $status_id);
+            $item_id = ItemClz::add($rs_work['org_id'], $rs_work['type_id'], $work_id, $node_id, $datas['f1'], '', Json::Encode($datas), Json::Encode($attachments), $status_id);
         }
 
         if ($status_id == ItemClz::StatusProcessing) {
@@ -286,6 +288,9 @@ class WorkMod extends BaseMod
 
         $view->item_status = !empty($rs_item) ? $rs_item['status'] : '';
         $view->datas = !empty($rs_reply) && !$edit ? ReplyClz::Instance()->getDatas($reply_id) : array();
+
+        $view->atts = AttachmentsClz::Panel('reply', $node_id, AttachmentsClz::StoreToStruct(ReplyClz::Instance()->getAttachments($reply_id)), $edit);
+        $view->attstr = AttachmentsClz::StoreToPage(ReplyClz::Instance()->getAttachments($reply_id));
 
         echo $view->Render();
 
