@@ -322,6 +322,8 @@ class IndexMod implements IMod
     // Member part
     public function Login()
     {
+        if (isset ($_SESSION ['_uid']) && !empty ($_SESSION ['_uid']) && isset ($_SESSION ['_user']) && !empty ($_SESSION ['_user'])) Url::RedirectUrl('?m=Work');
+
         if (!isset ($_SESSION ['mtimes'])) {
             $_SESSION ['mtimes'] = time();
             $_SESSION ['mcomes'] = 8;
