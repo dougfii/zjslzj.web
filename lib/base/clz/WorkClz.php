@@ -210,28 +210,24 @@ class WorkClz
             self::setNodes($work_id, Json::Encode($nodes));
         }
     }
-//    public static function EditPassword($id, $pass)
-//    {
-//        self::SetPassword($id, $pass);
-//    }
-//
-//    public static function SetPassword($id, $pass)
-//    {
-//        DB::db()->Query("
-//				UPDATE " . self::TABLE . "
-//				SET pass=md5(?)
-//				WHERE id=?
-//				", array($pass, $id));
-//    }
-//
-//    public static function Forget($name, $email)
-//    {
-//        $rs = DB::db()->Fetch("
-//				SELECT *
-//				FROM " . self::TABLE . "
-//				WHERE LOWER(name)=LOWER(?) AND LOWER(email)=LOWER(?) AND del=false
-//				LIMIT 1
-//				", array($name, $email));
-//        return $rs;
-//    }
+
+    public static function setPassword($id, $password)
+    {
+        DB::db()->Query("
+				UPDATE " . self::$table . "
+				SET password=md5(?)
+				WHERE id=?
+				", array($password, $id));
+    }
+
+    public static function forget($username, $email)
+    {
+        $rs = DB::db()->Fetch("
+				SELECT *
+				FROM " . self::$table . "
+				WHERE LOWER(username)=LOWER(?) AND LOWER(email)=LOWER(?) AND del=false
+				LIMIT 1
+				", array($username, $email));
+        return $rs;
+    }
 }

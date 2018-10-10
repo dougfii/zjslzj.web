@@ -266,7 +266,7 @@ class IndexMod implements IMod
             Json::ReturnError('工程名称或登录密码错误');
         }
 
-        $rs = ProjectCls::Forget($name, $email);
+        $rs = WorkClz::forget($name, $email);
         if (empty($rs)) {
             $_SESSION ['forgetcomes'] -= 1;
             $_SESSION ['forgettimes'] = time();

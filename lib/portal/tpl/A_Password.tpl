@@ -1,7 +1,7 @@
 <script type="text/javascript">
     $(function(){
         $('#ok').click(function(){
-            $.post('?m=Project&a=OnPassword', {opass:$('#opass').val(),npass:$('#npass').val(),rpass:$('#rpass').val()}, function (ret){if(ret.code==1)layer.msg('密码修改成功', 1, function(){location.reload();});else layer.msg(ret.msg, 1);}, 'json');
+            $.post('?m=Work&a=OnPassword', {opass:$('#opass').val(),npass:$('#npass').val(),rpass:$('#rpass').val()}, function (ret){if(ret.code==1)layer.msg('密码修改成功', 1, function(){location.reload();});else layer.msg(ret.msg, 1);}, 'json');
         });
     });
 </script>

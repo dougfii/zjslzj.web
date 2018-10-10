@@ -14,7 +14,7 @@ class WorkMod extends BaseMod
     {
         $this->Header();
 
-        $view = View::factory('Password');
+        $view = View::factory('A_Password');
         echo $view->render();
 
         $this->Footer();
@@ -31,7 +31,7 @@ class WorkMod extends BaseMod
         if ($npass != $rpass) Json::ReturnError('重复密码应与新设密码相同');
 
         try {
-            ProjectCls::EditPassword($this->Uid(), $npass);
+            WorkClz::setPassword($this->Uid(), $npass);
         } catch (Exception $e) {
             Json::ReturnError(ALERT_ERROR);
         }

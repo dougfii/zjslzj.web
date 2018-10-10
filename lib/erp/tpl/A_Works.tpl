@@ -26,7 +26,7 @@
 	});
 </script>
 <div class="toolbar">
-	<div class="tool clear"><span class="cap"><?php echo $caption; ?>列表</span><?php echo $paged; ?><span class="find clear"><span>名称</span><input type="text" id="fname" size="8" value="<?php echo $fname; ?>"/><span>单位</span><input type="text" id="fcompany" size="8" value="<?php echo $fcompany; ?>"/><span>日期起</span><input type="text" id="fdate0" size="10" class="c" value="<?php echo $fdate0; ?>" readonly/><span>日期止</span><input type="text" id="fdate1" size="10" class="c" value="<?php echo $fdate1; ?>" readonly/><input type="button" class="" id="fok" value="查找"/></span><a href="javascript:;" id="export" class="tooladd">导出</a></div>
+	<div class="tool clear"><span class="cap"><?php echo "{$caption} {$caption_year} 列表"; ?></span><?php echo $paged; ?><span class="find clear"><span>名称</span><input type="text" id="fname" size="8" value="<?php echo $fname; ?>"/><span>单位</span><input type="text" id="fcompany" size="8" value="<?php echo $fcompany; ?>"/><span>日期起</span><input type="text" id="fdate0" size="10" class="c" value="<?php echo $fdate0; ?>" readonly/><span>日期止</span><input type="text" id="fdate1" size="10" class="c" value="<?php echo $fdate1; ?>" readonly/><input type="button" class="" id="fok" value="查找"/></span><a href="javascript:;" id="export" class="tooladd">导出</a></div>
 </div>
 <div class="panel paneltool">
 	<table class="tl">

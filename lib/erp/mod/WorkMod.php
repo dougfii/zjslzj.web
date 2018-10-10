@@ -29,7 +29,11 @@ class WorkMod extends BaseMod
 
         $where = " AND type_id=${type_id}";
 
-        if ($year >= YEAR_START && $year <= Date::Year()) $where .= " AND EXTRACT(YEAR FROM time)=${$year}";
+        $caption_year = '';
+        if ($year >= YEAR_START && $year <= Date::Year()) {
+            $caption_year = $year;
+            $where .= " AND EXTRACT(YEAR FROM time)={$year}";
+        }
 
         if ($this->Uid() > 1) {
             $gids = GroupCls::Instance()->GetChildrenIds(UserCls::Instance()->Gid($this->Uid()), true);
@@ -50,6 +54,7 @@ class WorkMod extends BaseMod
         $url = Url::QUERY_STRING_DELETE(array('page', 'fname'));
 
         $size = PAGE_SIZE_MEDIUM;
+
         list($count, $rs) = WorkClz::results($where, '', $this->Page(), $size);
 
         $this->Header();
@@ -61,6 +66,7 @@ class WorkMod extends BaseMod
         $view->paged = HTML::PageJump($count, $this->Page(), $size, $url);
 
         $view->caption = $caption;
+        $view->caption_year = $caption_year;
 
         $view->url = $url;
         $view->fname = $fname;
