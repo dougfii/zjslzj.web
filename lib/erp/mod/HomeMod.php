@@ -23,6 +23,17 @@ class HomeMod extends BaseMod
         $this->Footer();
     }
 
+    public function OnRead()
+    {
+        $id = $this->Req('id', 0, 'int');
+
+        if ($id <= 0) Json::ReturnError(ALERT_ERROR);
+
+        NotifyClz::setRead($id);
+
+        Json::ReturnSuccess();
+    }
+
     public function Password()
     {
         $this->Header();
@@ -47,21 +58,6 @@ class HomeMod extends BaseMod
             UserCls::EditPassword($this->Uid(), $npass);
         } catch (Exception $e) {
             Json::ReturnError(ALERT_ERROR);
-        }
-
-        Json::ReturnSuccess();
-    }
-
-    public function OnRead()
-    {
-        $id = $this->Req('id', 0, 'int');
-
-        if ($id <= 0) Json::ReturnError(ALERT_ERROR);
-
-        try {
-            MsgCls::SetRead($id);
-        } catch (Exception $e) {
-            Json::ReturnError($e->getMessage());
         }
 
         Json::ReturnSuccess();

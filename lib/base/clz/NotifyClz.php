@@ -42,16 +42,18 @@ class NotifyClz
     }
 
     // 成员所有
-    public static function resultsMemberAll($uid)
+    public static function resultsMemberAll($uid, $read = false)
     {
         $where = " AND type_id=" . self::TypeToMember . " AND uid={$uid}";
+        if (!is_null($read)) $where .= " AND read=" . ($read ? 'true' : 'false');
         return self::results($where, '', 0, 0);
     }
 
     // 管理所有
-    public static function resultsAdminAll()
+    public static function resultsAdminAll($read = false)
     {
         $where = ' AND type_id=' . self::TypeToAdmin;
+        if (!is_null($read)) $where .= " AND read=" . ($read ? 'true' : 'false');
         return self::results($where, '', 0, 0);
     }
 
@@ -59,7 +61,6 @@ class NotifyClz
     {
         $where = 'WHERE del=false ' . $where;
         $order = empty($order) ? 'ORDER BY id DESC' : $order;
-
         $count = self::Count($where);
         $page = HTML::PageNum($count, $page, $size);
         $start = HTML::PagePos($count, $page, $size);
@@ -107,5 +108,14 @@ class NotifyClz
     public static function sendToAdmin($content, $url)
     {
         return self::add(self::TypeToAdmin, 0, $content, $url);
+    }
+
+    public static function setRead($id)
+    {
+        DB::db()->Query("
+				UPDATE " . self::$table . "
+				SET read=NOT read
+				WHERE id=?
+				", array($id));
     }
 }

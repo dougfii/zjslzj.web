@@ -110,13 +110,13 @@ abstract class BaseMod implements IMod
         } elseif ($mod == strtolower('System')) {
             $sides = array(
                 array('?m=System&a=GroupList', '组织机构', R::SYSTEM_USER),
-                array('?m=System&a=RoleList', '角色管理', R::SYSTEM_USER),
-                array('?m=System&a=ApproveList', '审批流程', R::SYSTEM_USER),
+                //array('?m=System&a=RoleList', '角色管理', R::SYSTEM_USER),
+                //array('?m=System&a=ApproveList', '审批流程', R::SYSTEM_USER),
                 array('?m=System&a=FacadeTypeList', '外观评测项目', R::SYSTEM_USER),
                 array('?m=System&a=CheckTypeList', '检验项目', R::SYSTEM_USER),
                 array('?m=System&a=LogLogin', '登录日志', R::SYSTEM_LOG),
-                array('?m=System&a=LogEvent', '事件日志', R::SYSTEM_LOG),
-                array('?m=System&a=CacheClean', '清理缓冲区', R::SYSTEM_LOG),
+                //array('?m=System&a=LogEvent', '事件日志', R::SYSTEM_LOG),
+                //array('?m=System&a=CacheClean', '清理缓冲区', R::SYSTEM_LOG),
             );
         }
 

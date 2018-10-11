@@ -71,11 +71,7 @@ class WorkMod extends BaseMod
 
         if ($id <= 0) Json::ReturnError(ALERT_ERROR);
 
-        try {
-            MsgCls::SetRead($id);
-        } catch (Exception $e) {
-            Json::ReturnError($e->getMessage());
-        }
+        NotifyClz::setRead($id);
 
         Json::ReturnSuccess();
     }

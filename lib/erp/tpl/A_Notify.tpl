@@ -2,7 +2,7 @@
     $(function(){
         $('.read').click(function(){
             var id=$(this).attr('rid');
-            $.post('?m=Home&a=OnRead', {id:id}, function(ret){if(ret.code==1)Refresh();else layer.msg(ret.msg, 2, -1);}, 'json');
+            $.post('?m=Home&a=OnRead', {id:id}, function(ret){if(ret.code==1)layer.msg('已读', 1, function(){Refresh();});else layer.msg(ret.msg, 2, -1);}, 'json');
         });
     });
 </script>
