@@ -72,14 +72,14 @@ function serials(obj){
     });
 }
 
-let work_attachments = [];
+var work_attachments = [];
 
 function SetWorkAttachment(str){
     if(str != null && str !== ''){
-        let arr = str.split('|');
+        var arr = str.split('|');
         if(Array.isArray(arr)){
-            for(let i in arr){
-                let ar = arr[i].split(',');
+            for(var i in arr){
+                var ar = arr[i].split(',');
                 if(Array.isArray(ar) && ar.length === 3){
                     work_attachments.push(ar);
                 }
@@ -89,8 +89,8 @@ function SetWorkAttachment(str){
 }
 
 function GetWorkAttachmentString(){
-    let tmp = [];
-    for(let i in work_attachments){
+    var tmp = [];
+    for(var i in work_attachments){
         tmp.push(work_attachments[i].join(','));
     }
     return tmp.join('|');
@@ -252,8 +252,8 @@ $(function () {
     });
 
     $('.atts').on( 'click', '.upd', function(){
-        let obj = $(this);
-        let id = obj.attr('did');
+        var obj = $(this);
+        var id = obj.attr('did');
         layer.confirm('您确认需要删除吗?\n此操作不可恢复!', function(i){
             layer.close(i);
             //work_attachments.splice(obj.parent('li').index());
