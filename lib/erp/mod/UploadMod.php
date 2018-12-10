@@ -12,6 +12,27 @@ class UploadMod extends BaseMod
     {
     }
 
+    public function UpWork()
+    {
+        $up_id = $this->Req('up_id', 0, 'int');
+
+        $this->settings();
+
+        //上传配置
+        $config = array(
+            "savePath" => "../../web/portal/upload/flow/",             //存储文件夹
+            "urlPath" => "/upload/flow/",//返回URL根路径
+            "maxSize" => 50000,                   //允许的文件最大尺寸，单位KB
+            "allowFiles" => self::$LIMIT_FORMAT_ALL //允许的文件格式
+        );
+
+        $up = new Uploader2("upfile{$up_id}", $config);
+
+        $info = $up->getFileInfo();
+
+        echo json_encode($info);
+    }
+
     public function UpFlowFixed()
     {
         $no = $this->Req('no', 0, 'int');

@@ -220,6 +220,12 @@ class WorkMod extends BaseMod
             }
         }
 
+        $datas = array();
+        for ($i = 0; $i < 50; $i++) {
+            $datas["f" . $i] = '';
+            $datas["fa" . $i] = array();
+        }
+
         $this->Header();
 
         $view = View::Factory('A_Item_' . $node_id);
@@ -239,7 +245,7 @@ class WorkMod extends BaseMod
         $view->node_direction = !empty($rs_work) ? WorkClz::Instance()->getNodeDirection($work_id, $node_id) : false;
 
         $view->item_status = !empty($rs_item) ? $rs_item['status'] : '';
-        $view->datas = !empty($rs_item) ? ItemClz::Instance()->getDatas($item_id) : array();
+        $view->datas = !empty($rs_item) ? ItemClz::Instance()->getDatas($item_id) : $datas;
 
         $view->table_structs = $table_structs;
 
@@ -311,6 +317,12 @@ class WorkMod extends BaseMod
             $pass = 'Backed';
         }
 
+        $datas = array();
+        for ($i = 0; $i < 50; $i++) {
+            $datas["f" . $i] = '';
+            $datas["fa" . $i] = array();
+        }
+
         $this->Header();
 
         $view = View::Factory('A_Reply_' . $pass . '_' . $tpl);
@@ -319,7 +331,7 @@ class WorkMod extends BaseMod
         $view->work_id = $work_id;
         $view->node_id = $node_id;
         $view->item_id = $item_id;
-        $view->replay_id = $reply_id;
+        $view->reply_id = $reply_id;
         $view->work_name = !empty($rs_work) ? $rs_work['name'] : '';
         $view->work_company = !empty($rs_work) ? $rs_work['company'] : '';
         $view->work_org = !empty($rs_work) ? $rs_work['org'] : '';
@@ -331,7 +343,7 @@ class WorkMod extends BaseMod
         $view->node_direction = !empty($rs_work) ? WorkClz::Instance()->getNodeDirection($work_id, $node_id) : false;
 
         $view->item_status = !empty($rs_item) ? $rs_item['status'] : '';
-        $view->datas = !empty($rs_reply) && !$edit ? ReplyClz::Instance()->getDatas($reply_id) : array();
+        $view->datas = !empty($rs_reply) && !$edit ? ReplyClz::Instance()->getDatas($reply_id) : $datas;
 
         $view->atts = AttachmentsClz::Panel('reply', $node_id, AttachmentsClz::StoreToStruct(ReplyClz::Instance()->getAttachments($reply_id)), $edit);
         $view->attstr = AttachmentsClz::StoreToPage(ReplyClz::Instance()->getAttachments($reply_id));
